@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 CLOUDFS_HOST = '192.168.36.201'
 CLOUDFS_PORT = 443

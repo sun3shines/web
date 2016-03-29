@@ -119,5 +119,9 @@ class TestEvent(Event):
 
     def getToken(self):
 
-        return getToken(self.email,self.passwd).get('access_token') 
+        resp = getToken(self.email,self.passwd)
+        if '-1' == resp['status']:
+            return None
+
+        return json.loads(resp['msg']).get('access_token') 
 

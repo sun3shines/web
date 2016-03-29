@@ -889,3 +889,27 @@ unquote(req.path) /zhu__feng00000com/0/AUTH_zhu__feng00000com/%E6%B5%8B%20%E8%AF
 
 开始完全的进入第二阶段的开发了。是的。进入第二第三阶段的开发。
 
+修改token的超时。 假数据。
+
+新建cloud-lib包，分开，api和daemon分开了。是的。
+
+并方便我们去构建其他的包了。是的。
+
+cloudlib，会整合进去cloudfs的包了。是的。
+
+今后新的开发工作会迁移到lib上，而针对于cloudweb的开发，将会被废弃了。是的。
+
+安装新的包，并且新的功能，会增加到新的lib上了。可同时使用lib或者cloudweb了。是的。方便服务的调用，而不用频繁的调用接口了。是的。
+
+让lib上的api可以跑通了。是的。
+
+rpmbuild 时，关于lib包的失败，lib/cloudlib/中没有__init__.py 文件。
+
+RPM build errors:
+    File not found: /root/rpmbuild/BUILDROOT/cloud-1.1-15.el6.x86_64/usr/lib/python2.6/site-packages/cloudlib
+
+增加tree接口。数据库？还是restful方式？
+
+增加管理员数据了。是的。不涉及真正的用户创建了。administrator
+
+

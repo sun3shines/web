@@ -4,6 +4,7 @@ import json
 from cloudweb.events.events import TestEvent
 from cloudweb.events.cloudfs import FileMeta,ContainerMeta,AccountMeta
 from cloudweb.events.cloudfs import DirCreate,ObjectList
+from cloudweb.events.cloudfs import UserInit
 
 def getObjectMeta(path,ev):
     
@@ -25,18 +26,18 @@ def getAccountMeta(ev):
 
 if __name__ == "__main__":
 
-    email = 'zhu__feng001@163com'
+    email = 'administrator@163com'
     passwd = '123456'
     
     ev = TestEvent(email,passwd)
     print ev.getAtName()
-    
+    import pdb;pdb.set_trace()    
 #    t = AccountMeta()
-#    t = UserInit()
+    t = UserInit()
 #    t = FileUpload('/normal/test.txt','/root/install.log')
 #    t = FileMeta('/normal/test.txt')
 #    t = DirCreate('/normal/dir')
-    t = ObjectList('/normal',r=True) 
+#    t = ObjectList('/normal',r=True) 
     t = ev.http(t)
-
+    print t.response
 
