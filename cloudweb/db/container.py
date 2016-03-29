@@ -2,7 +2,7 @@
 
 from urllib import unquote
 from cloudweb.db.table.stobj import account2id,insert_stobj,fullPath2id, \
-    delete_stobj,id2childAttrs
+    delete_stobj,id2childAttrs,id2treeAttrs
 
 def cntdelete(path,conn):
     # path /zhu__feng00000com/0/AUTH_zhu__feng00000com/%E6%B5%8B%20%E8%AF%95
@@ -42,9 +42,12 @@ def insert_container(conn,stobj_path,abs_parent):
         return False,'fetch account id error'
     return insert_stobj(conn,'container',stobj_path,parent_id,'')
 
-def cntList(db,atName,cntPath):
+def cntList(db,atName,cntPath,tree):
     
     newPath = '/'.join([atName,cntPath])
     id = fullPath2id(db, newPath)
-    return id2childAttrs(db, id)
+    if 'true' == tree:
+        return id2treeAttrs(db, id)
+    else:
+        return id2childAttrs(db, id)
 

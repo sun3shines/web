@@ -78,7 +78,7 @@ class ObjectCreate(Task):
         if self.srcPath:
             return open(self.srcPath)
         else:
-             return self.handle
+            return self.handle
 
     
 class ObjectDelete(Task):

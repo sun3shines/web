@@ -2,7 +2,7 @@
 
 from urllib import unquote
 from cloudweb.db.table.stobj import insert_object,fullPath2id,delete_child_stobj, \
-    delete_stobj,move_stobj,copy_stobj,id2childAttrs
+    delete_stobj,move_stobj,copy_stobj,id2childAttrs,id2treeAttrs
 
 def drdelete(path,conn):
 
@@ -59,8 +59,11 @@ def insert_dir(conn,absPath):
     stobj_path,abs_parent = conn.splitPath(absPath) 
     return insert_object(conn,'dir',stobj_path,abs_parent,'')
 
-def drList(db,atName,drPath):
+def drList(db,atName,drPath,tree):
     newPath = '/'.join([atName,drPath])
     id = fullPath2id(db,newPath)
-    return id2childAttrs(db, id)
+    if 'true' == tree:
+        return id2treeAttrs(db, id)
+    else:
+        return id2childAttrs(db, id)
 

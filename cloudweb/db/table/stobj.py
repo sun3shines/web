@@ -179,6 +179,25 @@ def id2childAttrs(conn,parent_id):
 
     return cldsattrs
 
+def id2treeAttrs(conn,parent_id):
+    cldsattrs = []
+    
+    s = StObj()
+    datas = conn.select(['*'],s.table,{s.parent_id:str(parent_id)})
+        
+    if datas:
+        for data in datas:
+            attrs = {}
+            attrs[s.id] = data[0]
+            attrs[s.path] = data[1]
+            attrs[s.type] = data[2]
+            attrs[s.parent_id] = data[3]
+            attrs[s.state] = data[4]
+            if 'dir' == attrs[s.type]:
+                attrs['list'] = id2treeAttrs(conn, attrs[s.id])
+            cldsattrs.append(attrs)
+    return cldsattrs
+
 def id2urlAttrs(id,db):
     
     s = StObj()
