@@ -912,4 +912,6 @@ RPM build errors:
 
 增加管理员数据了。是的。不涉及真正的用户创建了。administrator
 
+准备把源码整合起来，比如说web，common，lib，server等。是的。都放在一个里面。就像之前的swift的源码一样了。是的。一个源码，多个包。是的。
+
 
