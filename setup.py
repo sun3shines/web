@@ -22,11 +22,11 @@ name = 'cloudweb'
 setup(
     name=name,
     version='1.1',
-    description='Gluster Swift/UFO',
-    license='Apache License (2.0)',
-    author='Red Hat, Inc.',
-    author_email='gluster-users@gluster.org',
-    url='https://gluster.org/',
+    description='cloud console',
+    license='xx',
+    author='sss',
+    author_email='zhu__feng014@163.com',
+    url='https://org/',
     packages=find_packages(exclude=['test', 'bin']),
     test_suite='nose.collector',
     classifiers=[
