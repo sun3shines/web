@@ -914,4 +914,209 @@ RPM build errors:
 
 准备把源码整合起来，比如说web，common，lib，server等。是的。都放在一个里面。就像之前的swift的源码一样了。是的。一个源码，多个包。是的。
 
+dmidecode.获取硬件信息，主板，内存，cpu，网卡等信息。
 
+smartctl -a /dev/sda
+
+mii-tool
+
+dmidecode |grep -A16 "Memory Device$"
+Memory Device
+	Array Handle: 0x002D
+	Error Information Handle: Not Provided
+	Total Width: 64 bits
+	Data Width: 64 bits
+	Size: 4096 MB
+	Form Factor: DIMM
+	Set: None
+	Locator: DIMM_A1
+	Bank Locator: A1_BANK0
+	Type: DDR3
+	Type Detail: Synchronous
+	Speed: 1333 MHz
+	Manufacturer: Kingston        
+	Serial Number: D12F123C  
+	Asset Tag: A1_AssetTagNum1
+	Part Number: 99P5471-011.A00LF 
+
+获取system 信息？
+dmidecode |grep -A16 "System Information$"
+
+mii-tool lspci 
+
+fdisk 
+
+psutil
+
+grep -A NUM, --after-context=NUM
+
+获取主板信息
+dmidecode |grep -A18 "Base Board Information$"
+Base Board Information
+	Manufacturer: ASUSTeK Computer INC.
+	Product Name: F1A75-M
+	Version: Rev X.0x
+	Serial Number: MF70B7G01200921
+	Asset Tag: To be filled by O.E.M.
+	Features:
+		Board is a hosting board
+		Board is replaceable
+	Location In Chassis: To be filled by O.E.M.
+	Chassis Handle: 0x0003
+	Type: Motherboard
+	Contained Object Handles: 0
+
+lshw -c cpu -json
+    "id" : "cpu:0",
+    "class" : "processor",
+    "claimed" : true,
+    "handle" : "DMI:003D",
+    "description" : "CPU",
+    "product" : "AMD A6-3650 APU with Radeon(tm) HD Graphics",
+    "vendor" : "Advanced Micro Devices [AMD]",
+    "physid" : "2",
+    "businfo" : "cpu@0",
+    "version" : "AMD A6-3650 APU with Radeon(tm) HD Graphics",
+    "slot" : "FM1",
+    "units" : "Hz",
+    "size" : 2600000000,
+    "capacity" : 2600000000,
+    "width" : 64,
+    "clock" : 100000000,
+    "configuration" : {
+      "cores" : "4",
+      "enabledcores" : "4",
+      "threads" : "4"
+    },
+
+lshw -c network -json
+                                                                                                    {
+    "id" : "network",
+    "class" : "network",
+    "claimed" : true,
+    "handle" : "PCI:0000:03:00.0",
+    "description" : "Ethernet interface",
+    "product" : "AR8151 v2.0 Gigabit Ethernet",
+    "vendor" : "Atheros Communications Inc.",
+    "physid" : "0",
+    "businfo" : "pci@0000:03:00.0",
+    "logicalname" : "eth0",
+    "version" : "c0",
+    "serial" : "f4:6d:04:7c:f4:75",
+    "units" : "bit/s",
+    "size" : 100000000,
+    "capacity" : 1000000000,
+    "width" : 64,
+    "clock" : 33000000,
+    "configuration" : {
+      "autonegotiation" : "on",
+      "broadcast" : "yes",
+      "driver" : "atl1c",
+      "driverversion" : "1.0.1.0-NAPI",
+      "duplex" : "full",
+      "ip" : "192.168.36.1",
+      "latency" : "0",
+      "link" : "yes",
+      "multicast" : "yes",
+      "port" : "twisted pair",
+      "speed" : "100Mbit/s"
+    },
+
+ip addr show dev eth0
+
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether f4:6d:04:7c:f4:75 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.36.1/16 brd 192.168.255.255 scope global eth0
+    inet6 fe80::f66d:4ff:fe7c:f475/64 scope link 
+       valid_lft forever preferred_lft forever
+
+lshw -c disk -json
+                                                                                                                                                                                                                                                                      {
+    "id" : "disk",
+    "class" : "disk",
+    "claimed" : true,
+    "handle" : "SCSI:04:00:00:00",
+    "description" : "ATA Disk",
+    "product" : "WDC WD10EZEX-00R",
+    "vendor" : "Western Digital",
+    "physid" : "0.0.0",
+    "businfo" : "scsi@4:0.0.0",
+    "logicalname" : "/dev/sda",
+    "dev" : "8:0",
+    "version" : "80.0",
+    "serial" : "WD-WMC1S2415594",
+    "units" : "bytes",
+    "size" : 1000204886016,
+    "configuration" : {
+      "ansiversion" : "5",
+      "logicalsectorsize" : "512",
+      "sectorsize" : "4096",
+      "signature" : "000063c7"
+    },
+    "capabilities" : {
+      "partitioned" : "Partitioned disk",
+      "partitioned:dos" : "MS-DOS partition table"
+    },
+    "children" : [
+                                  
+    ]
+目前不考虑disk label，是的。
+
+Manufacturer: Kingston
+        Serial Number: D12F123C
+        Asset Tag: A1_AssetTagNum1
+        Part Number: 99P5471-011.A00LF
+
+create table host(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,name varchar(255),uuid varchar(255),product varchar(255),manufacturer varchar(255),version varchar(32),serial varchar(64) NOT NULL,asset_tag varchar(255),available varchar(8));
+
+create table host_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,total_width varchar(16),data_width varchar(16),size varchar(16),form_factor varchar(64),speed varchar(16),manufacturer varchar(255),serial varchar(64) NOT NULL,asset_tag varchar(255),part_number varchar(255));
+
+create table host_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(32),description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),serial varchar(64) NOT NULL,size bigint,capacity bigint,width bigint,clock bigint,mtu int ,mac varchar(266),inet varchar(64),is_primary varchar(8));
+
+create table host_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),size bigint,capacity bigint,width bigint,clock bigint,cores int,enabledcores int,threads int);
+
+create table host_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(32),description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),serial varchar(64) NOT NULL,size bigint);
+
+alter table host_mem add constraint mem_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table host_net add constraint net_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table host_cpu add constraint cpu_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table host_disk add constraint disk_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+
+host表： id 数据库id，name 主机名，uuid 主机唯一标志符，product 产品名，manufacturer生产商，version 版本，serial 序列号  available 主机是否可用
+host_mem表：id数据库id，host_id 主机id，total_width 位宽,size 容量，speed 主频，manufacturer 生产商，serial 序列号
+host_net 表： id数据库id，host_id 主机id，logicalname 设备名，description 描述，product 产品名,vendor 生产商，bus_info 总线信息，version 版本号，serial 序列号，size 容量，width 位宽,clock 频率，mtu，mac mac地址，inet ip地址，is_primary是否>为通信ip
+host_cpu 表: id数据库id，host_id 主机id，description 描述，product 产品名,vendor 生产商，bus_info 总线信息，version 版本号， size,capacity,width,clock,core,enablecores,threads
+host_disk 表：id数据库id，host_id 主机id，logicalname 设备名，description 描述，product 产品名,vendor 生产商，bus_info 总线信息，version 版>本号，serial 序列号，size硬盘容量
+
+create table stat_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,utilization float(8,4));
+
+create table stat_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,total bigint,available bigint);
+
+create table stat_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,bytes_sent_per_sec bigint,bytes_recv_per_sec bigint,packet_send_per_sec bigint ,packet_recv_per_sec bigint);
+
+create table stat_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,disk_read_per_sec bigint,disk_write_per_sec bigint);
+
+create table stat_storage(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,uuid varchar(255),path varchar(255),total bigint,used bigint,free bigint,available varchar(8));
+
+
+alter table stat_cpu add constraint stat_cpu_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_mem add constraint stat_mem_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_net add constraint stat_net_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_disk add constraint stat_disk_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_storage add constraint stat_storage_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+
+stat_cpu表：id数据库id，host_id 主机id，timestamp时间戳，utilization 使用率
+stat_mem表：id数据库id，host_id 主机id，timestamp时间戳，total总量，available 剩余量
+stat_net 表：id数据库id，host_id 主机id，timestamp时间戳，bytes_sent_per_sec 每秒发送字节，bytes_recv_per_sec 每秒接收字节，packet_send_per_sec 每秒发送数据包，packet_recv_per_sec 每秒接收数据包
+stat_disk 表：id数据库id，host_id 主机id，timestamp时间戳，disk_read_per_sec 主机每秒读字节，disk_write_per_sec 主机每秒写字节
+stat_storage 表：id数据库id，host_id 主机id，timestamp时间戳， uuid存储唯一标志符，path存储挂载路径，total 存储总量，used 已使用量，free剩余量,available 存储是否可用
+
+直接使用stat_disk 统计进程的io，使用proccess的统计。进程监控来实现了。是的。# 不仅反映了fs，disk以及process的io了。
+
+因此，在io统计上，完全的由本进程来接手了。而不是交给系统命令来处理了。是的。
+
+host,host_mem,host_net,host_disk 会以序列号作为其的唯一标志符了。如果没有，则会默认生成了。是的。host_cpu 则不用过分的详细了。是的无序列号。
+
+## create table stat_proc_io(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,disk_read_per_sec bigint,disk_write_per_sec bigint);
+
+mysqldump -u root -p111111 cloudweb > dbcloudweb.20160401.bak

@@ -1,0 +1,437 @@
+-- MySQL dump 10.13  Distrib 5.1.71, for redhat-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: cloudweb
+-- ------------------------------------------------------
+-- Server version	5.1.71
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `host`
+--
+
+DROP TABLE IF EXISTS `host`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `host` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `uuid` varchar(255) DEFAULT NULL,
+  `product` varchar(255) DEFAULT NULL,
+  `manufacturer` varchar(255) DEFAULT NULL,
+  `version` varchar(32) DEFAULT NULL,
+  `serial` varchar(64) NOT NULL,
+  `asset_tag` varchar(255) DEFAULT NULL,
+  `available` varchar(8) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `host`
+--
+
+LOCK TABLES `host` WRITE;
+/*!40000 ALTER TABLE `host` DISABLE KEYS */;
+/*!40000 ALTER TABLE `host` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `host_cpu`
+--
+
+DROP TABLE IF EXISTS `host_cpu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `host_cpu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `product` varchar(255) DEFAULT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `physical_id` int(11) DEFAULT NULL,
+  `bus_info` varchar(255) DEFAULT NULL,
+  `version` varchar(32) DEFAULT NULL,
+  `size` bigint(20) DEFAULT NULL,
+  `capacity` bigint(20) DEFAULT NULL,
+  `width` bigint(20) DEFAULT NULL,
+  `clock` bigint(20) DEFAULT NULL,
+  `cores` int(11) DEFAULT NULL,
+  `enabledcores` int(11) DEFAULT NULL,
+  `threads` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cpu_check` (`host_id`),
+  CONSTRAINT `cpu_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `host_cpu`
+--
+
+LOCK TABLES `host_cpu` WRITE;
+/*!40000 ALTER TABLE `host_cpu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `host_cpu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `host_disk`
+--
+
+DROP TABLE IF EXISTS `host_disk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `host_disk` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `logicalname` varchar(32) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `product` varchar(255) DEFAULT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `physical_id` int(11) DEFAULT NULL,
+  `bus_info` varchar(255) DEFAULT NULL,
+  `version` varchar(32) DEFAULT NULL,
+  `serial` varchar(64) NOT NULL,
+  `size` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `disk_check` (`host_id`),
+  CONSTRAINT `disk_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `host_disk`
+--
+
+LOCK TABLES `host_disk` WRITE;
+/*!40000 ALTER TABLE `host_disk` DISABLE KEYS */;
+/*!40000 ALTER TABLE `host_disk` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `host_mem`
+--
+
+DROP TABLE IF EXISTS `host_mem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `host_mem` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `total_width` varchar(16) DEFAULT NULL,
+  `data_width` varchar(16) DEFAULT NULL,
+  `size` varchar(16) DEFAULT NULL,
+  `form_factor` varchar(64) DEFAULT NULL,
+  `speed` varchar(16) DEFAULT NULL,
+  `manufacturer` varchar(255) DEFAULT NULL,
+  `serial` varchar(64) NOT NULL,
+  `asset_tag` varchar(255) DEFAULT NULL,
+  `part_number` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `host_check` (`host_id`),
+  CONSTRAINT `host_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `host_mem`
+--
+
+LOCK TABLES `host_mem` WRITE;
+/*!40000 ALTER TABLE `host_mem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `host_mem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `host_net`
+--
+
+DROP TABLE IF EXISTS `host_net`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `host_net` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `logicalname` varchar(32) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `product` varchar(255) DEFAULT NULL,
+  `vendor` varchar(255) DEFAULT NULL,
+  `physical_id` int(11) DEFAULT NULL,
+  `bus_info` varchar(255) DEFAULT NULL,
+  `version` varchar(32) DEFAULT NULL,
+  `serial` varchar(64) NOT NULL,
+  `size` bigint(20) DEFAULT NULL,
+  `capacity` bigint(20) DEFAULT NULL,
+  `width` bigint(20) DEFAULT NULL,
+  `clock` bigint(20) DEFAULT NULL,
+  `mtu` int(11) DEFAULT NULL,
+  `mac` varchar(266) DEFAULT NULL,
+  `inet` varchar(64) DEFAULT NULL,
+  `is_primary` varchar(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `net_check` (`host_id`),
+  CONSTRAINT `net_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `host_net`
+--
+
+LOCK TABLES `host_net` WRITE;
+/*!40000 ALTER TABLE `host_net` DISABLE KEYS */;
+/*!40000 ALTER TABLE `host_net` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `record`
+--
+
+DROP TABLE IF EXISTS `record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `record` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `msg` text NOT NULL,
+  `time` datetime DEFAULT NULL,
+  `uid` bigint(20) NOT NULL,
+  `oid` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_check` (`uid`),
+  KEY `stobj_check` (`oid`),
+  CONSTRAINT `stobj_check` FOREIGN KEY (`oid`) REFERENCES `stobj` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_check` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `record`
+--
+
+LOCK TABLES `record` WRITE;
+/*!40000 ALTER TABLE `record` DISABLE KEYS */;
+INSERT INTO `record` VALUES (4,' AUTH_zhu__feng001163com PUT ACCOUNT AUTH_zhu__feng001163com','2016-02-23 10:17:06',3,1339),(5,' AUTH_zhu__feng001163com PUT CONTAINER normal','2016-02-23 10:17:06',3,1340),(6,' AUTH_zhu__feng001163com PUT CONTAINER normal_versions','2016-02-23 10:17:06',3,1341),(7,' AUTH_zhu__feng001163com PUT CONTAINER segments','2016-02-23 10:17:06',3,1342),(8,' AUTH_zhu__feng001163com PUT CONTAINER recycle','2016-02-23 10:17:06',3,1343),(9,' AUTH_zhu__feng001163com PUT DIR meta','2016-02-23 10:17:06',3,1344),(10,' AUTH_zhu__feng001163com PUT DIR user','2016-02-23 10:17:06',3,1345),(11,' AUTH_zhu__feng001163com PUT CONTAINER private','2016-02-23 10:17:06',3,1346),(12,' AUTH_zhu__feng001163com PUT CONTAINER private_versions','2016-02-23 10:17:06',3,1347),(13,' AUTH_zhu__feng001163com PUT CONTAINER backup','2016-02-23 10:17:07',3,1348),(14,' AUTH_zhu__feng001163com PUT CONTAINER backup_versions','2016-02-23 10:17:07',3,1349),(15,' zhu__feng001163com PUT OBJECT test.txt','2016-02-26 03:43:25',3,1350),(16,' zhu__feng001163com PUT OBJECT test3.txt','2016-02-26 05:20:14',3,1351),(17,' zhu__feng001163com PUT DIR dir','2016-02-27 07:56:22',3,1352),(19,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:25:26',3,1353),(21,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:35:47',3,1355),(23,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:48:27',3,1356),(25,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:48:52',3,1357),(27,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:51:15',3,1358),(28,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 09:58:45',3,1359),(30,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:06:07',3,1360),(31,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266809.81503','2016-03-18 10:06:53',3,1360),(32,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:06:53',3,1361),(33,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266854.51305','2016-03-18 10:07:34',3,1361),(34,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:07:34',3,1362),(35,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266857.38204','2016-03-18 10:07:37',3,1362),(36,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:07:37',3,1363),(37,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266865.50919','2016-03-18 10:07:45',3,1363),(38,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:07:45',3,1364),(39,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266957.60260','2016-03-18 10:09:17',3,1364),(40,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:09:17',3,1365),(41,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458266992.81032','2016-03-18 10:09:52',3,1365),(42,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:09:53',3,1366),(43,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458267007.13547','2016-03-18 10:10:07',3,1366),(44,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:10:07',3,1367),(45,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458267044.66380','2016-03-18 10:10:44',3,1367),(46,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:10:44',3,1368),(47,' zhu__feng001163com MOVE OBJECT test3.txt TO 1458267176.64724','2016-03-18 10:12:56',3,1368),(48,' zhu__feng001163com PUT OBJECT test3.txt','2016-03-18 10:12:56',3,1369),(49,' zhu__feng001163com MOVE OBJECT test3.txt TO RECYCLE','2016-03-18 10:14:53',3,1369),(50,' administrator163com PUT ACCOUNT administrator163com','2016-03-19 04:24:02',4,1370),(51,' administrator163com PUT CONTAINER normal','2016-03-19 04:24:02',4,1371),(52,' administrator163com PUT CONTAINER normal_versions','2016-03-19 04:24:02',4,1372),(53,' administrator163com PUT CONTAINER segments','2016-03-19 04:24:03',4,1373),(54,' administrator163com PUT CONTAINER recycle','2016-03-19 04:24:03',4,1374),(55,' administrator163com PUT DIR meta','2016-03-19 04:24:03',4,1375),(56,' administrator163com PUT DIR user','2016-03-19 04:24:03',4,1376),(57,' administrator163com PUT CONTAINER private','2016-03-19 04:24:03',4,1377),(58,' administrator163com PUT CONTAINER private_versions','2016-03-19 04:24:03',4,1378),(59,' administrator163com PUT CONTAINER backup','2016-03-19 04:24:03',4,1379),(60,' administrator163com PUT CONTAINER backup_versions','2016-03-19 04:24:03',4,1380);
+/*!40000 ALTER TABLE `record` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stat_cpu`
+--
+
+DROP TABLE IF EXISTS `stat_cpu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stat_cpu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `utilization` float(8,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stat_cpu_check` (`host_id`),
+  CONSTRAINT `stat_cpu_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stat_cpu`
+--
+
+LOCK TABLES `stat_cpu` WRITE;
+/*!40000 ALTER TABLE `stat_cpu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_cpu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stat_disk`
+--
+
+DROP TABLE IF EXISTS `stat_disk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stat_disk` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `disk_read_per_sec` bigint(20) DEFAULT NULL,
+  `disk_write_per_sec` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stat_disk_check` (`host_id`),
+  CONSTRAINT `stat_disk_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stat_disk`
+--
+
+LOCK TABLES `stat_disk` WRITE;
+/*!40000 ALTER TABLE `stat_disk` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_disk` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stat_mem`
+--
+
+DROP TABLE IF EXISTS `stat_mem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stat_mem` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `total` bigint(20) DEFAULT NULL,
+  `available` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stat_mem_check` (`host_id`),
+  CONSTRAINT `stat_mem_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stat_mem`
+--
+
+LOCK TABLES `stat_mem` WRITE;
+/*!40000 ALTER TABLE `stat_mem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_mem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stat_net`
+--
+
+DROP TABLE IF EXISTS `stat_net`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stat_net` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `bytes_sent_per_sec` bigint(20) DEFAULT NULL,
+  `bytes_recv_per_sec` bigint(20) DEFAULT NULL,
+  `packet_send_per_sec` bigint(20) DEFAULT NULL,
+  `packet_recv_per_sec` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stat_net_check` (`host_id`),
+  CONSTRAINT `stat_net_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stat_net`
+--
+
+LOCK TABLES `stat_net` WRITE;
+/*!40000 ALTER TABLE `stat_net` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_net` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stat_storage`
+--
+
+DROP TABLE IF EXISTS `stat_storage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stat_storage` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `host_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `uuid` varchar(255) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `total` bigint(20) DEFAULT NULL,
+  `used` bigint(20) DEFAULT NULL,
+  `free` bigint(20) DEFAULT NULL,
+  `available` varchar(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stat_storage_check` (`host_id`),
+  CONSTRAINT `stat_storage_check` FOREIGN KEY (`host_id`) REFERENCES `host` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stat_storage`
+--
+
+LOCK TABLES `stat_storage` WRITE;
+/*!40000 ALTER TABLE `stat_storage` DISABLE KEYS */;
+/*!40000 ALTER TABLE `stat_storage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stobj`
+--
+
+DROP TABLE IF EXISTS `stobj`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stobj` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) NOT NULL,
+  `type` char(16) DEFAULT NULL,
+  `parent_id` bigint(20) DEFAULT NULL,
+  `state` char(16) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `xiaodi_ibfk_1` (`parent_id`),
+  CONSTRAINT `xiaodi_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `stobj` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1381 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stobj`
+--
+
+LOCK TABLES `stobj` WRITE;
+/*!40000 ALTER TABLE `stobj` DISABLE KEYS */;
+INSERT INTO `stobj` VALUES (1339,'AUTH_zhu__feng001163com','account',NULL,'enable'),(1340,'normal','container',1339,NULL),(1341,'normal_versions','container',1339,NULL),(1342,'segments','container',1339,NULL),(1343,'recycle','container',1339,NULL),(1344,'meta','dir',1343,NULL),(1345,'user','dir',1343,NULL),(1346,'private','container',1339,NULL),(1347,'private_versions','container',1339,NULL),(1348,'backup','container',1339,NULL),(1349,'backup_versions','container',1339,NULL),(1350,'test.txt','file',1340,'enable'),(1351,'eAdeovCb-fB5lfu-TkhF','file',1345,'enable'),(1352,'dir','dir',1340,NULL),(1353,'1458264889.87618','file',1354,'enable'),(1354,'test3.txt','dir',1341,NULL),(1355,'1458264989.06846','file',1354,'enable'),(1356,'1458265714.99228','file',1354,'enable'),(1357,'1458265737.72852','file',1354,'enable'),(1358,'1458265891.31118','file',1354,'enable'),(1359,'1458266332.49078','file',1354,'enable'),(1360,'1458266809.81503','file',1354,'enable'),(1361,'1458266854.51305','file',1354,'enable'),(1362,'1458266857.38204','file',1354,'enable'),(1363,'1458266865.50919','file',1354,'enable'),(1364,'1458266957.60260','file',1354,'enable'),(1365,'1458266992.81032','file',1354,'enable'),(1366,'1458267007.13547','file',1354,'enable'),(1367,'1458267044.66380','file',1354,'enable'),(1368,'1458267176.64724','file',1354,'enable'),(1369,'bfdi5xiC-XAlYpJ-xSlR','file',1345,'enable'),(1370,'AUTH_administrator163com','account',NULL,'enable'),(1371,'normal','container',1370,NULL),(1372,'normal_versions','container',1370,NULL),(1373,'segments','container',1370,NULL),(1374,'recycle','container',1370,NULL),(1375,'meta','dir',1374,NULL),(1376,'user','dir',1374,NULL),(1377,'private','container',1370,NULL),(1378,'private_versions','container',1370,NULL),(1379,'backup','container',1370,NULL),(1380,'backup_versions','container',1370,NULL);
+/*!40000 ALTER TABLE `stobj` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `type` int(11) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` text,
+  `state` char(8) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (3,'AUTH_zhu__feng001163com',1,'AUTH_zhu__feng001163com',NULL,'enable'),(4,'AUTH_administrator163com',0,'AUTH_administrator163com',NULL,'enable');
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-04-01 19:26:34
