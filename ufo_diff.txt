@@ -1120,3 +1120,25 @@ host,host_mem,host_net,host_disk 会以序列号作为其的唯一标志符了�
 ## create table stat_proc_io(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,disk_read_per_sec bigint,disk_write_per_sec bigint);
 
 mysqldump -u root -p111111 cloudweb > dbcloudweb.20160401.bak
+
+研究下软件外包，好像不难，还能挣钱，不错。是的。
+
+学习下手机app，开始搞外包。好像很爽。有时间啊。就去挣钱去。是的。
+
+http://www.epwk.com/zt/login/
+
+http://www.kuai.ma/request.html
+
+好像可以挣钱，还能锻炼项目的设计能力。当然了，有项目设计能力，就是要去做高大上的项目了。是的。
+
+增加高大上项目。
+
+比如对于当前的系统，增加智能调度系统。是的。根据cpu，mem，和request个数等。是的。
+
+吹把。以及告警和邮件服务等。
+
+一是要设计，但是还是要高大上。是的。
+
+反馈系统。这个是非常的关键的。是的。
+
+关于项目的web的开发，新开一个分支，支持新的monitor了。是的。也是在家处理了。是的。git上的不同的分支处理，在svn上是如何处理的？奇怪啊。是的。
