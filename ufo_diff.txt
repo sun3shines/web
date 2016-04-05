@@ -1144,3 +1144,23 @@ http://www.kuai.ma/request.html
 关于项目的web的开发，新开一个分支，支持新的monitor了。是的。也是在家处理了。是的。git上的不同的分支处理，在svn上是如何处理的？奇怪啊。是的。
 
 一次只更新一回host，是的。
+
+ss[-1000:]
+
+create table stat_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,utilization float(8,4),seq bigint);
+
+create table stat_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,total bigint,available bigint,seq bigint);
+
+create table stat_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,bytes_sent_per_sec bigint,bytes_recv_per_sec bigint,packet_send_per_sec bigint ,packet_recv_per_sec bigint,seq bigint);
+
+create table stat_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,disk_read_per_sec bigint,disk_write_per_sec bigint,seq bigint);
+
+create table stat_storage(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp timestamp,uuid varchar(255),path varchar(255),total bigint,used bigint,free bigint,available varchar(8),seq bigint);
+
+alter table stat_cpu add constraint stat_cpu_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_mem add constraint stat_mem_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_net add constraint stat_net_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_disk add constraint stat_disk_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_storage add constraint stat_storage_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+
+基本上，每张表，每个主机，都对应着自己的seq了。是的。
