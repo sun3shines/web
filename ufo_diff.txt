@@ -1164,3 +1164,22 @@ alter table stat_disk add constraint stat_disk_check foreign key(host_id) refere
 alter table stat_storage add constraint stat_storage_check foreign key(host_id) references host(id) on delete cascade on update cascade;
 
 基本上，每张表，每个主机，都对应着自己的seq了。是的。
+
+需要我们先设计客户端。然后先写服务端，然后客户端在写的过程中，才有依靠了。是的。
+
+关于架构组织。涉及到server，common，lib，和monitor等。
+
+以及框架流程优化了。是的。解决一些bug了。是的。
+
+增加枷锁的数据库处理了。是的。
+
+创建线程，编写线程类。和初始化全局变量了。
+
+加锁的全局变量。需要这个。
+
+多台主机同时启动的时候，会出问题了。是的。
+
+with getlock(conn) as mylock
+需要这样的方式才行了。也是可以的。是的。
+
+

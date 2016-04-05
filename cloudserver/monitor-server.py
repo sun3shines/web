@@ -28,7 +28,7 @@ from cloudcommon.common.utils import get_logger,  public
 from cloudcommon.common.constraints import check_utf8
 from cloudcommon.common.bufferedhttp import jresponse
 
-from cloudweb.core.urls import handlerequest
+from cloudweb.monitor.urls import handlerequest
 from cloudweb.core.data import Server
 
 class ServerController(object):

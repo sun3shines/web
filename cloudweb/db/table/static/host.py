@@ -56,6 +56,9 @@ def uuid2attrs(db,uuid):
         
     return attrs
 
+def uuid2hostid(db,uuid):    
+    return uuid2attrs(db, uuid).get('id')
+
 def queryattrs(db):
     
     h = Host()
