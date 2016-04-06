@@ -1184,3 +1184,5 @@ with getlock(conn) as mylock
 
 制作monitor rpm包，是的。
 
+主机uuid初始化。
+

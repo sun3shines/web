@@ -69,9 +69,9 @@ def get_hw_cpu(hw):
                  }
             local_cpus.append(c)
             break
-    return local_cpus
+    return local_cpus[0]
 
 if __name__ == '__main__':
     hw = get_hw()
-    print get_hw_cpu(hw)[0] 
+    print get_hw_cpu(hw)
     
