@@ -1182,4 +1182,5 @@ alter table stat_storage add constraint stat_storage_check foreign key(host_id) 
 with getlock(conn) as mylock
 需要这样的方式才行了。也是可以的。是的。
 
+制作monitor rpm包，是的。
 
