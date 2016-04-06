@@ -4,7 +4,7 @@ from cloudlib.missions.tasks.task import Task
 
 import json
 from cloudlib.missions.tasks.task import Task
-from cloudweb.core.urls import strQuotaGet,strQuotaSet
+from cloudcommon.urls.web import strQuotaGet,strQuotaSet
 
 class QuotaGet(Task):
 

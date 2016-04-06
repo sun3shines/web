@@ -2,7 +2,7 @@
 
 import json
 from cloudlib.missions.tasks.task import Task
-from cloudweb.core.urls import strDataGlobalSearch,strDataMd5Search,strDataUserSearch,strObjectDetails
+from cloudcommon.urls.web import strDataGlobalSearch,strDataMd5Search,strDataUserSearch,strObjectDetails
 
 class UserSearch(Task):
     

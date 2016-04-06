@@ -2,7 +2,7 @@
 
 import json
 from cloudlib.missions.tasks.task import Task 
-from cloudweb.core.urls import strUserLogin,strUserList, strUserEnable,strUserDisable,strUserDelete
+from cloudcommon.urls.web import strUserLogin,strUserList, strUserEnable,strUserDisable,strUserDelete
 
 class UserLogin(Task):
     

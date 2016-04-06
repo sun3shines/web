@@ -2,7 +2,7 @@
 
 import json
 from cloudlib.missions.tasks.task import Task 
-from cloudweb.core.urls import strGetAtRecords,strGetOtRecords
+from cloudcommon.urls.web import strGetAtRecords,strGetOtRecords
 
 class ObjectRecord(Task):
     def __init__(self,atName,objPath):

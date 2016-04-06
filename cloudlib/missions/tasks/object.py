@@ -3,7 +3,7 @@
 import json
 
 from cloudlib.missions.tasks.task import Task 
-from cloudweb.core.urls import strObjectDetails,strDisableObject,strEnableObject,strDeleteObject, \
+from cloudcommon.urls.web import strObjectDetails,strDisableObject,strEnableObject,strDeleteObject, \
     strDownloadObject,strUploadObject
 
 #class ObjectDetails(Task):

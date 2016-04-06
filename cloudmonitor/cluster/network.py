@@ -3,9 +3,9 @@
 import dbus
 import isys
 
-from cloudweb.cluster.exe import sysCmd 
-from cloudweb.cluster.config import ipExprPtn,macExprPtn,maskExprPtn,devExprPtn,linkExprPtn
-from cloudweb.cluster.reg import exprSearch,exprFindAll
+from cloudmonitor.cluster.exe import sysCmd 
+from cloudmonitor.cluster.config import ipExprPtn,macExprPtn,maskExprPtn,devExprPtn,linkExprPtn
+from cloudmonitor.cluster.reg import exprSearch,exprFindAll
 
 def getActiveNetDevs():
     active_devs = set()

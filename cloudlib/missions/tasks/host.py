@@ -3,7 +3,7 @@
 import json
 
 from cloudlib.missions.tasks.task import Task 
-from cloudweb.core.urls import strGetServiceStatus,strGetWorkloadStatus,strGetAbnormalEvents
+from cloudcommon.urls.web import strGetServiceStatus,strGetWorkloadStatus,strGetAbnormalEvents
 
 class ServiceStatus(Task):
     

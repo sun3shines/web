@@ -2,16 +2,14 @@
 
 from cloudcommon.common.exceptions import LockTimeout, MessageTimeout
 from cloudcommon.common.bufferedhttp import jresponse
-
+from cloudcommon.urls.monitor import *
 from cloudweb.monitor.views.host import processStartUp
 from cloudweb.monitor.views.stat import processStatData
 
 url2view = {}
 
-urlStartUp = '/api/monitor/startup'
 url2view.update({urlStartUp:processStartUp})
 
-urlStatData = '/api/monitor/statdata'
 url2view.update({urlStatData:processStatData})
 
 def handlerequest(req,sdata):

@@ -1,6 +1,6 @@
 # file write / read block
 
-from cloudweb.cluster.config import fileBlockSize
+from cloudmonitor.cluster.config import fileBlockSize
 
 def readBlock(fn):
 

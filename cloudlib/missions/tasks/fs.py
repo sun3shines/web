@@ -2,7 +2,7 @@
 
 import json
 from cloudlib.missions.tasks.task import Task 
-from cloudweb.core.urls import strAccountList, strContainerList, strDirList
+from cloudcommon.urls.web import strAccountList, strContainerList, strDirList
 class AccountList(Task):
     
     def __init__(self,atName):
