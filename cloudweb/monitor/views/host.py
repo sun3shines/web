@@ -47,8 +47,4 @@ def loadQueue(hostUuid,queueDict):
         
 def loadThread(db,hostUuid,threadDict):
     
-    threadDict.put(hostUuid,{})
-    for cls in GlobalClass:
-        threadobj = StatCpu(db,hostUuid)
-        threadDict.get(hostUuid).update({cls:threadobj})
-        threadobj.start()
+    StatCpu(db,hostUuid).start()

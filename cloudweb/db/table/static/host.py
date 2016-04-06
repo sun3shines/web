@@ -25,7 +25,7 @@ def insert_host(db,name,uuid,product,manuf,ver,serial,tag,avai):
 
 def fetch_host(db,uuid):
     h = Host()
-    attrs = [h.name,h.uuid,h.product,h.manufacturer,
+    attrs = [h.id,h.name,h.uuid,h.product,h.manufacturer,
             h.version,h.serial,h.asset_tag,h.available]
     c = {h.uuid:uuid}
     return db.select(attrs,h.table,c)
@@ -62,8 +62,8 @@ def uuid2hostid(db,uuid):
 def queryattrs(db):
     
     h = Host()
-    attrs = {[h.name,h.uuid,h.product,h.manufacturer,
-            h.version,h.serial,h.asset_tag,h.available]}
+    attrs = [h.name,h.uuid,h.product,h.manufacturer,
+            h.version,h.serial,h.asset_tag,h.available]
     
     return db.select(attrs,h.table)    
     
@@ -78,7 +78,7 @@ def puth(db,uuid,attrs):
         ver = attrs.get(h.version,'')
         serial = attrs.get(h.serial,'')
         tag = attrs.get(h.asset_tag,'')
-        avai = 'connected'
+        avai = 'enable'
         return insert_host(db, name, uuid, product, manuf, ver, serial, tag, avai)
     
     d = {}

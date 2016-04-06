@@ -2,7 +2,7 @@
 
 import MySQLdb
 from cloudweb.globalx.static import MYSQL_HOST,MYSQL_PORT,MYSQL_USER,MYSQL_PASSWD
-class dbConn:
+class dbConn(object):
 
     def __init__(self,host,user,passwd,port,db):
         self.host = host

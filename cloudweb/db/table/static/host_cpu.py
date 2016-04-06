@@ -5,7 +5,7 @@ class Cpu:
         self.table = 'host_cpu'
         self.hid = 'host_id'
         self.id = 'id'
-        self.desc = 'descrition'
+        self.desc = 'description'
         self.product = 'product'
         self.vendor = 'vendor'
         self.phyid = 'physical_id'

@@ -1196,3 +1196,4 @@ with getlock(conn) as mylock
 
 配置，氛围localx和globalx。区分。该如何是好？
 
+如果线程在等待，io的话，会不能杀死。如何解决？
