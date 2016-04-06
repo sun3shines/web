@@ -1190,3 +1190,9 @@ with getlock(conn) as mylock
 
 构建http 客户端了。是的。
 
+移动后的库会被引用，但是文件不会删除
+
+把所有的globalx统一到cloudcommon？下是否可以？
+
+配置，氛围localx和globalx。区分。该如何是好？
+
