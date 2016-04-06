@@ -2,6 +2,26 @@
 
 import subprocess
 import socket
+import os.path
+from cloudmonitor.globalx import HOST_PATH
+from cloudmonitor.uuid import get_vs_uuid
+
+from cloudmonitor.static.lshw import get_hw
+from cloudmonitor.static.host_cpu import get_hw_cpu
+from cloudmonitor.static.host_disk import get_hw_disk
+from cloudmonitor.static.host_mem import get_hw_mem
+from cloudmonitor.static.host_net import get_hw_net
+
+def loadUuid():
+    
+    if not os.path.exists(HOST_PATH):
+        uuid = get_vs_uuid()
+        with open(HOST_PATH,'w') as f:
+            f.write(uuid)
+            
+    with open(HOST_PATH,'r') as f:
+        return f.read()
+
 
 def get_hw_host():
     hw = subprocess.Popen(['dmidecode'], 
@@ -26,7 +46,7 @@ def get_hw_host():
             asset_tag = line.split(":")[1].strip()
             
     return {'name':socket.gethostname(),
-            'uuid':'hostxxx',
+            'uuid':loadUuid(),
             'manufacturer':manufacturer,
             'product':product,
             'version':version,
@@ -34,6 +54,13 @@ def get_hw_host():
             'asset_tag':asset_tag,
             'available':'enable'}
         
+def get_host_static():
+    hwhost = get_hw_host()
+    hw = get_hw()
+    return {'hostUuid':hwhost.get('uuid'),'hostClass':hwhost,'cpuClass':get_hw_cpu(hw),
+            'diskClass':get_hw_disk(hw),'memClass':get_hw_mem(),'netClass':get_hw_net(hw)}
+
 if __name__ == '__main__':
-    print get_hw_host()
+#    print get_hw_host()
+    print get_host_static()
  

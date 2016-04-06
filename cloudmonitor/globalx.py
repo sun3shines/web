@@ -8,3 +8,4 @@ diskQueue = Queue.Queue(1000)
 netQueue = Queue.Queue(1000)
 storageQueue = Queue.Queue(1000)
 
+HOST_PATH = 'hostUuid'

@@ -1186,3 +1186,5 @@ with getlock(conn) as mylock
 
 主机uuid初始化。
 
+在服务启动的时候，会检测路径，如果uuid存在，则生成，如果不存在，则不能生成了。是的。
+
