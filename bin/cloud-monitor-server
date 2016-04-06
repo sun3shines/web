@@ -19,4 +19,4 @@ from cloudserver.wsgi import run_wsgi
 
 if __name__ == '__main__':
     conf_file, options = parse_options()
-    run_wsgi(conf_file, 'cloud-server', default_port=7002, **options)
+    run_wsgi(conf_file, 'cloud-server', default_port=7013, **options)

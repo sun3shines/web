@@ -38,11 +38,13 @@ setup(
         ],
     install_requires=[],  # removed for better compat
     scripts=[
-        'bin/cloud-server',
+        'bin/cloud-web-server',
+        'bin/cloud-monitor-server',
     ],
     entry_points={
         'paste.app_factory': [
-            'server = cloudserver.server:app_factory',
+            'webserver = cloudserver.web-server:app_factory',
+            'monitorserver = cloudserver.monitor-server:app_factory',
 #            'object=cloud.swift.obj.server:app_factory',
 #            'container=cloud.swift.container.server:app_factory',
 #            'account=cloud.swift.account.server:app_factory',

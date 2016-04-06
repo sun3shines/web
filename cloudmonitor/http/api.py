@@ -26,13 +26,13 @@ class StatData(Task):
     def getBody(self):
         return json.dumps(self.data)
     
-def start(param):
+def monitor_start(param):
     t = StartUp(param)
     mission.execute(t)
     print t.response
     return t.response
 
-def stat(data):
+def monitor_stat(data):
     t = StatData(data)
     mission.execute(t)
     print t.response
