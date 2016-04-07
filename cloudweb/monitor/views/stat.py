@@ -14,5 +14,5 @@ def processStatData(request,sdata):
         return jresponse('0','restart',request,200)
     
     GlobalQueue.get(hostUuid).get(typeClass).put(attr)
-    GlobalQueue.get(hostUuid).get('host').put(attr)
+    # GlobalQueue.get(hostUuid).get('host').put(attr)
     return jresponse('0','',request,200)

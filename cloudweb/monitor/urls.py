@@ -14,6 +14,7 @@ url2view.update({urlStartUp:processStartUp})
 url2view.update({urlStatData:processStatData})
 
 def handlerequest(req,sdata):
+
     url = req.path
     if url not in url2view:
         return jresponse('-1','url error',req,404)

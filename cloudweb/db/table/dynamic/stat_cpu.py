@@ -32,7 +32,8 @@ def hid2attrs(db,hid):
     attrs = []
     c = Cpu()
     datas = fetch_cpu(db, hid)
-    truncated =  datas[-1000:]
+#    truncated =  datas[-1000:]
+    truncated =  datas
     for data in truncated:
         attr = {}
         attr[c.id] = data[0]

@@ -1067,15 +1067,15 @@ Manufacturer: Kingston
         Asset Tag: A1_AssetTagNum1
         Part Number: 99P5471-011.A00LF
 
-create table host(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,name varchar(255),uuid varchar(255),product varchar(255),manufacturer varchar(255),version varchar(32),serial varchar(64) NOT NULL,asset_tag varchar(255),available varchar(8));
+create table host(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,name varchar(255),uuid varchar(255),product varchar(255),manufacturer varchar(255),version varchar(64),serial varchar(64) NOT NULL,asset_tag varchar(255),available varchar(16));
 
-create table host_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,total_width varchar(16),data_width varchar(16),size varchar(16),form_factor varchar(64),speed varchar(16),manufacturer varchar(255),serial varchar(64) NOT NULL,asset_tag varchar(255),part_number varchar(255));
+create table host_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,total_width varchar(16),data_width varchar(16),size varchar(32),form_factor varchar(64),speed varchar(32),manufacturer varchar(255),serial varchar(64) NOT NULL,asset_tag varchar(255),part_number varchar(255));
 
-create table host_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(32),description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),serial varchar(64) NOT NULL,size bigint,capacity bigint,width bigint,clock bigint,mtu int ,mac varchar(266),inet varchar(64),is_primary varchar(8));
+create table host_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(64),description varchar(255),product varchar(255),vendor varchar(255),physical_id varchar(64),bus_info varchar(255),version varchar(64),serial varchar(64) NOT NULL,size bigint,capacity bigint,width bigint,clock bigint,mtu int ,mac varchar(266),inet varchar(64),is_primary varchar(16));
 
-create table host_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),size bigint,capacity bigint,width bigint,clock bigint,cores int,enabledcores int,threads int);
+create table host_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,description varchar(255),product varchar(255),vendor varchar(255),physical_id varchar(64),bus_info varchar(255),version varchar(64),size bigint,capacity bigint,width bigint,clock bigint,cores int,enabledcores int,threads int);
 
-create table host_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(32),description varchar(255),product varchar(255),vendor varchar(255),physical_id int,bus_info varchar(255),version varchar(32),serial varchar(64) NOT NULL,size bigint);
+create table host_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,logicalname varchar(64),description varchar(255),product varchar(255),vendor varchar(255),physical_id varchar(64),bus_info varchar(255),version varchar(64),serial varchar(64) NOT NULL,size bigint);
 
 alter table host_mem add constraint mem_check foreign key(host_id) references host(id) on delete cascade on update cascade;
 alter table host_net add constraint net_check foreign key(host_id) references host(id) on delete cascade on update cascade;
@@ -1197,3 +1197,22 @@ with getlock(conn) as mylock
 配置，氛围localx和globalx。区分。该如何是好？
 
 如果线程在等待，io的话，会不能杀死。如何解决？
+
+修改数据库字段类型。
+
+create table stat_cpu(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,utilization float(8,4),seq bigint);
+
+create table stat_mem(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,total bigint,available bigint,seq bigint);
+
+create table stat_net(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,bytes_sent_per_sec bigint,bytes_recv_per_sec bigint,packet_send_per_sec bigint ,packet_recv_per_sec bigint,seq bigint);
+
+create table stat_disk(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,disk_read_per_sec bigint,disk_write_per_sec bigint,seq bigint);
+
+create table stat_storage(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,uuid varchar(255),path varchar(255),total bigint,used bigint,free bigint,available varchar(8),seq bigint);
+
+alter table stat_cpu add constraint stat_cpu_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_mem add constraint stat_mem_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_net add constraint stat_net_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_disk add constraint stat_disk_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+alter table stat_storage add constraint stat_storage_check foreign key(host_id) references host(id) on delete cascade on update cascade;
+

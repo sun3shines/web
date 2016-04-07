@@ -1,12 +1,12 @@
 
-from clusterConfig import userCifsStoragePath,mountCmd,userCifsStorageDevice, \
+from cloudmonitor.cluster.config import userCifsStoragePath,mountCmd,userCifsStorageDevice, \
 userBusinessPath,mountStatusInterval
 
-from clusterMsg import storageExistsMsg,storageNotExistsMsg,businessExistsMsg,businessNotExistsMsg, \
+from cloudmonitor.cluster.msg import storageExistsMsg,storageNotExistsMsg,businessExistsMsg,businessNotExistsMsg, \
 mountStatusSucMsg,mountStatusFailedMsg
 
 
-from cmdExe import sysCmd
+from cloudmonitor.cluster.exe import sysCmd
 import os.path
 
 def getMountStatus(userStoragePath,userStorageDevice):

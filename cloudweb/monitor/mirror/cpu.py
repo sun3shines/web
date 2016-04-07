@@ -2,8 +2,9 @@
 
 from cloudweb.db.table.dynamic.stat_cpu import hid2attrs,Cpu, update_cpu,\
     insert_cpu
+from cloudweb.monitor.globalx import MIRROR_LIMIT
 
-class Cpu:
+class MirrorCpu:
     def __init__(self,db,hid):
         self.db = db
         self.hid = hid
@@ -15,7 +16,7 @@ class Cpu:
         
     def load(self):
         self.l = hid2attrs(self.db, self.hid)
-        if 1000 == len(self.l):
+        if MIRROR_LIMIT == len(self.l):
             
             maxseq = -1 
             for attr in self.l:
@@ -27,25 +28,35 @@ class Cpu:
             
         else:
             self.currentindex = len(self.l)
-            while len(self.l) < 1000:
+
+            maxseq = -1
+            for attr in self.l:
+                seq = float(attr[self.c.seq])
+                if seq > maxseq:
+                    maxseq = seq
+            self.currentseq = maxseq + 1
+
+            while len(self.l) < MIRROR_LIMIT:
                 self.l.append({self.c.hid:self.hid,self.c.id:None,
                                self.c.timestamp:None,self.c.utilization:None,
                                self.c.seq:None})
             
     def append(self,attr):
+
+        if MIRROR_LIMIT == self.currentindex:
+            self.currentindex = 0
+            self.l = hid2attrs(self.db, self.hid)
         self.update(attr)
         self.currentindex = self.currentindex + 1
         self.currentseq = self.currentseq + 1
-        if 1000 == self.currentindex:
-            self.currentindex = 0
-            self.l = hid2attrs(self.db, self.hid)
-            
+    
     def update(self,attr):
         dbattr = self.l[self.currentindex]
         timestamp = attr.get(self.c.timestamp)
         utilization = attr.get(self.c.utilization)
         
-        if not dbattr.get(self.c.seq):
+        # 之前是因为误判了。是0 而不是None 
+        if None == dbattr.get(self.c.seq):
             insert_cpu(self.db, self.hid, timestamp, utilization,self.currentseq)
         else:
             cid = dbattr.get(self.c.id)

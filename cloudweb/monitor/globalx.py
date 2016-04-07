@@ -9,3 +9,5 @@ GlobalThread = lockDict()
 GlobalQueue = lockDict()
 
 GlobalClass = ['host','statCpu','statMem','statNet','statDisk','statStorage']
+
+MIRROR_LIMIT = 100
