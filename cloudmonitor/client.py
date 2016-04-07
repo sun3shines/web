@@ -10,7 +10,8 @@ from cloudmonitor.producer.mem import pStatMem
 from cloudmonitor.consumer.mem import cStatMem
 from cloudmonitor.producer.storage import pStatStorage
 from cloudmonitor.consumer.storage import cStatStorage
-
+from cloudmonitor.producer.net import pStatNet
+from cloudmonitor.consumer.net import cStatNet
 def main():
 
     hostUuid = start()    
@@ -20,6 +21,8 @@ def main():
     cStatMem().start()
     pStatStorage(hostUuid).start()
     cStatStorage().start()
+    pStatNet(hostUuid).start()
+    cStatNet().start()
     while True:
         time.sleep(MONITOR_LOOP_INTERVAL)
         

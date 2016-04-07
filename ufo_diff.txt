@@ -1220,3 +1220,4 @@ alter table stat_storage add constraint stat_storage_check foreign key(host_id) 
 
 因此启动线程就可以了？
 
+psutil github scripts https://github.com/giampaolo/psutil
