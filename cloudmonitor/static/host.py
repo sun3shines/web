@@ -3,7 +3,8 @@
 import subprocess
 import socket
 import os.path
-from cloudmonitor.globalx import HOST_PATH
+import time
+from cloudmonitor.globalx import HOST_PATH,MONITOR_CONNECT_INTERVAL
 from cloudmonitor.uuid import get_vs_uuid
 
 from cloudmonitor.static.lshw import get_hw
@@ -11,6 +12,8 @@ from cloudmonitor.static.host_cpu import get_hw_cpu
 from cloudmonitor.static.host_disk import get_hw_disk
 from cloudmonitor.static.host_mem import get_hw_mem
 from cloudmonitor.static.host_net import get_hw_net
+
+from cloudmonitor.http.api import monitor_start
 
 def loadUuid():
     
@@ -60,6 +63,19 @@ def get_host_static():
     return {'hostUuid':hwhost.get('uuid'),'hostClass':hwhost,'cpuClass':get_hw_cpu(hw),
             'diskClass':get_hw_disk(hw),'memClass':get_hw_mem(),'netClass':get_hw_net(hw)}
 
+def start():
+    hostUuid = ''
+    while True:
+        host_hw = get_host_static()
+        hostUuid = host_hw.get('hostUuid')
+        t = monitor_start(host_hw)
+        if 'ready' == t.response.get('msg'):
+            break
+        time.sleep(MONITOR_CONNECT_INTERVAL)
+        
+    return hostUuid
+
+    
 if __name__ == '__main__':
 #    print get_hw_host()
     print get_host_static()

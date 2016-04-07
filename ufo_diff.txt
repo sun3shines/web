@@ -1216,3 +1216,7 @@ alter table stat_net add constraint stat_net_check foreign key(host_id) referenc
 alter table stat_disk add constraint stat_disk_check foreign key(host_id) references host(id) on delete cascade on update cascade;
 alter table stat_storage add constraint stat_storage_check foreign key(host_id) references host(id) on delete cascade on update cascade;
 
+其实就consumer和product来说，每个都是线程了。是的。
+
+因此启动线程就可以了？
+

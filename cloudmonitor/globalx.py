@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import Queue
-
-cpuQueue = Queue.Queue(1000)
-memQueue = Queue.Queue(1000)
-diskQueue = Queue.Queue(1000)
-netQueue = Queue.Queue(1000)
-storageQueue = Queue.Queue(1000)
-
 HOST_PATH = 'hostUuid'
 
 MONITOR_SERVER_HOST = '192.168.36.3'
 MONITOR_SERVER_PORT = 7013
 HTTP_TIMEOUT = 100
 
-PSUTIL_CPU_INTERVAL = 2
+MONITOR_CONNECT_INTERVAL =  10
+MONITOR_LOOP_INTERVAL = 10
+
+PSUTIL_CPU_INTERVAL = 5
+PSUTIL_MEM_INTERVAL = 5
+PSUTIL_DISK_INTERVAL = 5
+PSUTIL_NET_INTERVAL = 5
+PSUTIL_STORAGE_INTERVAL = 5
+
