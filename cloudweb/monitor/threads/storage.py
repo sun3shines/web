@@ -18,4 +18,5 @@ class StatStorage(threading.Thread):
         m = MirrorStorage(self.db,hostid)
         while True:
             attr = q.get()
+            print attr
             m.append(attr)

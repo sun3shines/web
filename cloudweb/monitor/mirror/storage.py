@@ -53,7 +53,6 @@ class MirrorStorage(MirrorBase):
                        total,used,free,available,self.currentseq)
     
     def update_mirror(self,attr,mirror_attr):
-        pass
         timestamp = attr.get(self.c.timestamp)
         uuid = attr.get(self.c.uuid)
         path = attr.get(self.c.path)

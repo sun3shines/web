@@ -8,6 +8,8 @@ from cloudmonitor.producer.cpu import pStatCpu
 from cloudmonitor.consumer.cpu import cStatCpu
 from cloudmonitor.producer.mem import pStatMem
 from cloudmonitor.consumer.mem import cStatMem
+from cloudmonitor.producer.storage import pStatStorage
+from cloudmonitor.consumer.storage import cStatStorage
 
 def main():
 
@@ -16,7 +18,8 @@ def main():
     cStatCpu().start()
     pStatMem(hostUuid).start()
     cStatMem().start()
-    
+    pStatStorage(hostUuid).start()
+    cStatStorage().start()
     while True:
         time.sleep(MONITOR_LOOP_INTERVAL)
         
