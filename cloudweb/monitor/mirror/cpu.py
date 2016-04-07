@@ -1,69 +1,48 @@
 # -*- coding: utf-8 -*-
 
-from cloudweb.db.table.dynamic.stat_cpu import hid2attrs,Cpu, update_cpu,\
-    insert_cpu
-from cloudweb.monitor.globalx import MIRROR_LIMIT
+from cloudweb.db.table.dynamic.stat_cpu import Cpu, update_cpu,insert_cpu
+from cloudweb.db.table.dynamic.stat_cpu import hid2attrs as CPUhid2attrs
+from cloudweb.monitor.mirror.base import MirrorBase
 
-class MirrorCpu:
+class MirrorCpu(MirrorBase):
     def __init__(self,db,hid):
-        self.db = db
-        self.hid = hid
-        self.currentindex = 0
-        self.currentseq = 0
-        self.l = []
-        self.c = Cpu()
-        self.load()
+        super(MirrorCpu, self).__init__(db,hid)
         
-    def load(self):
-        self.l = hid2attrs(self.db, self.hid)
-        if MIRROR_LIMIT == len(self.l):
-            
-            maxseq = -1 
-            for attr in self.l:
-                seq = float(attr[self.c.seq]) 
-                if seq > maxseq:
-                    maxseq = seq
-                    self.currentindex = self.currentindex + 1
-            self.currentseq = maxseq + 1
-            
-        else:
-            self.currentindex = len(self.l)
-
-            maxseq = -1
-            for attr in self.l:
-                seq = float(attr[self.c.seq])
-                if seq > maxseq:
-                    maxseq = seq
-            self.currentseq = maxseq + 1
-
-            while len(self.l) < MIRROR_LIMIT:
-                self.l.append({self.c.hid:self.hid,self.c.id:None,
-                               self.c.timestamp:None,self.c.utilization:None,
-                               self.c.seq:None})
-            
-    def append(self,attr):
-
-        if MIRROR_LIMIT == self.currentindex:
-            self.currentindex = 0
-            self.l = hid2attrs(self.db, self.hid)
-        self.update(attr)
-        self.currentindex = self.currentindex + 1
-        self.currentseq = self.currentseq + 1
+    @property
+    def hid2attrs(self):
+        
+        return CPUhid2attrs
     
-    def update(self,attr):
-        dbattr = self.l[self.currentindex]
+    @property
+    def getClass(self):
+        
+        return Cpu
+    
+    @property
+    def emptyObject(self):
+        
+        return {self.c.hid:self.hid,self.c.id:None,
+                self.c.timestamp:None,self.c.utilization:None,
+                self.c.seq:None}
+            
+    def insert_db(self,attr):
+        pass
         timestamp = attr.get(self.c.timestamp)
         utilization = attr.get(self.c.utilization)
+        insert_cpu(self.db, self.hid, timestamp, utilization,self.currentseq)
         
-        # 之前是因为误判了。是0 而不是None 
-        if None == dbattr.get(self.c.seq):
-            insert_cpu(self.db, self.hid, timestamp, utilization,self.currentseq)
-        else:
-            cid = dbattr.get(self.c.id)
-            update_cpu(self.db, cid, timestamp, utilization,self.currentseq)
-            
-        dbattr.update({self.c.timestamp:timestamp,self.c.utilization:utilization,
+    def update_db(self,attr,mirror_attr):
+        pass
+    
+        timestamp = attr.get(self.c.timestamp)
+        utilization = attr.get(self.c.utilization)
+        cid = mirror_attr.get(self.c.id)
+        update_cpu(self.db, cid, timestamp, utilization,self.currentseq)
+    
+    def update_mirror(self,attr,mirror_attr):
+        pass
+        timestamp = attr.get(self.c.timestamp)
+        utilization = attr.get(self.c.utilization)
+        mirror_attr.update({self.c.timestamp:timestamp,self.c.utilization:utilization,
                        self.c.seq:self.currentseq})
-    
-
-    
+        
