@@ -13,6 +13,11 @@ from cloudweb.db.table.static.host_disk import putds
 from cloudweb.monitor.globalx import GlobalDb,GlobalQueue,GlobalThread,GlobalClass
 from cloudweb.db.table.lock.mysql import getdb,getlock
 from cloudweb.monitor.threads.cpu import StatCpu
+from cloudweb.monitor.threads.mem import StatMem
+from cloudweb.monitor.threads.net import StatNet
+from cloudweb.monitor.threads.disk import StatDisk
+from cloudweb.monitor.threads.storage import StatStorage
+
 def processStartUp(request,sdata):
 
     param = json.loads(request.body)
@@ -48,3 +53,9 @@ def loadQueue(hostUuid,queueDict):
 def loadThread(db,hostUuid,threadDict):
     
     StatCpu(db,hostUuid).start()
+    StatMem(db,hostUuid).start()
+    StatDisk(db,hostUuid).start()
+    StatNet(db,hostUuid).start()
+    StatStorage(db,hostUuid).start()
+    
+    

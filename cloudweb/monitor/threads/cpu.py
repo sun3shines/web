@@ -16,8 +16,5 @@ class StatCpu(threading.Thread):
         hostid = uuid2hostid(self.db, self.hostUuid)
         m = MirrorCpu(self.db,hostid)
         while True:
-#            import pdb;pdb.set_trace()
             attr = q.get()
-            print attr
-            print 'in thread'
             m.append(attr)
