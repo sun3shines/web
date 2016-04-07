@@ -23,7 +23,7 @@ class MirrorStorage(MirrorBase):
         
         return {self.c.hid:self.hid,self.c.id:None,
                 self.c.timestamp:None,self.c.uuid:None,self.c.path:None,self.c.total:None,
-                self.c.used:None,self.c.free:None,self.c.available:None,self.c.seq:None}
+                self.c.used:None,self.c.free:None,self.c.avai:None,self.c.seq:None}
             
     def insert_db(self,attr):
         pass
@@ -33,7 +33,7 @@ class MirrorStorage(MirrorBase):
         total = attr.get(self.c.total)
         used = attr.get(self.c.used)
         free = attr.get(self.c.free)
-        available = attr.get(self.c.available)
+        available = attr.get(self.c.avai)
         insert_storage(self.db, self.hid, timestamp, uuid,path,
                        total,used,free,available,self.currentseq)
         
@@ -46,7 +46,7 @@ class MirrorStorage(MirrorBase):
         total = attr.get(self.c.total)
         used = attr.get(self.c.used)
         free = attr.get(self.c.free)
-        available = attr.get(self.c.available)
+        available = attr.get(self.c.avai)
         
         cid = mirror_attr.get(self.c.id)
         update_storage(self.db, cid, timestamp, uuid,path,
@@ -60,9 +60,9 @@ class MirrorStorage(MirrorBase):
         total = attr.get(self.c.total)
         used = attr.get(self.c.used)
         free = attr.get(self.c.free)
-        available = attr.get(self.c.available)
+        available = attr.get(self.c.avai)
         
         mirror_attr.update({self.c.timestamp:timestamp,self.c.uuid:uuid,self.c.path:path,self.c.total:total,
                             self.c.used:used,self.c.free:free,
-                            self.c.available:available,self.c.seq:self.currentseq})
+                            self.c.avai:available,self.c.seq:self.currentseq})
         

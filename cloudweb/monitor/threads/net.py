@@ -4,11 +4,12 @@ import threading
 from cloudweb.monitor.globalx import GlobalQueue
 from cloudweb.db.table.static.host import uuid2hostid
 from cloudweb.monitor.mirror.net import MirrorNet
+from cloudweb.db.table.lock.mysql import getdb
 
 class StatNet(threading.Thread):
-    def __init__(self,db,hostUuid):
+    def __init__(self,hostUuid):
         threading.Thread.__init__(self)
-        self.db = db
+        self.db = getdb()
         self.hostUuid = hostUuid
         
     def run(self):

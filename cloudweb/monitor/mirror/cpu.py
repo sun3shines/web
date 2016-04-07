@@ -40,7 +40,7 @@ class MirrorCpu(MirrorBase):
         update_cpu(self.db, cid, timestamp, utilization,self.currentseq)
     
     def update_mirror(self,attr,mirror_attr):
-        pass
+
         timestamp = attr.get(self.c.timestamp)
         utilization = attr.get(self.c.utilization)
         mirror_attr.update({self.c.timestamp:timestamp,self.c.utilization:utilization,

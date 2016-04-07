@@ -10,5 +10,7 @@ class cStatCpu(threading.Thread):
         
     def run(self):
         while True:
+#            data = self.queue.get()
+#            print data
             monitor_stat(self.queue.get())
     

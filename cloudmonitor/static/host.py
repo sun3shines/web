@@ -68,8 +68,8 @@ def start():
     while True:
         host_hw = get_host_static()
         hostUuid = host_hw.get('hostUuid')
-        t = monitor_start(host_hw)
-        if 'ready' == t.response.get('msg'):
+        resp = monitor_start(host_hw)
+        if 'ready' == resp.get('msg'):
             break
         time.sleep(MONITOR_CONNECT_INTERVAL)
         

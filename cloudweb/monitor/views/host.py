@@ -40,7 +40,7 @@ def processStartUp(request,sdata):
         loadQueue(hostUuid, GlobalQueue)
         
     if not GlobalThread.get(hostUuid):
-        loadThread(db,hostUuid, GlobalThread)
+        loadThread(hostUuid, GlobalThread)
     
     return jresponse('0','ready',request,200)
 
@@ -50,12 +50,12 @@ def loadQueue(hostUuid,queueDict):
     for cls in GlobalClass:
         queueDict.get(hostUuid).update({cls:Queue.Queue()})
         
-def loadThread(db,hostUuid,threadDict):
+def loadThread(hostUuid,threadDict):
     
-    StatCpu(db,hostUuid).start()
-    StatMem(db,hostUuid).start()
-    StatDisk(db,hostUuid).start()
-    StatNet(db,hostUuid).start()
-    StatStorage(db,hostUuid).start()
+    StatCpu(hostUuid).start()
+    StatMem(hostUuid).start()
+    StatDisk(hostUuid).start()
+    StatNet(hostUuid).start()
+    StatStorage(hostUuid).start()
     
     

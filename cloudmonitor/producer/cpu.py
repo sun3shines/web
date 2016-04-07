@@ -12,5 +12,7 @@ class pStatCpu(threading.Thread):
         
     def run(self):
         for data in get_psutil_cpu(self.hostUuid):
+            print data
+
             self.queue.put(data,block=True)
     

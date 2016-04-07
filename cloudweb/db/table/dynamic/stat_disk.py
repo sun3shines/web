@@ -2,7 +2,7 @@
 
 class Disk:
     def __init__(self):
-        self.table = 'stat_mem'
+        self.table = 'stat_disk'
         self.id = 'id'
         self.hid = 'host_id'
         self.timestamp = 'timestamp'

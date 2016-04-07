@@ -16,9 +16,10 @@ def get_psutil_memory(hostUuid):
     
     for total,available in memory_iter():
         yield {'hostUuid':hostUuid,
-                'class':'statMem',
-                'attr':{'total':total,'available':available,
-                'timestamp':str(datetime.datetime.now())}}
+               'class':'statMem',
+               'attr':{'total':total,
+                       'available':available,
+                       'timestamp':str(datetime.datetime.now())}}
         
         
         

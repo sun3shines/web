@@ -14,9 +14,9 @@ def get_psutil_cpu(hostUuid):
     
     for utilization in cpu_iter():
         yield {'hostUuid':hostUuid,
-                'class':'statCpu',
-                'attr':{'utilization':utilization,
-                'timestamp':str(datetime.datetime.now())}}
+               'class':'statCpu',
+               'attr':{'utilization':utilization,
+                       'timestamp':str(datetime.datetime.now())}}
         
         
         
