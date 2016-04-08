@@ -8,18 +8,20 @@ from cloudmonitor.global_cache import MONITOR_DISK_PROCESS
 from cloudmonitor.globalx import CLOUD_CMDLINES
 
 def is_cloud_process(cmdline):
-    
-    for c in CLOUD_CMDLINES:
+    for pc in CLOUD_CMDLINES:
+        if len(cmdline) < len(pc):
+            return False
         i = 0
-        while i< len(c):
-            if c[i] != cmdline[i]:
+        while i< len(pc):
+            if pc[i] != cmdline[i]:
                 break
-        if len(c) == i:
+            i = i + 1
+        if len(pc) == i:
             return True
     return False
             
 def get_psutil_process():
-    
+
     while True:
         pids = []
         for p in psutil.process_iter():

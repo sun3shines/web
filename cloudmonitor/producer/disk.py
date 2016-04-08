@@ -13,6 +13,5 @@ class pStatDisk(threading.Thread):
     def run(self):
         for data in get_psutil_disk(self.hostUuid):
             print data
-
             self.queue.put(data,block=True)
     

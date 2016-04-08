@@ -26,7 +26,7 @@ def psutil_process_bytes(psutil_pids):
             
     for pid in delpids:
         psutil_pids.remove(pid)
-        
+    print read_bytes,write_bytes        
     return read_bytes,write_bytes
 
                                 

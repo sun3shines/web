@@ -26,7 +26,8 @@ class MirrorDisk(MirrorBase):
                 self.c.disk_write_per_sec:None,self.c.seq:None}
             
     def insert_db(self,attr):
-        pass
+        print 'disk currentseq',self.currentseq
+        print 'disk currentindex',self.currentindex
         timestamp = attr.get(self.c.timestamp)
         disk_read_per_sec = attr.get(self.c.disk_read_per_sec)
         disk_write_per_sec = attr.get(self.c.disk_write_per_sec)
@@ -35,7 +36,8 @@ class MirrorDisk(MirrorBase):
         
     def update_db(self,attr,mirror_attr):
         pass
-    
+        print 'disk currentseq',self.currentseq   
+        print 'disk currentindex',self.currentindex 
         timestamp = attr.get(self.c.timestamp)
         disk_read_per_sec = attr.get(self.c.disk_read_per_sec)
         disk_write_per_sec = attr.get(self.c.disk_write_per_sec)

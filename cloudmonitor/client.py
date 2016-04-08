@@ -12,9 +12,15 @@ from cloudmonitor.producer.storage import pStatStorage
 from cloudmonitor.consumer.storage import cStatStorage
 from cloudmonitor.producer.net import pStatNet
 from cloudmonitor.consumer.net import cStatNet
-def main():
+from cloudmonitor.producer.disk import pStatDisk
+from cloudmonitor.consumer.disk import cStatDisk
+from cloudmonitor.process.filter import ProcessFilter
 
+
+def main():
     hostUuid = start()    
+    ProcessFilter().start()
+    
     pStatCpu(hostUuid).start()
     cStatCpu().start()
     pStatMem(hostUuid).start()
@@ -23,6 +29,9 @@ def main():
     cStatStorage().start()
     pStatNet(hostUuid).start()
     cStatNet().start()
+    pStatDisk(hostUuid).start()
+    cStatDisk().start()
+    
     while True:
         time.sleep(MONITOR_LOOP_INTERVAL)
         
