@@ -21,7 +21,7 @@ def insert_disk(db,hid,timestamp,disk_read_per_sec,disk_write_per_sec,seq):
 def update_disk(db,mid,timestamp,disk_read_per_sec,disk_write_per_sec,seq):
     d = Disk()
     dvs = {}
-    d.update({d.timestamp:timestamp,d.disk_read_per_sec:disk_read_per_sec,d.disk_write_per_sec:disk_write_per_sec,d.seq:seq})
+    dvs.update({d.timestamp:timestamp,d.disk_read_per_sec:disk_read_per_sec,d.disk_write_per_sec:disk_write_per_sec,d.seq:seq})
     return db.update(dvs,d.table,{d.id:mid})
 
 def fetch_disk(db,hid):

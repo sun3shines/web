@@ -49,6 +49,8 @@ def disk_iter():
         read_bytes_per_sec = write_bytes_per_sec = 0
         
         for pid in psutil_pids:
+            if pid not in read_bytes_after or pid not in write_bytes_before:
+                continue
             read_total_bytes = read_total_bytes + read_bytes_after[pid] - read_bytes_before[pid]
             write_total_bytes = write_total_bytes + write_bytes_after[pid] - write_bytes_before[pid]
         read_bytes_per_sec = read_total_bytes/PSUTIL_DISK_INTERVAL

@@ -9,10 +9,10 @@ HTTP_TIMEOUT = 100
 MONITOR_CONNECT_INTERVAL =  10
 MONITOR_LOOP_INTERVAL = 10
 
-PSUTIL_CPU_INTERVAL = 5 
-PSUTIL_MEM_INTERVAL = 5
-PSUTIL_DISK_INTERVAL = 3
-PSUTIL_NET_INTERVAL = 5
+PSUTIL_CPU_INTERVAL = 2 
+PSUTIL_MEM_INTERVAL = 2
+PSUTIL_DISK_INTERVAL = 2 
+PSUTIL_NET_INTERVAL = 2
 PSUTIL_STORAGE_INTERVAL = 30
 PSUTIL_PROCESS_INTERVAL = 5
 
@@ -22,4 +22,5 @@ CLOUD_CMDLINES = [('/usr/bin/python','/usr/bin/swift-account-server'),
                   ('/usr/bin/python','/usr/bin/swift-container-server'),
                   ('/usr/bin/python','/usr/bin/swift-object-server'),
                   ('/usr/bin/python','/usr/bin/cloud-web-server'),
-                  ('/usr/bin/python','/usr/bin/cloud-monitor-server')]
+                  ('/usr/bin/python','/usr/bin/cloud-monitor-server'),
+                  ('python','psutil_io.py')]
