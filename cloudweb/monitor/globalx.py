@@ -8,6 +8,7 @@ GlobalThread = lockDict()
 
 GlobalQueue = lockDict()
 
-GlobalClass = ['host','statCpu','statMem','statNet','statDisk','statStorage']
+GlobalClass = ['host','statCpu','statMem','statNet','statDisk','statStorage',
+               'statService']
 
 MIRROR_LIMIT = 100

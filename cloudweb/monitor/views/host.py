@@ -17,6 +17,7 @@ from cloudweb.monitor.threads.mem import StatMem
 from cloudweb.monitor.threads.net import StatNet
 from cloudweb.monitor.threads.disk import StatDisk
 from cloudweb.monitor.threads.storage import StatStorage
+from cloudweb.monitor.threads.service import StatService
 
 def processStartUp(request,sdata):
 
@@ -57,5 +58,5 @@ def loadThread(hostUuid,threadDict):
     StatDisk(hostUuid).start()
     StatNet(hostUuid).start()
     StatStorage(hostUuid).start()
-    
+    StatService(hostUuid).start()
     
