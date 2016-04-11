@@ -30,4 +30,5 @@ SERVICE_CMDLINE = {'proxy':('/usr/bin/python','/usr/bin/swift-proxy-server'),
                    'account':('/usr/bin/python','/usr/bin/swift-account-server'),
                    'container':('/usr/bin/python','/usr/bin/swift-container-server'),
                    'object':('/usr/bin/python','/usr/bin/swift-object-server'),
-                   'cloud-web':('/usr/bin/python','/usr/bin/cloud-web-server')}
+                   'cloud-web':('/usr/bin/python','/usr/bin/cloud-web-server'),
+                   'cloud-monitor':('/usr/bin/python','/usr/bin/cloud-monitor-server')}
