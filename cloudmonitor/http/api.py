@@ -3,7 +3,7 @@
 import json
 
 from cloudmonitor.http.task import Task
-from cloudcommon.urls.monitor import urlStartUp,urlStatData
+from cloudlib.urls.monitor import urlStartUp,urlStatData
 import cloudmonitor.http.mission as mission
 
 class StartUp(Task):

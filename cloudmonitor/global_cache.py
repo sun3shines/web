@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import Queue
-from cloudcommon.advanced.locklist import lockList
-from cloudcommon.advanced.lockdict import lockDict
+from cloudlib.advanced.locklist import lockList
+from cloudlib.advanced.lockdict import lockDict
 
 cpuQueue = Queue.Queue(1000)
 memQueue = Queue.Queue(1000)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from cloudcommon.common.bufferedhttp import jresponse
+from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.monitor.globalx import GlobalQueue
 
 def processStatData(request,sdata):

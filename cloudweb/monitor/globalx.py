@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from cloudweb.advanced.lockdict import lockDict
+from cloudlib.advanced.lockdict import lockDict
 
 GlobalDb = lockDict()
 

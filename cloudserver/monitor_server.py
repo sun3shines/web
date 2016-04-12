@@ -24,12 +24,12 @@ from xml.sax import saxutils
 from eventlet import Timeout
 from webob import Request, Response
 
-from cloudcommon.common.utils import get_logger,  public
-from cloudcommon.common.constraints import check_utf8
-from cloudcommon.common.bufferedhttp import jresponse
+from cloudlib.common.utils import get_logger,  public
+from cloudlib.common.constraints import check_utf8
+from cloudlib.common.bufferedhttp import jresponse
 
 from cloudweb.monitor.urls import handlerequest
-from cloudweb.core.data import Server
+from cloudweb.webcenter.data import Server
 
 class ServerController(object):
     """WSGI controller for the account server."""

@@ -3,7 +3,7 @@
 import json
 import Queue
 
-from cloudcommon.common.bufferedhttp import jresponse
+from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.db.table.static.host import puth,uuid2hostid
 from cloudweb.db.table.static.host_cpu import putc
 from cloudweb.db.table.static.host_mem import putms

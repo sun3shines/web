@@ -116,7 +116,7 @@ def run_wsgi(conf_file, app_section, *args, **kwargs):
     except Exception, e:
         print "Error trying to load config %s: %s" % (conf_file, e)
         return
-
+    
     # pre-configure logger
     log_name = conf.get('log_name', app_section)
     if 'logger' in kwargs:

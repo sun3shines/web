@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from cloudcommon.common.exceptions import LockTimeout, MessageTimeout
-from cloudcommon.common.bufferedhttp import jresponse
-from cloudcommon.urls.monitor import *
+from cloudlib.common.exceptions import LockTimeout, MessageTimeout
+from cloudlib.common.bufferedhttp import jresponse
+from cloudlib.urls.monitor import *
 
 from cloudweb.monitor.views.host import processStartUp
 from cloudweb.monitor.views.stat import processStatData
