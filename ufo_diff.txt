@@ -1247,3 +1247,14 @@ orm的方式，准备用一个的方式来写了。周末研究下orm。是的�
 create table stat_service(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,host_id bigint NOT NULL,timestamp datetime,name varchar(255),cmdline varchar(1024),active_status varchar(64),open_files int,net_connections int,thread_num int,cpu_utilization float,mem_utilization float,available varchar(64),seq bigint);
 alter table stat_service add constraint stat_service_check foreign key(host_id) references host(id) on delete cascade on update cascade;
 
+会通过配置，来设置全局变量了。是的。
+
+配置设置后，会重新启动了。是的。
+
+此时的web，应该称之为视图统计系统。兼职监控，管理系统了。是的。
+
+写程序，是们手艺了。是手艺人。或者说，是工艺了。是的。
+
+程序是工艺么？满足社会进步的工艺品么？那么企业级应用是怎么回事呢？是的。
+
+还有有健壮的稳定性了。是的。
