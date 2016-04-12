@@ -4,16 +4,12 @@ from cloudlib.common.exceptions import LockTimeout, MessageTimeout
 from cloudlib.common.bufferedhttp import jresponse
 from cloudlib.urls.flask import *
 
-from cloudweb.platform.http_flask_fs import *
-from cloudweb.platform.http_flask_user import *
-from cloudweb.platform.http_flask_search import *
-from cloudweb.platform.http_flask_object import *
-from cloudweb.platform.http_flask_quota import *
-from cloudweb.platform.http_flask_host import *
-from cloudweb.platform.http_flask_config import *
-from cloudweb.platform.http_flask_record import *
-from cloudweb.platform.http_flask_record import url_getObjectRecords, url_getAccountRecords
-
+from cloudweb.platform.http_flask_fs import url_listAccount,url_listContainer,url_listDir
+from cloudweb.platform.http_flask_user import url_userDelete,url_userDisable,url_userEnable,url_userList,url_userLogin
+from cloudweb.platform.http_flask_search import url_dataGlobalSearch,url_dataObjectDetail,url_dataUserSearch
+from cloudweb.platform.http_flask_object import url_deleteObject,url_disableObject,url_downloadObject,url_enableObject,url_uploadObject
+from cloudweb.platform.http_flask_quota import url_quotaGet,url_quotaSet
+from cloudweb.platform.http_flask_record import url_getAccountRecords,url_getObjectRecords
 
 url2view = {}
 

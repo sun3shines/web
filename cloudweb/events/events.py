@@ -56,7 +56,6 @@ class Event:
 
         self.connect()
         
-        method = t.getMethod()
         url = self.getUrl() + t.getPartialUrl()
         ps = t.getParams() 
         if ps:
