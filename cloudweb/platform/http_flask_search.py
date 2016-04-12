@@ -7,7 +7,7 @@ from cloudweb.db.search import search_global_objects,search_account_objects
 from cloudweb.events.restful.fs import getAccountMeta,getContainerMeta,getObjectMeta
 
 
-def dataGlobalSearch(req,sdata):
+def url_dataGlobalSearch(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -18,7 +18,7 @@ def dataGlobalSearch(req,sdata):
     objects = json.dumps(objects)
     return jresponse('0',objects,req,200)
 
-def dataUserSearch(req,sdata):
+def url_dataUserSearch(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -30,7 +30,7 @@ def dataUserSearch(req,sdata):
     objects = json.dumps(objects)
     return jresponse('0', objects, req,200) 
 
-def dataObjectDetail(req,sdata):
+def url_dataObjectDetail(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')

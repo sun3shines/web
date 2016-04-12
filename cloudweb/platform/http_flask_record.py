@@ -5,7 +5,7 @@ import time
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.db.record import getObjRecord,getUserRecord
 
-def getObjectRecords(req,sdata):
+def url_getObjectRecords(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -20,7 +20,7 @@ def getObjectRecords(req,sdata):
  
     return jresponse('0',json.dumps(attrs),req,200)
 
-def getAccountRecords(req,sdata):
+def url_getAccountRecords(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')

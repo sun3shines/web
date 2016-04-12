@@ -28,8 +28,8 @@ from cloudlib.common.utils import get_logger,  public
 from cloudlib.common.constraints import check_utf8
 from cloudlib.common.bufferedhttp import jresponse
 
-from cloudweb.webcenter.urls import handlerequest
-from cloudweb.webcenter.data import Server
+from cloudweb.platform.urls import handlerequest
+from cloudweb.platform.data import Server
 
 class ServerController(object):
     """WSGI controller for the account server."""

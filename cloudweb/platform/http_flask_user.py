@@ -8,7 +8,8 @@ from cloudweb.db.user import urDelete,urList,urDelete,urEnable, urDisable,\
     user2attr
     
 from cloudweb.db.account import atDisable,atEnable
-def userLogin(req,sdata):
+
+def url_userLogin(req,sdata):
 
     param = json.loads(req.body)
     email = param.get('email')
@@ -29,7 +30,7 @@ def userLogin(req,sdata):
     resp['msg'] = json.dumps(tokendict)
     return jresponse(resp['status'],resp['msg'],req,200)
 
-def userList(req,sdata):
+def url_userList(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -39,7 +40,7 @@ def userList(req,sdata):
     
     return jresponse('0',json.dumps(metadata),req,200)
 
-def userEnable(req,sdata):
+def url_userEnable(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -52,7 +53,7 @@ def userEnable(req,sdata):
     
     return jresponse('0',json.dumps({}),req,200)
 
-def userDisable(req,sdata):
+def url_userDisable(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -64,7 +65,7 @@ def userDisable(req,sdata):
     
     return jresponse('0',json.dumps({}),req,200)
 
-def userDelete(req,sdata):
+def url_userDelete(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')

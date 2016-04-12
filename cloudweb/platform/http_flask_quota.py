@@ -4,7 +4,7 @@ import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.events.restful.quota import getAtQuota,setAtQuota
 
-def quotaGet(req,sdata):
+def url_quotaGet(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -14,7 +14,7 @@ def quotaGet(req,sdata):
     
     return jresponse(resp['status'],resp['msg'],req,200)
 
-def quotaSet(req,sdata):
+def url_quotaSet(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
