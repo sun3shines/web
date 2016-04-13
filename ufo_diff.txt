@@ -1258,3 +1258,10 @@ alter table stat_service add constraint stat_service_check foreign key(host_id) 
 程序是工艺么？满足社会进步的工艺品么？那么企业级应用是怎么回事呢？是的。
 
 还有有健壮的稳定性了。是的。
+
+彻底的研究元编程了。这个更加的重要了。是的。
+
+数据库中，不处理和网络相关的内容，这些应该在http阶段被处理了。是的。
+
+转化为数据库可用数据了。是的。
+

@@ -1,0 +1,960 @@
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/account/server.py swift-1.7.4-master/swift/account/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/account/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/account/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -28,6 +28,12 @@
+     HTTPMethodNotAllowed, HTTPNoContent, HTTPNotFound, \
+     HTTPPreconditionFailed, HTTPConflict,HTTPOk
+ 
++from cloudweb.db.account import atdelete,atput
++from cloudweb.db.table.mysql import getDb
++from cloudweb.db.firewall import atValid
++from cloudweb.db.user import urPut
++from cloudweb.db.message.account import msgPut,msgDelete,msgHead,msgGet,msgMeta,msgPost
++
+ from swift.common.utils import get_logger, get_param, hash_path, public, \
+     normalize_timestamp, split_path, storage_directory, TRUE_VALUES, \
+     validate_device_partition, json
+@@ -58,7 +64,9 @@
+     @public
+     def DELETE(self, req):
+         """Handle HTTP DELETE request."""
++        
++        if not atValid(req.path,self.dbconn):
++            return jresponse('-1','account state invalid',req,403)
+         
+         try:
+             drive, part, account = split_path(unquote(req.path), 3)
+@@ -74,12 +82,15 @@
+             return jresponse('-1', 'not found', req,404)
+         
+         broker.delete_db(req.headers['x-timestamp'])
++        msgDelete(self.dbconn,req.path)
++        atdelete(req.path,self.dbconn)
++        
+         return jresponse('0', '', req,204)
+ 
+     @public
+     def PUT(self, req):
+         """Handle HTTP PUT request."""
++        
+         try:
+             drive, part, account, container = split_path(unquote(req.path),
+                                                          3, 4)
+@@ -124,13 +135,17 @@
+                 if key.lower().startswith('x-account-meta-'))
+             if metadata:
+                 broker.update_metadata(metadata)
++                
++            atput(req.path,self.dbconn)
++            urPut(self.dbconn,req.path)
++            msgPut(self.dbconn,req.path)
+             
+             return jresponse('0', '', req,201)
+ 
+     @public
+     def HEAD(self, req):
+         """Handle HTTP HEAD request."""
++        
+         try:
+             drive, part, account, container = split_path(unquote(req.path),
+                                                          3, 4)
+@@ -167,7 +182,9 @@
+     @public
+     def META(self, req):
+         
++        if not atValid(req.path,self.dbconn):
++            return jresponse('-1','account state invalid',req,403)
++        
+         try:
+             drive, part, account, container = split_path(unquote(req.path),
+                                                          3, 4)
+@@ -211,7 +228,9 @@
+     def GET(self, req):
+         """Handle HTTP GET request."""
+         
++        if not atValid(req.path,self.dbconn):
++            return jresponse('-1','account state invalid',req,403)
++        
+         try:
+             drive, part, account = split_path(unquote(req.path), 3)
+             validate_device_partition(drive, part)
+@@ -277,7 +296,9 @@
+     def POST(self, req):
+         
+         """Handle HTTP POST request."""
++        if not atValid(req.path,self.dbconn):
++            return jresponse('-1','account state invalid',req,403)
++        
+         try:
+             drive, part, account = split_path(unquote(req.path), 3)
+             validate_device_partition(drive, part)
+@@ -305,10 +326,12 @@
+         return jresponse('0', '', req,204)
+ 
+     def __call__(self, env, start_response):
++
+         start_time = time.time()
+         req = Request(env)
+-        
+         self.logger.txn_id = req.headers.get('x-trans-id', None)
++        self.dbconn = getDb()
++        
+         if not check_utf8(req.path_info):
+             res = jresponse('-1', 'invalid utf8', req,412)
+         else:
+@@ -331,7 +354,7 @@
+         if res.headers.get('x-container-timestamp') is not None:
+             additional_info += 'x-container-timestamp: %s' % \
+                 res.headers['x-container-timestamp']
+-        
++        self.dbconn.close()
+         return res(env, start_response)
+ 
+ 
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/bufferedhttp.py swift-1.7.4-master/swift/common/bufferedhttp.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/bufferedhttp.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/bufferedhttp.py	2016-03-28 16:24:06.000000000 +0800
+@@ -144,10 +144,9 @@
+             path = path.encode("utf-8")
+         except UnicodeError:
+             pass   # what should I do?
++
+     path = quote('/' + device + '/' + str(partition) + path)
++
+     if query_string:
+         path += '?' + query_string
+     conn.path = path
+@@ -213,10 +212,6 @@
+         
+     if status != '0' and req.method == 'PUT': 
+         pass
++
+     return ret
+     
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/memcached.py swift-1.7.4-master/swift/common/memcached.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/memcached.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/memcached.py	2016-03-28 16:24:06.000000000 +0800
+@@ -158,7 +158,7 @@
+             try:
+                 sock.sendall('set %s %d %d %s noreply\r\n%s\r\n' % \
+                               (key, flags, timeout, len(value), value))
++                
+                 self._return_conn(server, fp, sock)
+                 return
+             except Exception, e:
+@@ -179,7 +179,7 @@
+             try:
+                 sock.sendall('get %s\r\n' % key)
+                 line = fp.readline().strip().split()
++                
+                 while line[0].upper() != 'END':
+                     if line[0].upper() == 'VALUE' and line[1] == key:
+                         size = int(line[3])
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/account_quotas.py swift-1.7.4-master/swift/common/middleware/account_quotas.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/account_quotas.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/middleware/account_quotas.py	2016-03-28 16:24:06.000000000 +0800
+@@ -32,7 +32,7 @@
+ 
+     @wsgify
+     def __call__(self, request):
+-       
++
+         if request.method not in ("PUT","COPY"):
+             return self.app
+ 
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/update_task_db.py swift-1.7.4-master/swift/common/middleware/update_task_db.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/update_task_db.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/middleware/update_task_db.py	2016-03-28 16:24:06.000000000 +0800
+@@ -163,7 +163,6 @@
+         if fn.startswith('AUTH_') and fn.endswith('.db'):
+             dbpath = './%s' % (fn)
+             task_db_init(dbpath)
+ 
+ if __name__ == '__main__':
+     tasks_main()
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/userdb.py swift-1.7.4-master/swift/common/middleware/userdb.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/userdb.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/middleware/userdb.py	2016-03-28 16:24:06.000000000 +0800
+@@ -228,16 +228,10 @@
+     db_init(dbpath)
+     db_insert(dbpath,'tx1','path2','type3','method4','tenant5','url6','time7','','')
+     db_insert(dbpath,'tx2','path5','type7','method4','tenant5','url6','time7','','')
+     
+     db_update(dbpath,'status3','comment3','tx1')
+     
+     db_delete(dbpath)
+ 
+ def tasks_main():
+     account = 'zhu__feng006'
+@@ -245,16 +239,10 @@
+     task_db_init(dbpath)
+     task_db_insert(dbpath,'tx1','time7','','')
+     task_db_insert(dbpath,'tx2','time7','','')
+     
+     task_db_update(dbpath,'status3','comment3','tx1')
+     
+     task_db_delete(dbpath,'tx1')
+ 
+ if __name__ == '__main__':
+     ## operations_main() ##
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/userinit.py swift-1.7.4-master/swift/common/middleware/userinit.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/middleware/userinit.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/middleware/userinit.py	2016-03-28 16:24:06.000000000 +0800
+@@ -23,6 +23,8 @@
+     HTTPLengthRequired
+ 
+ from webob import Request
++from cloudweb.db.account import atexists
++from cloudweb.db.table.mysql import getDb
+ 
+ from swift.common.mx_swob import wsgify
+ 
+@@ -118,7 +120,17 @@
+         resp = new_req.get_response(self.app)
+             
+         return new_req.path,resp
+-    
++
++    def account_put(self,req,rdatas):
++ 
++        new_path,resp = self.handle_new_req(req, '' , 'PUT')
++
++        if resp.status_int // 100 == 2:
++            rdatas['success_count'] = rdatas['success_count'] + 1
++        else:
++            rdatas['not_found_count'] = 1 + rdatas['not_found_count']
++            rdatas['failed_files'].append([quote(new_path), resp.status])
++            
+     def handle_normal(self,req,rdatas):
+         
+         new_path,resp = self.handle_new_req(req, '/normal' , 'PUT')
+@@ -128,9 +140,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+     def handle_quota(self,req,rdatas):
+         
+         new_headers = {'X-Account-Meta-Quota-Bytes': 1024*1024*1024}
+@@ -141,9 +151,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+     def handle_normal_versions(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/normal_versions', 'PUT')
+@@ -152,9 +160,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
++                   
+     def handle_normal_metadata(self,req,rdatas):
+         
+         new_headers = {'X-Versions-Location': 'normal_versions'}
+@@ -164,9 +170,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
++           
+     def handle_segments(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/segments', 'PUT' )
+@@ -175,9 +179,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
++              
+     def handle_recycle(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/recycle', 'PUT')
+@@ -186,9 +188,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def handle_recycle_meta(self,req,rdatas):
+         
+         qstr = 'op=MKDIRS&ftype=d&type=NORMAL'
+@@ -198,9 +198,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def handle_recycle_user(self,req,rdatas):
+         
+         qstr = 'op=MKDIRS&ftype=d&type=NORMAL'
+@@ -210,9 +208,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def handle_private(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/private', 'PUT')
+@@ -221,9 +217,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++          
+     def handle_private_versions(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/private_versions', 'PUT')
+@@ -233,9 +227,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def handle_private_metadata(self,req,rdatas):
+         
+         new_headers = {'X-Versions-Location': 'private_versions'}
+@@ -247,9 +239,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-    
++   
+     def handle_backup(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/backup', 'PUT')
+@@ -258,8 +248,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
++           
+     def handle_backup_versions(self,req,rdatas):
+         
+         new_path,resp=  self.handle_new_req(req, '/backup_versions', 'PUT')
+@@ -268,9 +257,7 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def handle_backup_metadata(self,req,rdatas):
+         
+         new_headers = {'X-Versions-Location': 'backup_versions'}
+@@ -281,15 +268,15 @@
+         else:
+             rdatas['not_found_count'] = 1 + rdatas['not_found_count']
+             rdatas['failed_files'].append([quote(new_path), resp.status])
+-            
++           
+     def account_exists(self,req):
+-        
++
+         resp =  self.handle_new_req(req,'/normal','HEAD')[1]
+         
+         if resp.status_int == HTTP_NOT_FOUND:
+             return False
++        if not atexists(req.path,self.conn):
++            return False
+         return True
+     
+     def handle_register(self, req):
+@@ -298,7 +285,9 @@
+         
+         req.accept = 'application/json'
+         out_content_type = 'application/json'
++
++        self.account_put(req,rdatas) 
++
+         self.handle_normal(req,rdatas)
+     
+         self.handle_quota(req,rdatas)
+@@ -348,21 +337,22 @@
+         _,account,container,_ = split_path(req.path, 1, 4, True)
+ 
+         dbpath = '%s/%s.db' % (self.devices,account)
++
++        resp = self.app
++        self.conn = getDb()
+         if 'register' == container:
+             if not self.account_exists(req):
+                 dbpath = '%s/%s.db' % (self.devices,account)
+                 db_init(dbpath)
+                 task_db_init(dbpath)
++                resp = self.handle_register(req)
+             else:
++                resp = jresponse('-1','account user alread exists',req,400)
+         else:
+             if not self.account_exists(req):
++                resp = jresponse('-1','account user not found',req,404)
++        self.conn.close()
++        return resp
+ 
+ 
+ def filter_factory(global_conf, **local_conf):
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/wsgi.py swift-1.7.4-master/swift/common/wsgi.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/common/wsgi.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/common/wsgi.py	2016-03-28 16:24:06.000000000 +0800
+@@ -142,7 +142,7 @@
+     # redirect errors to logger and close stdio
+     # if app_section in ['account-server']:
+     
++    ## capture_stdio(logger)
+ 
+     def run_server():
+         wsgi.HttpProtocol.default_request_version = "HTTP/1.0"
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/container/server.py swift-1.7.4-master/swift/container/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/container/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/container/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -28,6 +28,10 @@
+     HTTPCreated, HTTPInternalServerError, HTTPNoContent, \
+     HTTPNotFound, HTTPPreconditionFailed, HTTPMethodNotAllowed
+ 
++from cloudweb.db.container import cntdelete,cntput
++from cloudweb.db.table.mysql import getDb
++from cloudweb.db.message.container import msgPut,msgDelete,msgHead,msgMeta,msgGet,msgPost
++
+ from swift.common.utils import get_logger, get_param, hash_path, public, \
+     normalize_timestamp, storage_directory, split_path, validate_sync_to, \
+     TRUE_VALUES, validate_device_partition, json
+@@ -135,7 +139,7 @@
+             validate_device_partition(drive, part)
+         except ValueError, err:
+             return jresponse('-1', 'bad request', req,400)
+-         
++          
+         if 'x-timestamp' not in req.headers or \
+                     not check_float(req.headers['x-timestamp']):
+             return jresponse('-1', 'Missing timestamp', req, 400)
+@@ -158,6 +162,10 @@
+             existed = float(broker.get_info()['put_timestamp']) and \
+                       not broker.is_deleted()
+             broker.delete_db(req.headers['X-Timestamp'])
++            
++            msgDelete(self.dbconn,req.path)
++            cntdelete(req.path,self.dbconn)
++            
+             if not broker.is_deleted():
+                 return jresponse('-1', 'conflict', req,409) 
+             resp = self.account_update(req, account, container, broker)
+@@ -221,6 +229,10 @@
+             resp = self.account_update(req, account, container, broker)
+             if resp:
+                 return resp
++
++            cntput(req.path,self.dbconn)
++            msgPut(self.dbconn,req.path)
++            
+             return jresponse('0', '', req,201) 
+ 
+     @public
+@@ -401,6 +413,8 @@
+         start_time = time.time()
+         req = Request(env)
+         self.logger.txn_id = req.headers.get('x-trans-id', None)
++        self.dbconn = getDb()
++        
+         if not check_utf8(req.path_info):
+             res = jresponse('-1','Invalid UTF8',req,412)
+         else:
+@@ -413,13 +427,12 @@
+                     res = jresponse('-1', 'method not allowed', req,405) 
+                 else:
+                     res = method(req)
+             except (Exception, Timeout):
+                 self.logger.exception(_('ERROR __call__ error with %(method)s'
+                     ' %(path)s '), {'method': req.method, 'path': req.path})
+                 res = jresponse('-1', 'InternalServerError', req,500)
+-        
++        self.dbconn.close()
+         return res(env, start_response)
+ 
+ 
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/direr/server.py swift-1.7.4-master/swift/direr/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/direr/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/direr/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -29,6 +29,12 @@
+     HTTPCreated, HTTPInternalServerError, HTTPNoContent, \
+     HTTPNotFound, HTTPPreconditionFailed, HTTPMethodNotAllowed
+ 
++from cloudweb.db.dir import drdelete,drreset,drput,drdeleteRecycle, \
++    drmoveRecycle,drmove,drcopy
++from cloudweb.db.table.mysql import getDb
++from cloudweb.db.message.dir import msgDelete,msgReset,msgDeleteRecycle,msgMoveRecycle, \
++    msgPut,msgMove,msgCopy,msgMetaGet,msgGet
++
+ from swift.common.utils import get_logger, get_param, hash_path, public, \
+     normalize_timestamp, storage_directory, split_path, validate_sync_to, \
+     TRUE_VALUES, validate_device_partition, json
+@@ -139,6 +145,9 @@
+         dirsize = broker.get_data_dir_size()
+         
+         broker.delete_db()
++        msgDelete(self.dbconn,req.path)
++        drdelete(req.path,self.dbconn)
++        
+         if not broker.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+         
+@@ -149,6 +158,8 @@
+             if not ver_broker.is_deleted():
+                 versize = ver_broker.get_data_dir_size()
+                 ver_broker.delete_db()
++                msgDelete(self.dbconn,'/'.join(['',drive,part,account,lcontainer,direr]))
++                drdelete('/'.join(['',drive,part,account,lcontainer,direr]),self.dbconn)
+                 dirsize = versize + dirsize
+                                 
+         self.account_update(req, account, dirsize, add_flag=False)
+@@ -178,6 +189,8 @@
+         dirsize = broker.get_data_dir_size()
+         
+         broker.reset_db()
++        msgReset(self.dbconn,req.path)
++        drreset(req.path,self.dbconn)
+         
+         object_versions = req.headers.get('x-versions-location')
+         if object_versions:
+@@ -186,6 +199,10 @@
+             if not ver_broker.is_deleted():
+                 versize = ver_broker.get_data_dir_size()
+                 ver_broker.delete_db()
++                
++                msgReset(self.dbconn,'/'.join(['',drive,part,account,lcontainer,direr]))
++                drreset('/'.join(['',drive,part,account,lcontainer,direr]),self.dbconn)
++                
+                 dirsize = versize + dirsize
+         self.account_update(req, account, dirsize, add_flag=False)
+                      
+@@ -230,6 +247,8 @@
+             user_broker.create_dir_object(user_broker.fhr_path)
+             
+         user_broker.move(src_broker.datadir)
++        msgDeleteRecycle(self.dbconn,req.path)
++        drdeleteRecycle('/'.join([account,src_container,src_direr]),'/'.join([account,recycle_container,user_obj]),self.dbconn)
+         
+         if user_broker.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+@@ -286,6 +305,8 @@
+             dst_broker.create_dir_object(dst_broker.fhr_path)
+             
+         dst_broker.move(src_broker.datadir)
++        msgMoveRecycle(self.dbconn,req.path)
++        drmoveRecycle('/'.join([account, src_container,src_direr,recycle_uuid]),'/'.join([account, dst_container,dst_direr]),self.dbconn)
+         
+         if dst_broker.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+@@ -318,7 +339,8 @@
+             broker.update_put_timestamp()
+             if broker.is_deleted():
+                 return jresponse('-1', 'conflict', req,409)
+-            
++        drput(req.path,self.dbconn)
++        msgPut(self.dbconn,req.path)
+         
+         return jresponse('0', '', req,201) 
+         
+@@ -362,6 +384,8 @@
+             return jresponse('-1', 'conflict', req,409)
+                                 
+         dst_broker.move(src_broker.datadir)
++        msgMove(self.dbconn,req.path,dst_direr.split('/')[-1])
++        drmove('/'.join([account, src_container,src_direr]),'/'.join([account, dst_container,dst_direr]),self.dbconn)
+         
+         if dst_broker.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+@@ -377,6 +401,8 @@
+                     dst_broker.delete_db()
+                                 
+                 dst_broker.move(ver_broker.datadir)
++                drmove('/'.join([account, lcontainer,src_direr]),'/'.join([account, lcontainer,dst_direr]),self.dbconn)
++                msgMove(self.dbconn,'/'.join(['',drive,part,account, lcontainer,src_direr]),dst_direr.split('/')[-1])
+                 
+         return jresponse('0', '', req,201)
+     
+@@ -431,6 +457,8 @@
+             return jresponse('-1', 'conflict', req,409)
+                                 
+         dst_broker.copy(src_broker.datadir)
++        drcopy('/'.join([account, src_container,src_direr]),'/'.join([account, dst_container,dst_direr]),self.dbconn)
++        msgCopy(self.dbconn,req.path,dst_direr.split('/')[-1])
+         
+         if dst_broker.is_deleted():
+             task_db_update(dbpath,'failed','conflict',tx_id)
+@@ -449,7 +477,9 @@
+                 dst_broker.copy(ver_broker.datadir)
+                 dstsize = dst_broker.get_data_dir_size()
+                 dirsize = dstsize + dirsize
+-                        
++                drcopy('/'.join([account, lcontainer,src_direr]),'/'.join([account, lcontainer,dst_direr]),self.dbconn)
++                msgCopy(self.dbconn,'/'.join(['',drive,part,account, lcontainer,src_direr]),dst_direr.split('/')[-1])
++                
+         self.account_update(req, account, dirsize, add_flag=True)
+         task_db_update(dbpath,'success','',tx_id)
+         return jresponse('0', '', req,201)
+@@ -553,6 +583,8 @@
+             return self.app(env,start_response)
+ 
+         self.logger.txn_id = req.headers.get('x-trans-id', None)
++        self.dbconn = getDb()
++        
+         if not check_utf8(req.path_info):
+             res = jresponse('-1', 'invalid UTF8', req,412)
+             
+@@ -566,14 +598,14 @@
+                     res = jresponse('-1', 'method not allowed', req,405)
+                 else:
+                     res = method(req)
+             except (Exception, Timeout):
+                 self.logger.exception(_('ERROR __call__ error with %(method)s'
+                     ' %(path)s '), {'method': req.method, 'path': req.path})
+                 res = jresponse('-1', 'internal server error', req,500)
+-
++                
++        self.dbconn.close()
++        
+         return res(env, start_response)
+ 
+ 
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/link/server.py swift-1.7.4-master/swift/link/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/link/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/link/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -27,6 +27,10 @@
+ from urllib import unquote
+ from contextlib import contextmanager
+ 
++from cloudweb.db.link import lkput
++from cloudweb.db.table.mysql import getDb
++from cloudweb.db.message.link import msgPut
++
+ from webob import Request, Response, UTC
+ from webob.exc import HTTPAccepted, HTTPBadRequest, HTTPCreated, \
+     HTTPInternalServerError, HTTPNoContent, HTTPNotFound, \
+@@ -154,6 +158,8 @@
+             return jresponse('-1', 'conflict', request,409) 
+                                 
+         dst_file.link(src_file.data_file)
++        lkput('/'.join(['', device, partition, account, dst_container,dst_link]),self.dbconn)
++        msgPut(self.dbconn,request.path,dst_link.split('/')[-1])
+         
+         if dst_file.is_deleted():
+             return jresponse('-1', 'conflict', request,409) 
+@@ -171,6 +177,7 @@
+             return self.app(env,start_response)
+         
+         self.logger.txn_id = req.headers.get('x-trans-id', None)
++        self.dbconn = getDb()
+         
+         if not check_utf8(req.path_info):
+             res =jresponse('-1', 'Invalid UTF8', req,412) 
+@@ -189,7 +196,7 @@
+                     ' %(path)s '), {'method': req.method, 'path': req.path})
+                 res = jresponse('-1', 'InternalServerError', req,500)
+         trans_time = time.time() - start_time
+-        
++        self.dbconn.close()
+         if req.method in ('PUT', 'DELETE'):
+             slow = self.slow - trans_time
+             if slow > 0:
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/obj/server.py swift-1.7.4-master/swift/obj/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/obj/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/obj/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -30,6 +30,13 @@
+ import syslog
+ import threading
+ import multiprocessing
++from cloudweb.db.object import otput,otdelete,otcopy,otdeleteRecycle, \
++    otmoveRecycle,otmove
++    
++from cloudweb.db.table.mysql import getDb
++from cloudweb.db.firewall import otValid
++from cloudweb.db.message.object import msgPut,msgGet,msgHead,msgMeta,msgDelete, \
++    msgDeleteRecycle, msgMove,msgCopy,msgMoveRecycle,msgPost
+ 
+ from webob import Request, Response, UTC
+ from webob.exc import HTTPAccepted, HTTPBadRequest, HTTPCreated, \
+@@ -261,8 +268,9 @@
+       
+     @public
+     def PUT(self, request):
++
+         """Handle HTTP PUT requests for the Swift Object Server."""
++        
+         try:
+             device, partition, account, container, obj = \
+                 split_path(unquote(request.path), 5, 5, True)
+@@ -357,16 +365,20 @@
+             hdata['X-Object-Permisson'] = metadata['X-Object-Permisson']
+             
+             hdata = json.dumps(hdata)
++            
++        otput(request.path,self.dbconn)
++        msgPut(self.dbconn,request.path)
+         
+         resp = HTTPCreated(body=hdata,request=request)
+-        
+         return resp
+ 
+     @public
+     def GET(self, request):
+         # request is global , can not be modify
+         # response can be modify
++        if not otValid(request.path,self.dbconn):
++            return jresponse('-1','file state invalid',request,403)
++        
+         try:
+             device, partition, account, container, obj = \
+                 split_path(unquote(request.path), 5, 5, True)
+@@ -416,6 +428,9 @@
+     @public
+     def HEAD(self, request):
+         
++        if not otValid(request.path,self.dbconn):
++            return jresponse('-1','file state invalid',request,403)
++        
+         try:
+             device, partition, account, container, obj = \
+                 split_path(unquote(request.path), 5, 5, True)
+@@ -448,7 +463,10 @@
+     
+     @public
+     def META(self, request):
+-        
++
++        if not otValid(request.path,self.dbconn):
++            return jresponse('-1','file state invalid',request,403)
++                
+         try:
+             device, partition, account, container, obj = \
+                 split_path(unquote(request.path), 5, 5, True)
+@@ -480,7 +498,10 @@
+     @public
+     def DELETE(self, request):
+         """Handle HTTP DELETE requests for the Swift Object Server."""
++        
++        if not otValid(request.path,self.dbconn):
++            return jresponse('-1','file state invalid',request,403)
++        
+         try:
+             device, partition, account, container, obj = \
+                 split_path(unquote(request.path), 5, 5, True)
+@@ -506,11 +527,18 @@
+         file.meta_del()
+         self.account_update(request, account, content_length, add_flag=False)
+         
++        msgDelete(self.dbconn,request.path)
++        otdelete(request.path,self.dbconn)
++        
+         resp = response_class(request=request)
+         return resp
+ 
+     @public
+     def DELETE_RECYCLE(self, req):
++        
++        if not otValid(req.path,self.dbconn):
++            return jresponse('-1','file state invalid',req,403)
++        
+         try:
+             device, partition, account, src_container, src_obj = split_path(
+                 unquote(req.path), 4, 5, True)
+@@ -545,6 +573,8 @@
+             
+         user_file.move(src_file.data_file)
+         
++        msgDeleteRecycle(self.dbconn,req.path)
++        otdeleteRecycle('/'.join([account,src_container,src_obj]),'/'.join([account,recycle_container,user_obj]),self.dbconn)
+         
+         if user_file.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+@@ -607,7 +637,10 @@
+ 
+     @public
+     def COPY(self, req):
+-        
++
++        if not otValid(req.path,self.dbconn):
++            return jresponse('-1','file state invalid',req,403)
++                
+         device, partition, accountname = split_path(unquote(req.path), 3, 3, True)
+         accountname = accountname.split('/')[0]
+         dbpath = '%s/%s.db' % (self.devices,accountname)
+@@ -672,13 +705,19 @@
+         ## dst_file.copy(src_file.data_file) ##
+         tx_id = req.environ.get('HTTP_X_TRANS_ID') 
+         self.copy_action(src_file, dst_file, req,account,dbpath,tx_id)
+-
++        
++        otcopy('/'.join([account, src_container,src_obj]),'/'.join([account,dst_container,dst_obj]),self.dbconn)
++        msgCopy(self.dbconn,req.path,dst_obj.split('/')[-1])
++        
+         return jresponse('0', '', req,201)
+     
+     
+     @public
+     def MOVE(self, req):
+-           
++
++        if not otValid(req.path,self.dbconn):
++            return jresponse('-1','file state invalid',req,403)
++                   
+         try:
+             device, partition, account, src_container, src_obj = split_path(
+                 unquote(req.path), 4, 5, True)
+@@ -731,8 +770,9 @@
+                 return jresponse('-1', 'not found', req,404)
+         
+         dst_file.move(src_file.data_file)
++        msgMove(self.dbconn,req.path,dst_obj.split('/')[-1])
++        otmove('/'.join([account,src_container,src_obj]),'/'.join([account,dst_container,dst_obj]),self.dbconn)
+         
+-         
+         if dst_file.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+             
+@@ -747,7 +787,10 @@
+ 
+     @public
+     def MOVE_RECYCLE(self, req):
+-           
++
++        if not otValid(req.path,self.dbconn):
++            return jresponse('-1','file state invalid',req,403)
++                   
+         try:
+             device, partition, account, src_container, src_obj = split_path(
+                 unquote(req.path), 4, 5, True)
+@@ -776,6 +819,7 @@
+         dst_file = DiskFile(self.devices, device, partition, account, dst_container,
+                         dst_obj, self.logger, disk_chunk_size=self.disk_chunk_size)
+         
++        
+         if src_file.is_deleted():
+             return jresponse('-1', 'not found', req,404)
+         
+@@ -793,6 +837,8 @@
+             dst_file.create_dir_object(dst_file.fhr_path)
+         
+         dst_file.move(src_file.data_file)
++        msgMoveRecycle(self.dbconn,req.path)
++        otmoveRecycle('/'.join([account,src_container,src_obj]),'/'.join([account,dst_container,dst_obj]),self.dbconn)
+         
+         if dst_file.is_deleted():
+             return jresponse('-1', 'conflict', req,409)
+@@ -807,7 +853,10 @@
+     
+     @public
+     def POST(self, request):
+-        
++
++        if not otValid(request.path,self.dbconn):
++            return jresponse('-1','file state invalid',request,403)
++                
+         """Handle HTTP POST requests for the Swift Object Server."""
+         start_time = time.time()
+         try:
+@@ -862,7 +911,7 @@
+         start_time = time.time()
+         req = Request(env)
+         self.logger.txn_id = req.headers.get('x-trans-id', None)
+-        
++        self.dbconn = getDb()
+         if not check_utf8(req.path_info):
+             res = jresponse('-1', 'invalid utf8', req,412)
+         else:
+@@ -875,14 +924,14 @@
+                     res = jresponse('-1', 'method not allowed', req,405)
+                 else:
+                     res = method(req)
++
+             except (Exception, Timeout):
+                 self.logger.exception(_('ERROR __call__ error with %(method)s'
+                     ' %(path)s '), {'method': req.method, 'path': req.path})
+                 res = jresponse('-1', 'InternalServerError', req,500)
+                  
+         trans_time = time.time() - start_time
++        self.dbconn.close()
+         
+         if req.method in ('PUT', 'DELETE'):
+             slow = self.slow - trans_time
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/account.py swift-1.7.4-master/swift/proxy/controllers/account.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/account.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/proxy/controllers/account.py	2016-03-28 16:24:06.000000000 +0800
+@@ -24,6 +24,7 @@
+         self.account_name = unquote(account_name)
+ 
+     def GETorHEAD(self, req):
++
+         """Handler for HTTP GET/HEAD requests."""
+         partition, nodes = self.app.account_ring.get_nodes(self.account_name)
+         shuffle(nodes)
+@@ -81,9 +82,10 @@
+             
+         return resp
+ 
+-    
++        
+     @public
+     def PUT(self, req):
++
+         """HTTP PUT request handler."""
+         if not self.app.allow_account_management:
+             return jresponse('-1','method not allowed',req,405)
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/base.py swift-1.7.4-master/swift/proxy/controllers/base.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/base.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/proxy/controllers/base.py	2016-03-28 16:24:06.000000000 +0800
+@@ -219,7 +219,6 @@
+                   or (None, None, None) if it does not exist
+         """
+         partition, nodes = self.app.account_ring.get_nodes(account)
+         result_code = 0
+         
+         attempts_left = len(nodes)
+@@ -257,7 +256,6 @@
+                     _('Trying to get account info for %s') % path)
+         if result_code == HTTP_NOT_FOUND and autocreate:
+             if len(account) > MAX_ACCOUNT_NAME_LENGTH:
+                 return None, None
+             headers = {'X-Timestamp': normalize_timestamp(time.time()),
+                        'X-Trans-Id': self.trans_id,
+@@ -269,12 +267,9 @@
+             if not is_success(resp.status_int):
+                 self.app.logger.warning('Could not autocreate account %r' % \
+                                         path)
+                 return None, None
+             result_code = HTTP_OK
+ 
+         if result_code == HTTP_OK:
+             return partition, nodes
+         return None, None
+@@ -293,7 +288,7 @@
+         
+         partition, nodes = self.app.container_ring.get_nodes(account, container)
+         path = '/%s/%s' % (account, container)
++        
+         if not self.account_info(account, autocreate=account_autocreate)[1]:
+             return None, None,None
+         result_code = 0
+@@ -333,7 +328,6 @@
+                 self.exception_occurred(node, _('Container'),
+                     _('Trying to get container info for %s') % path)
+        
+         if result_code == HTTP_OK:
+             return partition, nodes,versions
+         return None, None,None
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/container.py swift-1.7.4-master/swift/proxy/controllers/container.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/controllers/container.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/proxy/controllers/container.py	2016-03-28 16:24:06.000000000 +0800
+@@ -81,7 +81,6 @@
+     @public
+     @delay_denial
+     def HEAD(self, req):
+-        
+         return self.GETorHEAD(req)
+ 
+     @public
+diff -urN swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/server.py swift-1.7.4-master/swift/proxy/server.py
+--- swift-1.7.4-0ba7191a94f4c4c537c8f900c2045d73563261a0/swift/proxy/server.py	2015-10-13 12:15:38.000000000 +0800
++++ swift-1.7.4-master/swift/proxy/server.py	2016-03-28 16:24:06.000000000 +0800
+@@ -154,6 +154,7 @@
+         return req
+ 
+     def handle_request(self, req):
++
+         try:
+             self.logger.set_statsd_prefix('proxy-server')
+             if req.content_length and req.content_length < 0:
