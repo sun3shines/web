@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from cloudlib.common.exceptions import LockTimeout, MessageTimeout
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.platform.flask_urls import flaskUrl2View
+from cloudweb.platform.cloudfs_urls import cloudfsUrl2View
 
 url2view = {}
 url2view.update(flaskUrl2View())
+url2view.update(cloudfsUrl2View())
 
 def handlerequest(req,sdata):
     url = req.path

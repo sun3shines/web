@@ -23,10 +23,6 @@ def cloudfs_account_delete(request_path):
     path = unquote(request_path)
     newPath = '/'.join(path.split('/')[3:])
 
-    # objPath = unquote(request_path)
-    # objPath = '/'.join(objPath.split('/')[3:])    
-    # msgparam = {}
-    
     t = CloudfsAccountDelete(newPath)
     mission.execute(t)
     return t.response
@@ -35,8 +31,6 @@ def cloudfs_account_exists(request_path):
     
     path = unquote(request_path)
     newPath = '/'.join(path.split('/')[2])
-    
-    # msgparam = {}
     
     t = CloudfsAccountExists(newPath)
     mission.execute(t)
