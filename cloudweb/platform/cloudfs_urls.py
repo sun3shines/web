@@ -2,7 +2,7 @@
 
 
 from cloudlib.urls.cloudfs import *
-from cloudweb.platform.http_cloudfs_account import cloudfsAccountDelete,cloudfsAccountExists,cloudfsAccountGet,\
+from cloudweb.platform.http_cloudfs_account import cloudfsAccountDelete,cloudfsAccountGet,\
     cloudfsAccountHead,cloudfsAccountMeta,cloudfsAccountPost,cloudfsAccountPut
 from cloudweb.platform.http_cloudfs_container import cloudfsContainerDelete,cloudfsContainerGet,cloudfsContainerHead,\
     cloudfsContainerMeta,cloudfsContainerPost,cloudfsContainerPut
@@ -18,7 +18,7 @@ def cloudfsUrl2View():
     
     url2view = {}
     url2view.update({strCloudfsAccountDelete:cloudfsAccountDelete})
-    url2view.update({strCloudfsAccountExists:cloudfsAccountExists})
+#    url2view.update({strCloudfsAccountExists:cloudfsAccountExists})
     url2view.update({strCloudfsAccountGet:cloudfsAccountGet})
     url2view.update({strCloudfsAccountHead:cloudfsAccountHead})
     url2view.update({strCloudfsAccountMeta:cloudfsAccountMeta})

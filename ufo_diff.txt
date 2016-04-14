@@ -1265,3 +1265,13 @@ alter table stat_service add constraint stat_service_check foreign key(host_id) 
 
 转化为数据库可用数据了。是的。
 
+牛逼，意味iter只是返回函数那么简单么？不是，是时刻在报告自己的信息了。以及控制函数间的串行执行了。对于iter要理解的更加的深刻一点了。是的。生成器。是的。
+
+yield 如何兼容return？是的。
+
+以后可能会用yield，而不是return了。是的。
+
+req.environ.update({'db_dict':{}}) 
+
+swift 如何绕过account put时额quota的限制？因为在head account的时候，就已经创建目录了。是的。
+

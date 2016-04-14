@@ -6,6 +6,7 @@ from cloudweb.dblib.db_cloudfs_link import db_cloudfs_link_put
 from cloudweb.db.message.message_link import db_message_link_put
 
 def cloudfsLinkPut(req):
+    
     param = json.loads(req.body)
     newPath = param.get('newPath')
     objPath = param.get('objPath')

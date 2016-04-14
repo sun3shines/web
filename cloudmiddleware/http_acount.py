@@ -27,6 +27,8 @@ def cloudfs_account_delete(request_path):
     mission.execute(t)
     return t.response
 
+####################################################
+
 def cloudfs_account_exists(request_path):
     
     path = unquote(request_path)
@@ -36,9 +38,6 @@ def cloudfs_account_exists(request_path):
     mission.execute(t)
     return t.response    
     
-
-####################################################
-
 def cloudfs_account_get(request_path):
 
     objPath = unquote(request_path)
