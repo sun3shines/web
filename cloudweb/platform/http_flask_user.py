@@ -9,7 +9,7 @@ from cloudweb.db.user import urDelete,urList,urDelete,urEnable, urDisable,\
     
 from cloudweb.db.account import atDisable,atEnable
 
-def url_userLogin(req,sdata):
+def flaskUserLogin(req,sdata):
 
     param = json.loads(req.body)
     email = param.get('email')
@@ -30,7 +30,7 @@ def url_userLogin(req,sdata):
     resp['msg'] = json.dumps(tokendict)
     return jresponse(resp['status'],resp['msg'],req,200)
 
-def url_userList(req,sdata):
+def flaskUserList(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -40,7 +40,7 @@ def url_userList(req,sdata):
     
     return jresponse('0',json.dumps(metadata),req,200)
 
-def url_userEnable(req,sdata):
+def flaskUserEnable(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -53,7 +53,7 @@ def url_userEnable(req,sdata):
     
     return jresponse('0',json.dumps({}),req,200)
 
-def url_userDisable(req,sdata):
+def flaskUserDisable(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -65,7 +65,7 @@ def url_userDisable(req,sdata):
     
     return jresponse('0',json.dumps({}),req,200)
 
-def url_userDelete(req,sdata):
+def flaskUserDelete(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')

@@ -6,7 +6,7 @@ from cloudweb.db.account import atList
 from cloudweb.db.container import cntList
 from cloudweb.db.dir import drList
 
-def url_listAccount(req,sdata):
+def flasklistAccount(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
     ev = sdata.user.getUser(atName)
@@ -14,7 +14,7 @@ def url_listAccount(req,sdata):
     
     return jresponse('0',json.dumps(metadata),req,200)
 
-def url_listContainer(req,sdata):
+def flasklistContainer(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
     cntPath = param.get('cntPath')
@@ -24,7 +24,7 @@ def url_listContainer(req,sdata):
     metadata = cntList(ev.db, atName, cntPath,tree)
     return jresponse('0',json.dumps(metadata),req,200)
 
-def url_listDir(req,sdata):
+def flasklistDir(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')

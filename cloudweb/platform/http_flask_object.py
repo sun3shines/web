@@ -6,7 +6,7 @@ from cloudweb.events.restful.object import uploadFile,downloadFile,deleteFile
 from cloudweb.db.object import enableOt,disableOt
 from cloudlib.common.common.swob import Response as HResponse
 
-def url_uploadObject(req,sdata):
+def flaskUploadObject(req,sdata):
     
     param = req.headers
     atName = param.pop('Atname')
@@ -16,7 +16,7 @@ def url_uploadObject(req,sdata):
     resp = uploadFile(ev,objPath,'',handle=req.environ['wsgi.input'],headers=param)
     return jresponse(resp['status'],resp['msg'],req,200)
 
-def url_downloadObject(req,sdata):
+def flaskDownloadObject(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -27,7 +27,7 @@ def url_downloadObject(req,sdata):
 
     return HResponse(app_iter=app_iter,request=req,conditional_response=True)
 
-def url_deleteObject(req,sdata):
+def flaskDeleteObject(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -37,7 +37,7 @@ def url_deleteObject(req,sdata):
     resp = deleteFile(ev,objPath)
     return jresponse(resp['status'],resp['msg'],req,200)
 
-def url_enableObject(req,sdata):
+def flaskEnableObject(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -48,7 +48,7 @@ def url_enableObject(req,sdata):
     enableOt(ev.db,newPath)
     return jresponse('0',json.dumps({}),req,200)
 
-def url_disableObject(req,sdata):
+def flaskDisableObject(req,sdata):
     
     param = json.loads(req.body)
     atName = param.get('atName')
