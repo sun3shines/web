@@ -14,6 +14,10 @@ strCloudfsAccountMeta = '/cloudfs/account/meta'
 
 strCloudfsAccountValid = '/cloudfs/account/valid'
 
+strCloudfsObjectValid = '/cloudfs/object/valid'
+
+strCloudfsAccountExists = '/cloudfs/account/exists'
+
 strCloudfsContainerDelete = '/cloudfs/container/delete'
 
 strCloudfsContainerPut = '/cloudfs/container/put'

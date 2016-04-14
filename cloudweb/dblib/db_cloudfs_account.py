@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from urllib import unquote
-from cloudweb.db.db_account import account2id,delete_stobj,insert_account,account_exists
+from cloudweb.db.db_account import account2id,insert_account,account_exists
+from cloudweb.db.table.stobj import delete_stobj
 
 # atdelete -> db_cloudfs_account_delete
 # atput -> db_cloudfs_account_put
@@ -23,6 +24,8 @@ def db_cloudfs_account_put(newPath,conn):
 def db_cloudfs_account_exists(newPath,conn):
 
     return account_exists(conn,newPath)
+
+######################################
 
 def db_cloudfs_account_head(path):
 

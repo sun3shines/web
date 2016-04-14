@@ -2,38 +2,82 @@
 
 import json
 from cloudmiddleware.task import Task
-from cloudlib.urls.cloudfs import strCloudfsAccountPut,strCloudfsAccountDelete,strCloudfsAccountValid
+from cloudlib.urls.cloudfs import strCloudfsAccountPut,strCloudfsAccountDelete,strCloudfsAccountValid,\
+    strCloudfsAccountExists,strCloudfsAccountHead,strCloudfsAccountGet,strCloudfsAccountMeta,\
+    strCloudfsAccountPost
 
-class CloudAccountPut(Task):
-    def __init__(self,path):
-        self.path = path
+class CloudfsAccountPut(Task):
+    def __init__(self,newPath,msgparam):
+        self.path = newPath
+        self.objPath = msgparam.get('objPath')
         
     def getBody(self):
-        return json.dumps({'atName':self.path})
+        return json.dumps({'newPath':self.path,
+                           'objPath':self.objPath})
     
     def getUrl(self):
         return strCloudfsAccountPut
     
-    
-class CloudAccountDelete(Task):
-    def __init__(self,path):
-        self.path = path
+class CloudfsAccountDelete(Task):
+    def __init__(self,newPath):
+        self.path = newPath
         
     def getBody(self):
-        return json.dumps({'atName':self.path})
+        return json.dumps({'newPath':self.path})
     
     def getUrl(self):
         return strCloudfsAccountDelete
-    
-class CloudAccountValid(Task):
-    def __init__(self,request_path):
-        self.path = request_path
+        
+class CloudfsAccountExists(Task):
+    def __init__(self,newPath):
+        self.path = newPath
         
     def getBody(self):
-        return json.dumps({'atName':self.path})
+        return json.dumps({'newPath':self.path})
     
     def getUrl(self):
-        return strCloudfsAccountValid
+        return strCloudfsAccountExists
+    
+class CloudfsAccountHead(Task):
+    def __init__(self,msgparam):
+        self.objPath = msgparam.get('objPath')
+        
+    def getBody(self):
+        return json.dumps({'objPath':self.objPath})
+    
+    def getUrl(self):
+        return strCloudfsAccountHead
+    
+class CloudfsAccountGet(Task):
+    def __init__(self,msgparam):
+        self.objPath = msgparam.get('objPath')
+        
+    def getBody(self):
+        return json.dumps({'objPath':self.objPath})
+    
+    def getUrl(self):
+        return strCloudfsAccountGet
+    
+class CloudfsAccountMeta(Task):
+    def __init__(self,msgparam):
+        self.objPath = msgparam.get('objPath')
+        
+    def getBody(self):
+        return json.dumps({'objPath':self.objPath})
+    
+    def getUrl(self):
+        return strCloudfsAccountMeta
+    
+class CloudfsAccountPost(Task):
+    def __init__(self,msgparam):
+        self.objPath = msgparam.get('objPath')
+        
+    def getBody(self):
+        return json.dumps({'objPath':self.objPath})
+    
+    def getUrl(self):
+        return strCloudfsAccountPost
+    
     
     
     
