@@ -3,7 +3,7 @@
 import json
 import time
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.db.record import getObjRecord,getUserRecord
+from cloudweb.dblib.db_flask_record import db_flask_record_object,db_flask_record_user
 
 def flaskGetObjectRecords(req,sdata):
     
@@ -12,7 +12,7 @@ def flaskGetObjectRecords(req,sdata):
     objPath = param.get('objPath')
     
     ev = sdata.user.getUser(atName)
-    metadata = getObjRecord(ev.db, '/'.join([atName,objPath]))
+    metadata = db_flask_record_object(ev.db, '/'.join([atName,objPath]))
    
     attrs = []
     for attr in metadata:
@@ -26,7 +26,7 @@ def flaskGetAccountRecords(req,sdata):
     atName = param.get('atName')
 
     ev = sdata.user.getUser(atName)
-    metadata = getUserRecord(ev.db, atName)
+    metadata = db_flask_record_user(ev.db, atName)
     attrs = []
     for attr in metadata:
         attrs.append((attr[0],attr[1],str(attr[2])))

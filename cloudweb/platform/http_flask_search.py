@@ -3,7 +3,7 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.db.table.stobj import id2urlAttrs
-from cloudweb.db.search import search_global_objects,search_account_objects
+from cloudweb.dblib.db_flask_search import db_flask_search_account_objects,db_flask_search_global_objects
 from cloudweb.events.restful.fs import getAccountMeta,getContainerMeta,getObjectMeta
 
 
@@ -14,7 +14,7 @@ def flaskDataGlobalSearch(req,sdata):
     keyword = param.get('keyword')
     
     ev = sdata.user.getUser(atName)
-    objects = search_global_objects(ev.db,keyword)
+    objects = db_flask_search_global_objects(ev.db,keyword)
     objects = json.dumps(objects)
     return jresponse('0',objects,req,200)
 
@@ -26,7 +26,7 @@ def flaskDataUserSearch(req,sdata):
     
     ev = sdata.user.getUser(atName)
     
-    objects = search_account_objects(ev.db,atName, keyword)
+    objects = db_flask_search_account_objects(ev.db,atName, keyword)
     objects = json.dumps(objects)
     return jresponse('0', objects, req,200) 
 

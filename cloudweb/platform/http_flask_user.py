@@ -4,10 +4,10 @@ import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.events.events import Event
 from cloudweb.events.restful.user import getToken
-from cloudweb.db.user import urDelete,urList,urDelete,urEnable, urDisable,\
-    user2attr
-    
-from cloudweb.db.account import atDisable,atEnable
+
+from cloudweb.db.db_user import user2attr
+from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,db_flask_user_enable,db_flask_user_list
+from cloudweb.dblib.db_flask_account import db_flask_account_disable,db_flask_account_enable
 
 def flaskUserLogin(req,sdata):
 
@@ -36,7 +36,7 @@ def flaskUserList(req,sdata):
     atName = param.get('atName')
     ev = sdata.user.getUser(atName)
     
-    metadata = urList(ev.db)
+    metadata = db_flask_user_list(ev.db)
     
     return jresponse('0',json.dumps(metadata),req,200)
 
@@ -48,8 +48,8 @@ def flaskUserEnable(req,sdata):
     # check atName type ; only admin do
     
     ev = sdata.user.getUser(atName)
-    urEnable(ev.db, urName)
-    atEnable(ev.db, urName )
+    db_flask_user_enable(ev.db, urName)
+    db_flask_account_enable(ev.db, urName )
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -60,8 +60,8 @@ def flaskUserDisable(req,sdata):
     urName = param.get('urName')
 
     ev = sdata.user.getUser(atName)
-    urDisable(ev.db,urName)
-    atDisable(ev.db, urName) 
+    db_flask_user_disable(ev.db,urName)
+    db_flask_account_disable(ev.db, urName) 
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -74,6 +74,6 @@ def flaskUserDelete(req,sdata):
     # check atName type ; only admin do
         
     ev = sdata.user.getUser(atName)
-    urDelete(ev.db, urName)
-    atDisable(ev.db,urName)    
+    db_flask_user_delete(ev.db, urName)
+    db_flask_account_disable(ev.db,urName)    
     return jresponse('0',json.dumps({}),req,200)

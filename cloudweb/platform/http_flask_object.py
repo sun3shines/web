@@ -3,7 +3,7 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.events.restful.object import uploadFile,downloadFile,deleteFile
-from cloudweb.db.object import enableOt,disableOt
+from cloudweb.dblib.db_flask_object import db_flask_object_disable,db_flask_object_enable
 from cloudlib.common.common.swob import Response as HResponse
 
 def flaskUploadObject(req,sdata):
@@ -45,7 +45,7 @@ def flaskEnableObject(req,sdata):
     ev = sdata.user.getUser(atName)
     
     newPath = '/'.join([atName,objPath])
-    enableOt(ev.db,newPath)
+    db_flask_object_enable(ev.db,newPath)
     return jresponse('0',json.dumps({}),req,200)
 
 def flaskDisableObject(req,sdata):
@@ -56,5 +56,5 @@ def flaskDisableObject(req,sdata):
     ev = sdata.user.getUser(atName)
     
     newPath = '/'.join([atName,objPath])
-    disableOt(ev.db,newPath)
+    db_flask_object_disable(ev.db,newPath)
     return jresponse('0',json.dumps({}),req,200)

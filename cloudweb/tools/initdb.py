@@ -4,11 +4,11 @@ import os.path
 import os
 
 from cloudweb.db.table.mysql import dbConn
-from cloudweb.db.dir import insert_dir
-from cloudweb.db.account import insert_account
-from cloudweb.db.container import insert_container
-from cloudweb.db.link import insert_link
-from cloudweb.db.object import insert_file
+from cloudweb.db.db_dir import insert_dir
+from cloudweb.db.db_account import insert_account
+from cloudweb.db.db_container import insert_container
+from cloudweb.db.db_link import insert_link
+from cloudweb.db.db_object import insert_file
 
 from cloudweb.globalx.static import MYSQL_HOST,MYSQL_PORT,MYSQL_USER,MYSQL_PASSWD
 

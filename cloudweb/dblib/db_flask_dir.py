@@ -2,9 +2,9 @@
 
 from cloudweb.db.table.stobj import fullPath2id,id2treeAttrs,id2childAttrs
 
-# drList -> db_flask_container_list
+# drList -> db_flask_dir_list
 
-def db_flask_container_list(db,atName,drPath,tree):
+def db_flask_dir_list(db,atName,drPath,tree):
     
     newPath = '/'.join([atName,drPath])
     did = fullPath2id(db,newPath)
