@@ -13,7 +13,6 @@ def cloudfsObjectPut(req):
     param = json.loads(req.body)
     newPath = param.get('newPath')
     objPath = param.get('objPath')
-
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
     

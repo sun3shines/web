@@ -12,8 +12,10 @@ def cloudfs_account_put(func):
         resp = func(*args,**kwargs)
         if 2 != resp.status_int/100:
             return resp
-         
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         
         path = unquote(request_path)
@@ -37,6 +39,9 @@ def cloudfs_account_delete(func):
             return resp
         
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         
         path = unquote(request_path)

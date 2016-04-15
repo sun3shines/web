@@ -15,6 +15,9 @@ def cloudfs_object_put(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
@@ -38,6 +41,9 @@ def cloudfs_object_delete(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
@@ -61,6 +67,9 @@ def cloudfs_object_deleterecycle(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         srcNewPath = http_dict.get('srcNewPath')
         dstNewPath = http_dict.get('dstNewPath')
         request_path = http_dict.get('request_path')
@@ -86,6 +95,9 @@ def cloudfs_object_copy(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')   
+        if not http_dict:
+            return resp
+
         srcNewPath = http_dict.get('srcNewPath')
         dstNewPath = http_dict.get('dstNewPath')
         request_path = http_dict.get('request_path')
@@ -112,6 +124,9 @@ def cloudfs_object_move(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         srcNewPath = http_dict.get('srcNewPath')
         dstNewPath = http_dict.get('dstNewPath')
         request_path = http_dict.get('request_path')
@@ -139,6 +154,9 @@ def cloudfs_object_moverecycle(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         srcNewPath = http_dict.get('srcNewPath')
         dstNewPath = http_dict.get('dstNewPath')
         request_path = http_dict.get('request_path')

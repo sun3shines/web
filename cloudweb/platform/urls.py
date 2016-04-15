@@ -9,9 +9,14 @@ url2view.update(flaskUrl2View())
 url2view.update(cloudfsUrl2View())
 
 def handlerequest(req,sdata):
+
     url = req.path
+    print url
     if url not in url2view:
         return jresponse('-1','url error',req,404)
-    return url2view[url](req,sdata)
+    if url.startswith('/cloudfs'):
+        return url2view[url](req)
+    else: 
+        return url2view[url](req,sdata)
 
 

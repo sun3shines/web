@@ -14,6 +14,9 @@ def cloudfs_link_put(func):
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         dstName = http_dict.get('dstName')
         srcName = http_dict.get('srcName')

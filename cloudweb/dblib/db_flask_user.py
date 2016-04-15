@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from cloudweb.db.table.user import userDisable,userEnable
-from cloudweb.db.db_user import urList
+from cloudweb.db.db_user import user_list
 
 # urDelete -> db_flask_user_delete
 # urEnable -> db_flask_user_enable
@@ -17,4 +17,4 @@ def db_flask_user_disable(db,userName):
     return userDisable(db, userName)
 
 def db_flask_user_list(db):
-    return urList(db)
+    return user_list(db)

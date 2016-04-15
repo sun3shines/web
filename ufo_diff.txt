@@ -1278,3 +1278,29 @@ swift 如何绕过account put时额quota的限制？因为在head account的时�
 把设计模式用python实现一遍。作为标准了。证明设计模式是ok的。是的。以及其他的各种代码了。orm，一致性哈希。和paxos了。把要学的内容，都转化为python了。是的。作为成果封装了。
 
 __call__,__new__,__init__ 来控制实例的创建了。是的。
+
+一般是因为代码异常导致的问题出现了。是的。
+
+## 不对 ALTER TABLE xyz CONVERT TO CHARACTER SET utf8;
+
+如果出现中文问题，不是数据库的问题。是的。
+
+mysql -u abc_f -p abc < abc.sql
+
+curl -i https://localhost:443/v1/AUTH_testadministrator163com/%E6%B5%8B%20%E8%AF%95 -X PUT -H "X-Auth-Token: gPDcsIChk0n5F209fXl6gLGzwa0cdIznMKi88CuMtestadministrator163com "  --cacert /root/task/api/ssl6/ca.crt
+
+insert into stobj (type , path , parent_id) values ('container' , '\u6d4b \u8bd5' , '1404') 失败了
+
+insert into stobj (type , path , parent_id) values ('container' , '\xe6\xb5\x8b \xe8\xaf\x95' , '1404') 成功了。
+
+{"newPath": "AUTH_testadministrator163com/\\u6d4b \\u8bd5", "objPath": "AUTH_testadministrator163com/\\u6d4b \\u8bd5"}
+
+所以应该是出在了json上面了。是的。
+
+json.dumps({'aa':ss},ensure_ascii=False)
+
+想不到啊。
+
+修改json么？那就太麻烦了。毕竟很多地方有json了。是的。所以，要对其的字符串，再次进行解码了。是的。
+
+sqlStr.encode('utf-8')

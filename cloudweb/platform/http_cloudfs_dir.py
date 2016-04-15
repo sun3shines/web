@@ -9,12 +9,12 @@ from cloudweb.db.message.message_dir import db_message_dir_delete,db_message_dir
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 
 def cloudfsDirPut(req):
+
     param = json.loads(req.body)
     objPath = param.get('objPath')
     newPath = param.get('newPath')
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
     
     db_cloudfs_dir_put(newPath, conn)
     db_message_dir_put(conn, objPath)

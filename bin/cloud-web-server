@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from cloudcommon.common.utils import parse_options
+from cloudlib.common.utils import parse_options
 from cloudserver.wsgi import run_wsgi
 
 if __name__ == '__main__':

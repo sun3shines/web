@@ -6,8 +6,7 @@ from functools import wraps
 import cloudmiddleware.mission as mission 
 from cloudmiddleware.class_container import CloudfsContainerDelete,CloudfsContainerGet,CloudfsContainerHead,\
     CloudfsContainerMeta,CloudfsContainerPost,CloudfsContainerPut
-from qpid.peer import Responder
-    
+
 def cloudfs_container_delete(func):
     
     @wraps(func)
@@ -16,7 +15,11 @@ def cloudfs_container_delete(func):
         if 2 != resp.status_int/100:
             return resp
         
+        
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
@@ -36,12 +39,15 @@ def cloudfs_container_put(func):
     
     @wraps(func)
     def wrapper(*args,**kwargs):
-
         resp = func(*args,**kwargs)
         if 2 != resp.status_int/100:
             return resp
         http_dict = resp.request.environ.get('http_dict')
+        if not http_dict:
+            return resp
+
         request_path = http_dict.get('request_path')
+
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
         

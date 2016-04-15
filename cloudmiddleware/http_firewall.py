@@ -10,11 +10,9 @@ def cloudfs_account_valid(func):
     @wraps(func)
     def wrapper(*args,**kwargs):
         request = args[1]
-        http_dict = request.environ.get('http_dict')
-        request_path = http_dict.get('request_path')
+        request_path = request.path 
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
-        
         t = CloudfsAccountValid(newPath)
         t = mission.execute(t)
         t.response
@@ -29,8 +27,7 @@ def cloudfs_object_valid(func):
     @wraps(func)
     def wrapper(*args,**kwargs):
         request = args[1]
-        http_dict = request.environ.get('http_dict')
-        request_path = http_dict.get('request_path')
+        request_path = request.path
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
     

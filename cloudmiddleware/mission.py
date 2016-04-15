@@ -36,8 +36,12 @@ class Mission:
         self.close()
         
     def http(self,t):
-       
-        self.conn.request(t.getMethod(),t.getUrl(),t.getBody(),t.getHeaders())
+        try: 
+            self.conn.request(t.getMethod(),t.getUrl(),t.getBody(),t.getHeaders())
+        except:
+            t.response = {'status':'-1','msg':'connected refused'}
+            return t 
+
         resp = self.conn.getresponse()
         t.status = resp.status
         t.data = resp.read()

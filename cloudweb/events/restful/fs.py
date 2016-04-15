@@ -26,12 +26,11 @@ def getAccountMeta(ev):
 
 if __name__ == "__main__":
 
-    email = 'administrator@163com'
+    email = 'testadministrator@163com'
     passwd = '123456'
     
     ev = TestEvent(email,passwd)
     print ev.getAtName()
-    import pdb;pdb.set_trace()    
 #    t = AccountMeta()
     t = UserInit()
 #    t = FileUpload('/normal/test.txt','/root/install.log')

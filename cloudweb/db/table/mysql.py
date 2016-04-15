@@ -26,8 +26,11 @@ class dbConn(object):
             self.flag = False
 
     def getData(self,sqlStr):
+        sqlStr = sqlStr.encode('utf-8')
+
         self.connect()
         cur = self.connection.cursor()
+
         cur.execute(sqlStr)
         data = cur.fetchone()
         cur.close()
@@ -35,6 +38,7 @@ class dbConn(object):
         return data
 
     def getDataList(self,sqlStr):
+        sqlStr = sqlStr.encode('utf-8')
 
         self.connect()
         cur = self.connection.cursor()
@@ -75,6 +79,9 @@ class dbConn(object):
          
     def execute_sql(self,sqlStr):
 
+        sqlStr = sqlStr.encode('utf-8')
+
+        print sqlStr
         self.connect()
         cur = self.connection.cursor()
         cur.execute(sqlStr)

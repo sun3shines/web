@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 from cloudlib.urls.cloudfs import *
 from cloudweb.platform.http_cloudfs_account import cloudfsAccountDelete,cloudfsAccountGet,\
     cloudfsAccountHead,cloudfsAccountMeta,cloudfsAccountPost,cloudfsAccountPut
@@ -58,4 +57,5 @@ def cloudfsUrl2View():
     url2view.update({strCloudfsObjectHead:cloudfsObjectHead})
     url2view.update({strCloudfsObjectMeta:cloudfsObjectMeta})
     url2view.update({strCloudfsObjectPost:cloudfsObjectPost})
+    return url2view
     
