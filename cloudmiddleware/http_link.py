@@ -20,9 +20,11 @@ def cloudfs_link_put(func):
         
         path = unquote(request_path)
         newPath = '/'.join(path.split('/')[3:])
-        objPath = unquote(srcName)
-        objPath = '/'.join(objPath.split('/')[3:])
         
+        # objPath = unquote(srcName)
+        # objPath = '/'.join(objPath.split('/')[3:])
+        
+        objPath = newPath
         msgparam = {'objPath':objPath,'dstName':dstName}
         
         t = CloudfsLinkPut(newPath,msgparam)

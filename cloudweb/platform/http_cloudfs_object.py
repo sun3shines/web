@@ -6,13 +6,17 @@ from cloudweb.dblib.db_cloudfs_object import db_cloudfs_object_put,db_cloudfs_ob
     db_cloudfs_object_copy,db_cloudfs_object_move,db_cloudfs_object_moverecycle
 from cloudweb.db.message.message_object import db_message_object_put,db_message_object_delete,db_message_object_deleterecycle,\
     db_message_object_copy,db_message_object_move,db_message_object_moverecycle
-    
+from cloudweb.globalx.variable import GLOBAL_USER_DB 
+
 def cloudfsObjectPut(req):
     
     param = json.loads(req.body)
     newPath = param.get('newPath')
     objPath = param.get('objPath')
-    conn = None
+
+    atName = newPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_cloudfs_object_put(newPath, conn)
     db_message_object_put(conn, objPath)
     
@@ -23,7 +27,10 @@ def cloudfsObjectDelete(req):
     param = json.loads(req.body)
     newPath = param.get('newPath')
     objPath = param.get('objPath')
-    conn = None
+
+    atName = newPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_message_object_delete(conn, objPath)
     db_cloudfs_object_delete(newPath, conn)
     return jresponse('0','',req,200)
@@ -34,7 +41,9 @@ def cloudfsObjectDeleteRecycle(req):
     objPath = param.get('objPath')
     srcNewPath = param.get('srcNewPath')
     dstNewPath = param.get('dstNewPath')
-    conn = None
+    
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
     
     db_message_object_deleterecycle(conn, objPath)
     db_cloudfs_object_deleterecycle(srcNewPath, dstNewPath, conn)
@@ -47,9 +56,13 @@ def cloudfsObjectCopy(req):
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
     dstName = param.get('dstName')
-    conn = None
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_cloudfs_object_copy(srcNewPath, dstNewPath, conn)
     db_message_object_copy(conn, objPath, dstName)
+    
     return jresponse('0','',req,200)
 
 def cloudfsObjectMove(req):
@@ -59,9 +72,13 @@ def cloudfsObjectMove(req):
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
     dstName = param.get('dstName')
-    conn = None
-    db_cloudfs_object_move(srcNewPath, dstNewPath, conn)
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_message_object_move(conn, objPath, dstName)
+    db_cloudfs_object_move(srcNewPath, dstNewPath, conn)
+    
     return jresponse('0','',req,200)
 
 def cloudfsObjectMoveRecycle(req):
@@ -70,7 +87,9 @@ def cloudfsObjectMoveRecycle(req):
     objPath = param.get('objPath')
     srcNewPath = param.get('srcNewPath')
     dstNewPath = param.get('dstNewPath')
-    conn = None
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
     
     db_message_object_moverecycle(conn, objPath)
     db_cloudfs_object_moverecycle(srcNewPath, dstNewPath, conn)

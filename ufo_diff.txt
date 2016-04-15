@@ -1275,3 +1275,6 @@ req.environ.update({'db_dict':{}})
 
 swift 如何绕过account put时额quota的限制？因为在head account的时候，就已经创建目录了。是的。
 
+把设计模式用python实现一遍。作为标准了。证明设计模式是ok的。是的。以及其他的各种代码了。orm，一致性哈希。和paxos了。把要学的内容，都转化为python了。是的。作为成果封装了。
+
+__call__,__new__,__init__ 来控制实例的创建了。是的。

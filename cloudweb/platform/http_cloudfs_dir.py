@@ -6,12 +6,15 @@ from cloudweb.dblib.db_cloudfs_dir import db_cloudfs_dir_delete,db_cloudfs_dir_r
     db_cloudfs_dir_moverecycle,db_cloudfs_dir_put,db_cloudfs_dir_move,db_cloudfs_dir_copy
 from cloudweb.db.message.message_dir import db_message_dir_delete,db_message_dir_reset,db_message_dir_deleterecycle,\
     db_message_dir_moverecycle,db_message_dir_put,db_message_dir_move,db_message_dir_copy
-    
+from cloudweb.globalx.variable import GLOBAL_USER_DB 
+
 def cloudfsDirPut(req):
     param = json.loads(req.body)
     objPath = param.get('objPath')
     newPath = param.get('newPath')
-    conn = None
+    atName = newPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     
     db_cloudfs_dir_put(newPath, conn)
     db_message_dir_put(conn, objPath)
@@ -23,7 +26,9 @@ def cloudfsDirDelete(req):
     param = json.loads(req.body)
     objPath = param.get('objPath')
     newPath = param.get('newPath')
-    conn = None
+    atName = newPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     
     db_message_dir_delete(conn, objPath)
     db_cloudfs_dir_delete(newPath, conn)
@@ -34,7 +39,8 @@ def cloudfsDirReset(req):
     param = json.loads(req.body)
     objPath = param.get('objPath')
     newPath = param.get('newPath')
-    conn = None
+    atName = newPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
     
     db_message_dir_reset(conn, objPath)
     db_cloudfs_dir_reset(newPath, conn)
@@ -45,7 +51,10 @@ def cloudfsDirDeleteRecycle(req):
     srcNewPath = param.get('srcNewPath')
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
-    conn = None
+    
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_message_dir_deleterecycle(conn, objPath)
     db_cloudfs_dir_deleterecycle(srcNewPath, dstNewPath, conn)
     return jresponse('0','',req,200)
@@ -55,7 +64,9 @@ def cloudfsDirMoveRecycle(req):
     srcNewPath = param.get('srcNewPath')
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
-    conn = None
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
     
     db_message_dir_moverecycle(conn, objPath)
     db_cloudfs_dir_moverecycle(srcNewPath, dstNewPath, conn)
@@ -68,7 +79,10 @@ def cloudfsDirMove(req):
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
     dstName = param.get('dstName')
-    conn = None
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_message_dir_move(conn, objPath, dstName)    
     db_cloudfs_dir_move(srcNewPath, dstNewPath, conn)
     
@@ -80,7 +94,10 @@ def cloudfsDirCopy(req):
     dstNewPath = param.get('dstNewPath')
     objPath = param.get('objPath')
     dstName = param.get('dstName')
-    conn = None
+
+    atName = srcNewPath.split('/')[0]
+    conn = GLOBAL_USER_DB.get(atName)
+    
     db_cloudfs_dir_copy(srcNewPath, dstNewPath, conn)
     db_message_dir_copy(conn, objPath, dstName)
     
