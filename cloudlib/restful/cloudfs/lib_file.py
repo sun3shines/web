@@ -3,7 +3,7 @@
 
 import json
 from cloudlib.restful.cloudfs.http.mission import TestMission
-from cloudlib.restful.cloudfs.http.advanced_task import FileUpload,FileDownload
+from cloudlib.restful.cloudfs.http.advanced_task import FileUpload,FileDownload,FileList
 from cloudlib.restful.cloudfs.http.basic_task import UfoObjectGet,UfoObjectDelete
 from cloudlib.restful.cloudfs.http.mission import Mission
 
@@ -32,6 +32,12 @@ def libDeleteFile(atName,token,objPath):
     
     ev = Mission(atName,token)
     t = UfoObjectDelete(objPath)
+    t = ev.http(t)
+    return t.response
+    
+def libGetFileList(atName,token,path):
+    ev = Mission(atName,token)
+    t = FileList(path)
     t = ev.http(t)
     return t.response
     

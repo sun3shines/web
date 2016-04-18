@@ -26,7 +26,11 @@ def libGetToken(email,passwd):
 
     t = TokenGet(email,passwd)
     t = operation.execute(t)
-    return t.response
+    resp = t.response
+    
+    if '-1' == resp['status']:
+            return None
+    return json.loads(resp['msg']).get('access_token') 
 
 if __name__ == '__main__':
 

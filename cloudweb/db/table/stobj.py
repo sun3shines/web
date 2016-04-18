@@ -8,8 +8,6 @@
 
 # account_exists -> account_exists account.py
 
-# insert_stobj -> insert_stobj stobj.py
-
 # insert_account -> insert_account account.py
 
 # fetch_one_attrs -> id2attrs
@@ -101,9 +99,7 @@ def fullPath2id(conn,path,parent=False):
     return id
 
 def insert_stobj(conn,stobj_type,stobj_path,stobj_parent_id,stobj_state):
-    
-    # insert_stobj
-    
+     
     s = StObj()
     keys = [s.type,s.path]
     vals = [stobj_type,stobj_path]
