@@ -7,7 +7,9 @@ from cloudweb.dblib.db_cloudfs_object import db_cloudfs_object_put,db_cloudfs_ob
 from cloudweb.db.message.message_object import db_message_object_put,db_message_object_delete,db_message_object_deleterecycle,\
     db_message_object_copy,db_message_object_move,db_message_object_moverecycle
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.drive.consistency import db_consistent
 
+@db_consistent
 def cloudfsObjectPut(req):
     
     param = json.loads(req.body)
@@ -21,6 +23,7 @@ def cloudfsObjectPut(req):
     
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsObjectDelete(req):
     
     param = json.loads(req.body)
@@ -34,6 +37,7 @@ def cloudfsObjectDelete(req):
     db_cloudfs_object_delete(newPath, conn)
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsObjectDeleteRecycle(req):
     
     param = json.loads(req.body)
@@ -48,6 +52,7 @@ def cloudfsObjectDeleteRecycle(req):
     db_cloudfs_object_deleterecycle(srcNewPath, dstNewPath, conn)
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsObjectCopy(req):
     
     param = json.loads(req.body)
@@ -64,6 +69,7 @@ def cloudfsObjectCopy(req):
     
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsObjectMove(req):
     
     param = json.loads(req.body)
@@ -80,6 +86,7 @@ def cloudfsObjectMove(req):
     
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsObjectMoveRecycle(req):
     
     param = json.loads(req.body)

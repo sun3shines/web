@@ -5,7 +5,9 @@ from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_cloudfs_link import db_cloudfs_link_put
 from cloudweb.db.message.message_link import db_message_link_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.drive.consistency import db_consistent
 
+@db_consistent
 def cloudfsLinkPut(req):
     
     param = json.loads(req.body)

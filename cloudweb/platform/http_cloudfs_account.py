@@ -6,7 +6,9 @@ from cloudweb.dblib.db_cloudfs_account import db_cloudfs_account_delete,db_cloud
 from cloudweb.db.message.message_account import db_message_account_put,db_message_account_delete
 from cloudweb.dblib.db_cloudfs_user import db_cloudfs_user_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.drive.consistency import db_consistent
 
+@db_consistent
 def cloudfsAccountPut(req):
     
     param = json.loads(req.body)

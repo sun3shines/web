@@ -15,6 +15,8 @@ from cloudweb.drive.utils import getAtNameByEmail
 from cloudlib.restful.cloudfs.lib_container import libGetContainerList
 from cloudlib.restful.cloudfs.lib_object import libGetObjectList
 
+from cloudweb.db.table.stobj import fullPath2id,id2childAttrs,delete_stobj
+
 class DbType:
     def __init__(self):
         self.account = 'account'
@@ -47,7 +49,7 @@ def insert_db_data(conn,objtype,dbpath):
         return False,'data type error'
     return True,''
 
-def getDirList(conn,dbpath,level,filelist=[]):
+def getDirList(conn,dbpath,usertoken,level,filelist=[]):
 
     dt = DbType()
     if 0== level:
@@ -61,19 +63,25 @@ def getDirList(conn,dbpath,level,filelist=[]):
     
     libobjlist = []
     if dt.account == stobj_type:
-        resp = libGetContainerList(atName, token)
+        resp = libGetContainerList(atName, usertoken)
+        if '-1' == resp.get('status'):
+            return False,resp.get('msg')
         libobjlist = resp.get('msg',[])
         
     elif dt.container == stobj_type:
         lib_container_path = '/'.join(['']+dbpath.split('/')[1:])
-        resp = libGetObjectList(atName, token,lib_container_path)
+        resp = libGetObjectList(atName, usertoken,lib_container_path)
+        if '-1' == resp.get('status'):
+            return False,resp.get('msg')
         libobjlist = resp.get('msg',[])
         
     elif dt.dir == stobj_type:
         libobjlist = filelist
-                
+    
+    namelist = []
     for obj in libobjlist:
         objname = obj.get('name').encode('utf-8')
+        namelist.append(objname)
         dbobjpath = '/'.join([dbpath,objname])
         objtype = obj.get('ftype')
         
@@ -82,21 +90,28 @@ def getDirList(conn,dbpath,level,filelist=[]):
         elif 'l' == objtype:
             insert_db_data(conn,'link',dbobjpath) 
         else:
-            getDirList(conn,dbobjpath,level+1,obj.get('list')) 
+            flag,msg = getDirList(conn,dbobjpath,usertoken,level+1,obj.get('list')) 
+            if not flag:
+                return flag,msg
+            
+    current_id = fullPath2id(conn, dbpath)
+    dbobjlist = id2childAttrs(conn, current_id)
+    for obj in dbobjlist:
+        if obj['path'] not in namelist:
+            delete_stobj(conn, obj.get('id'))
         
     return True,''
 
 if __name__ == '__main__':
     
-    import pdb;pdb.set_trace() 
     conn = dbConn(MYSQL_HOST,MYSQL_USER,MYSQL_PASSWD,MYSQL_PORT,'cloudweb') 
     
     email = 'testadministrator@163com'
     passwd = '123456'
     
-    token = libGetToken(email, passwd)
+    usertoken = libGetToken(email, passwd)
     atName = getAtNameByEmail(email)
     
-    getDirList(conn,atName,0)
+    getDirList(conn,atName,usertoken,0)
     conn.close()
     

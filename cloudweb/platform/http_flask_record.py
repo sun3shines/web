@@ -4,6 +4,7 @@ import json
 import time
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_flask_record import db_flask_record_object,db_flask_record_user
+from cloudweb.globalx.variable import GLOBAL_USER_DB
 
 def flaskGetObjectRecords(req,sdata):
     
@@ -11,8 +12,8 @@ def flaskGetObjectRecords(req,sdata):
     atName = param.get('atName')
     objPath = param.get('objPath')
     
-    ev = sdata.user.getUser(atName)
-    metadata = db_flask_record_object(ev.db, '/'.join([atName,objPath]))
+    conn = GLOBAL_USER_DB.get(atName)
+    metadata = db_flask_record_object(conn, '/'.join([atName,objPath]))
    
     attrs = []
     for attr in metadata:
@@ -25,8 +26,8 @@ def flaskGetAccountRecords(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
 
-    ev = sdata.user.getUser(atName)
-    metadata = db_flask_record_user(ev.db, atName)
+    conn = GLOBAL_USER_DB.get(atName)
+    metadata = db_flask_record_user(conn, atName)
     attrs = []
     for attr in metadata:
         attrs.append((attr[0],attr[1],str(attr[2])))

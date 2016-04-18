@@ -2,8 +2,8 @@
 
 import json
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.events.events import Event
-from cloudweb.events.restful.user import getToken
+from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
+from cloudlib.restful.cloudfs.lib_token import libGetTokenAttr
 
 from cloudweb.db.db_user import user2attr
 from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,db_flask_user_enable,db_flask_user_list
@@ -15,17 +15,17 @@ def flaskUserLogin(req,sdata):
     email = param.get('email')
     passwd = param.get('passwd')
     
-    userName = 'AUTH_' + email.replace('@','').replace('.','') 
-    resp = getToken(email,passwd)
+    atName = userName = 'AUTH_' + email.replace('@','').replace('.','') 
+    resp = libGetTokenAttr(email, passwd)
+    
     if '-1' == resp['status']:
         return jresponse(resp['status'],resp['msg'],req,200)
     
-    ev = Event(email,passwd,sdata)
     tokendict = json.loads(resp['msg'])
-    sdata.token.setToken(ev.getAtName(),tokendict.get('access_token'))
-    sdata.user.setUser(ev.getAtName(),ev)
+    conn = GLOBAL_USER_DB.get(atName)
+    GLOBAL_USER_TOKEN.put(atName, email, passwd, tokendict.get('access_token'))
     
-    attr = user2attr(ev.db, userName)
+    attr = user2attr(conn, userName)
     tokendict.update(attr)
     resp['msg'] = json.dumps(tokendict)
     return jresponse(resp['status'],resp['msg'],req,200)
@@ -34,9 +34,9 @@ def flaskUserList(req,sdata):
 
     param = json.loads(req.body)
     atName = param.get('atName')
-    ev = sdata.user.getUser(atName)
     
-    metadata = db_flask_user_list(ev.db)
+    conn = GLOBAL_USER_DB.get(atName)
+    metadata = db_flask_user_list(conn)
     
     return jresponse('0',json.dumps(metadata),req,200)
 
@@ -47,9 +47,9 @@ def flaskUserEnable(req,sdata):
     urName = param.get('urName')
     # check atName type ; only admin do
     
-    ev = sdata.user.getUser(atName)
-    db_flask_user_enable(ev.db, urName)
-    db_flask_account_enable(ev.db, urName )
+    conn = GLOBAL_USER_DB.get(atName)
+    db_flask_user_enable(conn, urName)
+    db_flask_account_enable(conn, urName )
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -59,9 +59,9 @@ def flaskUserDisable(req,sdata):
     atName = param.get('atName')
     urName = param.get('urName')
 
-    ev = sdata.user.getUser(atName)
-    db_flask_user_disable(ev.db,urName)
-    db_flask_account_disable(ev.db, urName) 
+    conn = GLOBAL_USER_DB.get(atName)
+    db_flask_user_disable(conn,urName)
+    db_flask_account_disable(conn, urName) 
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -72,8 +72,8 @@ def flaskUserDelete(req,sdata):
     urName = param.get('urName')
 
     # check atName type ; only admin do
-        
-    ev = sdata.user.getUser(atName)
-    db_flask_user_delete(ev.db, urName)
-    db_flask_account_disable(ev.db,urName)    
+    
+    conn = GLOBAL_USER_DB.get(atName)
+    db_flask_user_delete(conn, urName)
+    db_flask_account_disable(conn,urName)    
     return jresponse('0',json.dumps({}),req,200)

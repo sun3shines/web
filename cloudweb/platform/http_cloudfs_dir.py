@@ -7,7 +7,9 @@ from cloudweb.dblib.db_cloudfs_dir import db_cloudfs_dir_delete,db_cloudfs_dir_r
 from cloudweb.db.message.message_dir import db_message_dir_delete,db_message_dir_reset,db_message_dir_deleterecycle,\
     db_message_dir_moverecycle,db_message_dir_put,db_message_dir_move,db_message_dir_copy
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.drive.consistency import db_consistent
 
+@db_consistent
 def cloudfsDirPut(req):
 
     param = json.loads(req.body)
@@ -21,6 +23,7 @@ def cloudfsDirPut(req):
     
     return jresponse('0','',req,200)
 
+@db_consistent
 def cloudfsDirDelete(req):
     
     param = json.loads(req.body)

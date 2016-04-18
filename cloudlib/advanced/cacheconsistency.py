@@ -7,8 +7,8 @@ class CacheConsistency:
         self.d = {}
         self.lock = threading.Lock()
         
-        self.success = 'successed'
-        self.running = 'running'
+        self.state_success = 'success'
+        self.state_running = 'running'
     
     def get(self,atName):
         if atName not in self.d:
@@ -24,11 +24,11 @@ class CacheConsistency:
             self.d.update({atName:status})
             self.lock.release()
             
-    def successed(self,atName):
-        return self.success == self.get(atName)
+    def success(self,atName):
+        return self.state_success == self.get(atName)
     
-    def waiting(self,atName):
-        return self.running == self.get(atName)
+    def running(self,atName):
+        return self.state_running == self.get(atName)
     
     def failed(self,atName):
         return not self.get(atName)

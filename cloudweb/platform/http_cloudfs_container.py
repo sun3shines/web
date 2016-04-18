@@ -5,8 +5,9 @@ from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_cloudfs_container import db_cloudfs_container_delete,db_cloudfs_container_put
 from cloudweb.db.message.message_container import db_message_container_delete,db_message_container_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.drive.consistency import db_consistent
 
-
+@db_consistent
 def cloudfsContainerDelete(req):
     param = json.loads(req.body)
     objPath = param.get('objPath')
@@ -19,7 +20,7 @@ def cloudfsContainerDelete(req):
     db_cloudfs_container_delete(newPath, conn)    
     return jresponse('0','',req,200)
 
-
+@db_consistent
 def cloudfsContainerPut(req):
     
     param = json.loads(req.body)

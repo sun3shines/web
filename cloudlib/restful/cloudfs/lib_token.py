@@ -32,6 +32,14 @@ def libGetToken(email,passwd):
             return None
     return json.loads(resp['msg']).get('access_token') 
 
+def libGetTokenAttr(email,passwd):
+
+    t = TokenGet(email,passwd)
+    t = operation.execute(t)
+    resp = t.response
+    
+    return resp
+
 if __name__ == '__main__':
 
     email = 'zhu__feng001@163com'

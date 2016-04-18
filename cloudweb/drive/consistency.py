@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 
-import json
 from cloudweb.drive.utils import getAtName,getUserToken
-from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,GLOBAL_USER_TOKEN
+from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudlib.common.bufferedhttp import jresponse
-from cloudlib.restful.cloudfs.lib_container import libGetContainerList
-from cloudlib.restful.cloudfs.lib_object import libGetObjectList
+from cloudweb.tools.init_consistency_db import getDirList
+
 def db_consistent(func):
     
     def wrapper(*args,**kwargs):
@@ -14,41 +14,28 @@ def db_consistent(func):
             return jresponse('-1', msg, request, 400)
          
         atName = msg
-        if GLOBAL_USER_CONSISTENCY.successed(atName):
+        if GLOBAL_USER_CONSISTENCY.success(atName):
             return func(*args,**kwargs)
         
-        elif GLOBAL_USER_CONSISTENCY.waiting(atName):
-            return jresponse('0',GLOBAL_USER_CONSISTENCY.running,request,200)
+        elif GLOBAL_USER_CONSISTENCY.running(atName):
+            return jresponse('0',GLOBAL_USER_CONSISTENCY.state_running,request,200)
          
         flag,resp = getUserToken(atName, request)
         if not flag:
             return resp
         
-        token = resp 
-        flag,resp = user_consistency(atName, token,request)
+        usertoken = resp
+        
+        conn = GLOBAL_USER_DB.get(atName) 
+        GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_running)
+        
+        flag,msg = getDirList(conn, atName, usertoken, 0)
+        
         if not flag:
-            return resp
+            GLOBAL_USER_TOKEN.eliminate(atName)
+            GLOBAL_USER_CONSISTENCY.eliminate(atName)
+            return jresponse('-1', msg, request, 400)
+        GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_success)
         return func(*args,**kwargs)
     
     return wrapper
-
-
-
-def user_consistency(atName,token,request):
-    
-    GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.running)
-    lresp = libGetContainerList(atName,token)
-    if '-1' == lresp['status']:
-        GLOBAL_USER_CONSISTENCY.eliminate(atName)
-        return False,jresponse('-1',lresp.get('msg'),request,400)
-    
-    container_list = json.loads(lresp.get('msg'))
-    for container in container_list:
-        container_path = '/'.join(['',container.get('name').encode('utf-8')])
-        oresp = libGetObjectList(atName,token,container_path)
-        if '-1' == oresp['status']:
-            GLOBAL_USER_CONSISTENCY.eliminate(atName)
-            return False,jresponse('-1',oresp.get('msg'),request,400)
-        object_list = json.loads(oresp.get('msg'))
-    pass
-    

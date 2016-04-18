@@ -4,8 +4,10 @@ import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.db.table.stobj import id2urlAttrs
 from cloudweb.dblib.db_flask_search import db_flask_search_account_objects,db_flask_search_global_objects
-from cloudweb.events.restful.fs import getAccountMeta,getContainerMeta,getObjectMeta
-
+from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
+from cloudlib.restful.cloudfs.lib_object import libGetObjectMeta
+from cloudlib.restful.cloudfs.lib_container import libGetContainerMeta
+from cloudlib.restful.cloudfs.lib_account import libGetAccountMeta
 
 def flaskDataGlobalSearch(req,sdata):
     
@@ -13,8 +15,8 @@ def flaskDataGlobalSearch(req,sdata):
     atName = param.get('atName')
     keyword = param.get('keyword')
     
-    ev = sdata.user.getUser(atName)
-    objects = db_flask_search_global_objects(ev.db,keyword)
+    conn = GLOBAL_USER_DB.get(atName)
+    objects = db_flask_search_global_objects(conn,keyword)
     objects = json.dumps(objects)
     return jresponse('0',objects,req,200)
 
@@ -24,9 +26,8 @@ def flaskDataUserSearch(req,sdata):
     atName = param.get('atName')
     keyword = param.get('keyword')
     
-    ev = sdata.user.getUser(atName)
-    
-    objects = db_flask_search_account_objects(ev.db,atName, keyword)
+    conn = GLOBAL_USER_DB.get(atName)
+    objects = db_flask_search_account_objects(conn,atName, keyword)
     objects = json.dumps(objects)
     return jresponse('0', objects, req,200) 
 
@@ -36,16 +37,17 @@ def flaskDataObjectDetail(req,sdata):
     atName = param.get('atName')
     oid = param.get('objectId')
     
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    conn = GLOBAL_USER_DB.get(atName)
     
-    ev = sdata.user.getUser(atName)
-    attr = id2urlAttrs(oid,ev.db)
+    attr = id2urlAttrs(oid,conn)
     
     if 'account' == attr.get('type'):
-        resp = getAccountMeta(ev)
+        resp = libGetAccountMeta(atName, usertoken)
     elif 'container' == attr.get('type'):
-        resp = getContainerMeta(attr['path'].replace(atName,'',1), ev)   
+        resp = libGetContainerMeta(atName, usertoken, attr['path'].replace(atName,'',1))
     else:
-        resp = getObjectMeta(attr['path'].replace(atName,'',1), ev)
+        resp = libGetObjectMeta(atName, usertoken, attr['path'].replace(atName,'',1))
         
     if '0' == resp['status']:
         msg = json.loads(resp['msg'])
