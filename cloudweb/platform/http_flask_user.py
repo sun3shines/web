@@ -12,7 +12,6 @@ from cloudweb.drive.consistency import flask_consistent
 from cloudweb.tools.init_consistency_db import getDirList
 
 def flaskUserLogin(req,sdata):
-    import pdb;pdb.set_trace()
     param = json.loads(req.body)
     email = param.get('email')
     passwd = param.get('passwd')

@@ -5,7 +5,7 @@ from functools import wraps
 import cloudmiddleware.mission as mission 
 from cloudmiddleware.class_oauth2 import OauthRegister
 
-def cloudfs_link_put(func):
+def cloudfs_oauth_register(func):
     
     @wraps(func)
     def wrapper(*args,**kwargs):
@@ -26,5 +26,6 @@ def cloudfs_link_put(func):
         t = mission.execute(t)
         t.response
         return resp
+    
     return wrapper
 

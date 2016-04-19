@@ -11,7 +11,6 @@ from cloudweb.thread.worker import do_consistency_worker
 def db_consistent(func):
     
     def wrapper(*args,**kwargs):
-        import pdb;pdb.set_trace()
         request = args[0]
         flag,msg = cloudfsGetAtName(request)
         if not flag:
@@ -39,7 +38,6 @@ def db_consistent(func):
 def flask_consistent(func):
     
     def wrapper(*args,**kwargs):
-        import pdb;pdb.set_trace() 
         request = args[0]
         atName = flaskGetAtName(request)
         

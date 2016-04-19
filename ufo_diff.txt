@@ -1314,3 +1314,12 @@ sqlStr.encode('utf-8')
 下一步，flask的一致性。设计了。目前来看，swift的设计，是需要依赖于flask的。是的。
 
 在错误处理中，要把数据库的错误给暴露出来。错误处理。
+
+Exception _mysql_exceptions.ProgrammingError: (2014, "Commands out of sync; you can't run this command now") in <bound method Cursor.__del__ of <MySQLdb.cursors.Cursor object at 0x1dfd7d0>> ignored
+
+估计是错误的处理。
+
+下一阶段，就是交互式的设计了。是的。
+
+要求增加交互式的设计。希望可以避免上述的错误了。是的。
+
