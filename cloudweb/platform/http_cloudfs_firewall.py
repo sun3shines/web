@@ -6,7 +6,6 @@ from cloudweb.dblib.db_cloudfs_firewall import db_cloudfs_account_valid,db_cloud
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 from cloudweb.drive.consistency import db_consistent
 
-@db_consistent
 def cloudfsAccountValid(req):
     param = json.loads(req.body)
     newPath = param.get('newPath')
@@ -17,7 +16,6 @@ def cloudfsAccountValid(req):
     db_cloudfs_account_valid(newPath, conn)    
     return jresponse('0','',req,200)
 
-@db_consistent
 def cloudfsObjectValid(req):
     
     param = json.loads(req.body)

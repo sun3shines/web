@@ -7,6 +7,9 @@ from cloudweb.dblib.db_flask_account import db_flask_account_list
 from cloudweb.dblib.db_flask_container import db_flask_container_list
 from cloudweb.dblib.db_flask_dir import db_flask_dir_list
 from cloudweb.globalx.variable import GLOBAL_USER_DB
+from cloudweb.drive.consistency import flask_consistent
+
+@flask_consistent
 def flasklistAccount(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -15,6 +18,7 @@ def flasklistAccount(req,sdata):
     
     return jresponse('0',json.dumps(metadata),req,200)
 
+@flask_consistent
 def flasklistContainer(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -25,6 +29,7 @@ def flasklistContainer(req,sdata):
     metadata = db_flask_container_list(conn, atName, cntPath,tree)
     return jresponse('0',json.dumps(metadata),req,200)
 
+@flask_consistent
 def flasklistDir(req,sdata):
     
     param = json.loads(req.body)

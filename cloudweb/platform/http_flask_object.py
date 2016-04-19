@@ -6,7 +6,9 @@ from cloudlib.restful.cloudfs.lib_file import libUploadFile,libDownloadFile,libD
 from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudweb.dblib.db_flask_object import db_flask_object_disable,db_flask_object_enable
 from cloudlib.common.common.swob import Response as HResponse
+from cloudweb.drive.consistency import flask_consistent
 
+@flask_consistent
 def flaskUploadObject(req,sdata):
     
     param = req.headers
@@ -16,6 +18,7 @@ def flaskUploadObject(req,sdata):
     resp = libUploadFile(atName, usertoken, objPath, '', handle=req.environ['wsgi.input'], headers=param)
     return jresponse(resp['status'],resp['msg'],req,200)
 
+@flask_consistent
 def flaskDownloadObject(req,sdata):
 
     param = json.loads(req.body)
@@ -27,6 +30,7 @@ def flaskDownloadObject(req,sdata):
 
     return HResponse(app_iter=app_iter,request=req,conditional_response=True)
 
+@flask_consistent
 def flaskDeleteObject(req,sdata):
     
     param = json.loads(req.body)
@@ -38,6 +42,7 @@ def flaskDeleteObject(req,sdata):
     
     return jresponse(resp['status'],resp['msg'],req,200)
 
+@flask_consistent
 def flaskEnableObject(req,sdata):
     
     param = json.loads(req.body)
@@ -50,6 +55,7 @@ def flaskEnableObject(req,sdata):
     db_flask_object_enable(conn,newPath)
     return jresponse('0',json.dumps({}),req,200)
 
+@flask_consistent
 def flaskDisableObject(req,sdata):
     
     param = json.loads(req.body)

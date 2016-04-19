@@ -4,7 +4,7 @@ from cloudweb.globalx.variable import GLOBAL_USER_TOKEN
 from cloudlib.common.bufferedhttp import jresponse
 from cloudlib.restful.cloudfs.lib_token import libGetToken
 
-def getAtName(request):
+def cloudfsGetAtName(request):
     param = json.loads(request.body)
     atName = ''
     if param.has_key('objPath'):
@@ -16,6 +16,11 @@ def getAtName(request):
     else:
         return False,'param error,no account name found'
     return True,atName
+
+def flaskGetAtName(request):
+    
+    param = json.loads(request.body)     
+    return param.get('atName')
 
 def getUserToken(atName,request):
     

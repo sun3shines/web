@@ -69,3 +69,5 @@ strCloudfsObjectMove = '/cloudfs/object/move'
 strCloudfsObjectMoveRecycle = '/cloudfs/object/move_recycle'
 
 strCloudfsObjectPost = '/cloudfs/object/post'
+
+strCloudfsOauthRegister = '/cloudfs/oauth/register'

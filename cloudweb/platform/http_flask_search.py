@@ -8,7 +8,9 @@ from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudlib.restful.cloudfs.lib_object import libGetObjectMeta
 from cloudlib.restful.cloudfs.lib_container import libGetContainerMeta
 from cloudlib.restful.cloudfs.lib_account import libGetAccountMeta
+from cloudweb.drive.consistency import flask_consistent
 
+@flask_consistent
 def flaskDataGlobalSearch(req,sdata):
     
     param = json.loads(req.body)
@@ -20,6 +22,7 @@ def flaskDataGlobalSearch(req,sdata):
     objects = json.dumps(objects)
     return jresponse('0',objects,req,200)
 
+@flask_consistent
 def flaskDataUserSearch(req,sdata):
     
     param = json.loads(req.body)
@@ -31,6 +34,7 @@ def flaskDataUserSearch(req,sdata):
     objects = json.dumps(objects)
     return jresponse('0', objects, req,200) 
 
+@flask_consistent
 def flaskDataObjectDetail(req,sdata):
 
     param = json.loads(req.body)

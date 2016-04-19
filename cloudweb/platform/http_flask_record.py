@@ -5,7 +5,9 @@ import time
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_flask_record import db_flask_record_object,db_flask_record_user
 from cloudweb.globalx.variable import GLOBAL_USER_DB
+from cloudweb.drive.consistency import flask_consistent
 
+@flask_consistent
 def flaskGetObjectRecords(req,sdata):
     
     param = json.loads(req.body)
@@ -21,6 +23,7 @@ def flaskGetObjectRecords(req,sdata):
  
     return jresponse('0',json.dumps(attrs),req,200)
 
+@flask_consistent
 def flaskGetAccountRecords(req,sdata):
     
     param = json.loads(req.body)

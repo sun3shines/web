@@ -57,5 +57,8 @@ def cloudfsUrl2View():
     url2view.update({strCloudfsObjectHead:cloudfsObjectHead})
     url2view.update({strCloudfsObjectMeta:cloudfsObjectMeta})
     url2view.update({strCloudfsObjectPost:cloudfsObjectPost})
+    
+    url2view.update({strCloudfsOauthRegister:None})
+    
     return url2view
     

@@ -61,8 +61,10 @@ def getDirList(conn,dbpath,usertoken,level,filelist=[]):
 
     insert_db_data(conn,stobj_type,dbpath)
     
+    atName = dbpath.split('/')[0]
+    
     libobjlist = []
-    if dt.account == stobj_type:
+    if dt.account == stobj_type:    
         resp = libGetContainerList(atName, usertoken)
         if '-1' == resp.get('status'):
             return False,resp.get('msg')
@@ -82,7 +84,7 @@ def getDirList(conn,dbpath,usertoken,level,filelist=[]):
     for obj in libobjlist:
         objname = obj.get('name').encode('utf-8')
         namelist.append(objname)
-        dbobjpath = '/'.join([dbpath,objname])
+        dbobjpath = '/'.join([dbpath,objname]).encode('utf-8')
         objtype = obj.get('ftype')
         
         if 'f' == objtype:
