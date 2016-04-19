@@ -30,13 +30,13 @@ def db_cloudfs_account_valid(newPath,db):
     return False
 
 if __name__ == "__main__":
-
-    db = getDb()
+    pass
+    # db = getDb()
     # atPath = '/zhu__feng001163com/0/AUTH_zhu__feng001163com' 
     # print atValid(atPath,db)
 
-    otPath = '/zhu__feng001163com/0/AUTH_zhu__feng001163com/normal/test.txt'
-    print db_cloudfs_object_valid(otPath,db)
+    # otPath = '/zhu__feng001163com/0/AUTH_zhu__feng001163com/normal/test.txt'
+    # print db_cloudfs_object_valid(otPath,db)
 
 
 

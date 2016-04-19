@@ -3,11 +3,11 @@
 import time
 
 from cloudweb.drive.utils import cloudfsGetAtName,flaskGetAtName,getUserToken
-from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,GLOBAL_USER_TOKEN,GLOBAL_USER_DB
+from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,USER_CONSISTENCY_DIR,GLOBAL_USER_DB
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.tools.init_consistency_db import getDirList
 from cloudweb.thread.worker import do_consistency_worker
-
+from cloudweb.db.table.lock.mysql import getlock
 def db_consistent(func):
     
     def wrapper(*args,**kwargs):
@@ -21,6 +21,7 @@ def db_consistent(func):
             return func(*args,**kwargs)
         
         elif GLOBAL_USER_CONSISTENCY.running(atName):
+            USER_CONSISTENCY_DIR.put_consistency(atName)
             return jresponse('0',GLOBAL_USER_CONSISTENCY.state_running,request,200)
          
         flag,resp = getUserToken(atName, request)
@@ -28,9 +29,7 @@ def db_consistent(func):
             return resp
         
         usertoken = resp
-        
         do_consistency_worker(atName,usertoken).start()
-        
         return jresponse('0',GLOBAL_USER_CONSISTENCY.state_running,request,200)
     
     return wrapper
@@ -55,11 +54,13 @@ def flask_consistent(func):
         usertoken = resp
         
         conn = GLOBAL_USER_DB.get(atName) 
+        
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_running)
         
-        flag,msg = getDirList(conn, atName, usertoken, 0)
-        if not flag:
-            return jresponse('-1', msg, request, 400)
+        with getlock(conn) as mylock:
+            flag,msg = getDirList(conn, atName, usertoken, 0)
+            if not flag:
+                return jresponse('-1', msg, request, 400)
         
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_success)
         return func(*args,**kwargs)

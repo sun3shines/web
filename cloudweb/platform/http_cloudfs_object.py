@@ -8,6 +8,7 @@ from cloudweb.db.message.message_object import db_message_object_put,db_message_
     db_message_object_copy,db_message_object_move,db_message_object_moverecycle
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 from cloudweb.drive.consistency import db_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent
 def cloudfsObjectPut(req):
@@ -17,9 +18,9 @@ def cloudfsObjectPut(req):
     objPath = param.get('objPath')
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_cloudfs_object_put(newPath, conn)
-    db_message_object_put(conn, objPath)
+    with getlock(conn) as mylock:
+        db_cloudfs_object_put(newPath, conn)
+        db_message_object_put(conn, objPath)
     
     return jresponse('0','',req,200)
 
@@ -32,9 +33,9 @@ def cloudfsObjectDelete(req):
 
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_object_delete(conn, objPath)
-    db_cloudfs_object_delete(newPath, conn)
+    with getlock(conn) as mylock:
+        db_message_object_delete(conn, objPath)
+        db_cloudfs_object_delete(newPath, conn)
     return jresponse('0','',req,200)
 
 @db_consistent
@@ -47,9 +48,9 @@ def cloudfsObjectDeleteRecycle(req):
     
     atName = srcNewPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_object_deleterecycle(conn, objPath)
-    db_cloudfs_object_deleterecycle(srcNewPath, dstNewPath, conn)
+    with getlock(conn) as mylock:
+        db_message_object_deleterecycle(conn, objPath)
+        db_cloudfs_object_deleterecycle(srcNewPath, dstNewPath, conn)
     return jresponse('0','',req,200)
 
 @db_consistent
@@ -63,9 +64,9 @@ def cloudfsObjectCopy(req):
 
     atName = srcNewPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_cloudfs_object_copy(srcNewPath, dstNewPath, conn)
-    db_message_object_copy(conn, objPath, dstName)
+    with getlock(conn) as mylock:
+        db_cloudfs_object_copy(srcNewPath, dstNewPath, conn)
+        db_message_object_copy(conn, objPath, dstName)
     
     return jresponse('0','',req,200)
 
@@ -80,9 +81,9 @@ def cloudfsObjectMove(req):
 
     atName = srcNewPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_object_move(conn, objPath, dstName)
-    db_cloudfs_object_move(srcNewPath, dstNewPath, conn)
+    with getlock(conn) as mylock:
+        db_message_object_move(conn, objPath, dstName)
+        db_cloudfs_object_move(srcNewPath, dstNewPath, conn)
     
     return jresponse('0','',req,200)
 
@@ -96,9 +97,9 @@ def cloudfsObjectMoveRecycle(req):
 
     atName = srcNewPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_object_moverecycle(conn, objPath)
-    db_cloudfs_object_moverecycle(srcNewPath, dstNewPath, conn)
+    with getlock(conn) as mylock:
+        db_message_object_moverecycle(conn, objPath)
+        db_cloudfs_object_moverecycle(srcNewPath, dstNewPath, conn)
     return jresponse('0','',req,200)
 
 ##################################################

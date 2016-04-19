@@ -10,6 +10,7 @@ from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disa
 from cloudweb.dblib.db_flask_account import db_flask_account_disable,db_flask_account_enable
 from cloudweb.drive.consistency import flask_consistent
 from cloudweb.tools.init_consistency_db import getDirList
+from cloudweb.db.table.lock.mysql import getlock
 
 def flaskUserLogin(req,sdata):
     param = json.loads(req.body)
@@ -27,9 +28,10 @@ def flaskUserLogin(req,sdata):
     GLOBAL_USER_TOKEN.put(atName, email, passwd, tokendict.get('access_token'))
     
     if GLOBAL_USER_CONSISTENCY.failed(atName):
-        flag,msg = getDirList(conn, atName, tokendict.get('access_token'), 0)
-        if not flag:
-            return jresponse('-1', msg, req, 400)
+        with getlock(conn) as mylock:
+            flag,msg = getDirList(conn, atName, tokendict.get('access_token'), 0)
+            if not flag:
+                return jresponse('-1', msg, req, 400)
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_success)
     
     attr = user2attr(conn, userName)
@@ -44,7 +46,8 @@ def flaskUserList(req,sdata):
     atName = param.get('atName')
     
     conn = GLOBAL_USER_DB.get(atName)
-    metadata = db_flask_user_list(conn)
+    with getlock(conn) as mylock:
+        metadata = db_flask_user_list(conn)
     
     return jresponse('0',json.dumps(metadata),req,200)
 
@@ -57,8 +60,9 @@ def flaskUserEnable(req,sdata):
     # check atName type ; only admin do
     
     conn = GLOBAL_USER_DB.get(atName)
-    db_flask_user_enable(conn, urName)
-    db_flask_account_enable(conn, urName )
+    with getlock(conn) as mylock:
+        db_flask_user_enable(conn, urName)
+        db_flask_account_enable(conn, urName )
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -68,10 +72,11 @@ def flaskUserDisable(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
     urName = param.get('urName')
-
+    
     conn = GLOBAL_USER_DB.get(atName)
-    db_flask_user_disable(conn,urName)
-    db_flask_account_disable(conn, urName) 
+    with getlock(conn) as mylock:
+        db_flask_user_disable(conn,urName)
+        db_flask_account_disable(conn, urName) 
     
     return jresponse('0',json.dumps({}),req,200)
 
@@ -85,7 +90,8 @@ def flaskUserDelete(req,sdata):
     # check atName type ; only admin do
     
     conn = GLOBAL_USER_DB.get(atName)
-    db_flask_user_delete(conn, urName)
-    db_flask_account_disable(conn,urName)    
+    with getlock(conn) as mylock:
+        db_flask_user_delete(conn, urName)
+        db_flask_account_disable(conn,urName)    
     return jresponse('0',json.dumps({}),req,200)
 

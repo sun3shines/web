@@ -7,6 +7,7 @@ from cloudweb.db.message.message_account import db_message_account_put,db_messag
 from cloudweb.dblib.db_cloudfs_user import db_cloudfs_user_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 from cloudweb.drive.consistency import db_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent
 def cloudfsAccountPut(req):
@@ -18,9 +19,10 @@ def cloudfsAccountPut(req):
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
     
-    db_cloudfs_account_put(newPath, conn)
-    db_cloudfs_user_put(conn, newPath)
-    db_message_account_put(conn, objPath)
+    with getlock(conn) as mylock:
+        db_cloudfs_account_put(newPath, conn)
+        db_cloudfs_user_put(conn, newPath)
+        db_message_account_put(conn, objPath)
     
     return jresponse('0','',req,200)
 
@@ -33,9 +35,9 @@ def cloudfsAccountDelete(req):
     
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_account_delete(conn, objPath)
-    db_cloudfs_account_delete(newPath, conn)
+    with getlock(conn) as mylock:
+        db_message_account_delete(conn, objPath)
+        db_cloudfs_account_delete(newPath, conn)
     
     return jresponse('0','',req,200)
 

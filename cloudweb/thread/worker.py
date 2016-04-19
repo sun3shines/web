@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import threading
-from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,GLOBAL_USER_DB,GLOBAL_USER_TOKEN
+from cloudweb.globalx.variable import GLOBAL_USER_CONSISTENCY,GLOBAL_USER_DB,GLOBAL_USER_TOKEN,USER_CONSISTENCY_DIR
 from cloudweb.tools.init_consistency_db import getDirList
+from cloudweb.db.table.lock.mysql import getlock
 
 class do_consistency_worker(threading.Thread):
     
@@ -12,13 +13,20 @@ class do_consistency_worker(threading.Thread):
         self.usertoken = usertoken
 
     def run(self):
-        conn = GLOBAL_USER_DB.get(self.atName) 
-        GLOBAL_USER_CONSISTENCY.put(self.atName, GLOBAL_USER_CONSISTENCY.state_running)
         
-        flag,_ = getDirList(conn, self.atName, self.usertoken, 0)
-        if not flag:
-            GLOBAL_USER_TOKEN.eliminate(self.atName)
-            GLOBAL_USER_CONSISTENCY.eliminate(self.atName)
-        else:
-            GLOBAL_USER_CONSISTENCY.put(self.atName, GLOBAL_USER_CONSISTENCY.state_success)       
+        print 'START DO CONSISTENCY WORKER THREAD' 
+        while True:
+            conn = GLOBAL_USER_DB.get(self.atName) 
+            GLOBAL_USER_CONSISTENCY.put(self.atName, GLOBAL_USER_CONSISTENCY.state_running)
+            with getlock(conn) as mylock:
+                flag,_ = getDirList(conn, self.atName, self.usertoken, 0)
+                if not flag:
+                    GLOBAL_USER_TOKEN.eliminate(self.atName)
+                    GLOBAL_USER_CONSISTENCY.eliminate(self.atName)
         
+            if not USER_CONSISTENCY_DIR.get_consistency(self.atName):
+                GLOBAL_USER_CONSISTENCY.put(self.atName, GLOBAL_USER_CONSISTENCY.state_success)
+                print 'FINISH DO CONSISTENCY WORKER THREAD'
+                break
+            print 'LOOP DO CONSISTENCY WORKER THREAD'
+            

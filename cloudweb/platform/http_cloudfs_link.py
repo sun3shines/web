@@ -6,6 +6,7 @@ from cloudweb.dblib.db_cloudfs_link import db_cloudfs_link_put
 from cloudweb.db.message.message_link import db_message_link_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 from cloudweb.drive.consistency import db_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent
 def cloudfsLinkPut(req):
@@ -18,9 +19,9 @@ def cloudfsLinkPut(req):
     
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_cloudfs_link_put(newPath, conn)
-    db_message_link_put(conn, objPath, dstName)
+    with getlock(conn) as mylock:
+        db_cloudfs_link_put(newPath, conn)
+        db_message_link_put(conn, objPath, dstName)
     
     return jresponse('0','',req,200)
 

@@ -9,6 +9,7 @@ from cloudlib.restful.cloudfs.lib_object import libGetObjectMeta
 from cloudlib.restful.cloudfs.lib_container import libGetContainerMeta
 from cloudlib.restful.cloudfs.lib_account import libGetAccountMeta
 from cloudweb.drive.consistency import flask_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent
 def flaskDataGlobalSearch(req,sdata):
@@ -16,10 +17,11 @@ def flaskDataGlobalSearch(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
     keyword = param.get('keyword')
-    
+    objects = []
     conn = GLOBAL_USER_DB.get(atName)
-    objects = db_flask_search_global_objects(conn,keyword)
-    objects = json.dumps(objects)
+    with getlock(conn) as mylock:
+        objects = db_flask_search_global_objects(conn,keyword)
+        objects = json.dumps(objects)
     return jresponse('0',objects,req,200)
 
 @flask_consistent
@@ -28,10 +30,11 @@ def flaskDataUserSearch(req,sdata):
     param = json.loads(req.body)
     atName = param.get('atName')
     keyword = param.get('keyword')
-    
+    objects = []
     conn = GLOBAL_USER_DB.get(atName)
-    objects = db_flask_search_account_objects(conn,atName, keyword)
-    objects = json.dumps(objects)
+    with getlock(conn) as mylock:
+        objects = db_flask_search_account_objects(conn,atName, keyword)
+        objects = json.dumps(objects)
     return jresponse('0', objects, req,200) 
 
 @flask_consistent
@@ -44,7 +47,8 @@ def flaskDataObjectDetail(req,sdata):
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     conn = GLOBAL_USER_DB.get(atName)
     
-    attr = id2urlAttrs(oid,conn)
+    with getlock(conn) as mylock:
+        attr = id2urlAttrs(oid,conn)
     
     if 'account' == attr.get('type'):
         resp = libGetAccountMeta(atName, usertoken)

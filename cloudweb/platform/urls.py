@@ -11,7 +11,7 @@ url2view.update(cloudfsUrl2View())
 def handlerequest(req,sdata):
 
     url = req.path
-    print url
+#    print url
     if url not in url2view:
         return jresponse('-1','url error',req,404)
     if url.startswith('/cloudfs'):

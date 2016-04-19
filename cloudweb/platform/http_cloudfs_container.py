@@ -6,6 +6,7 @@ from cloudweb.dblib.db_cloudfs_container import db_cloudfs_container_delete,db_c
 from cloudweb.db.message.message_container import db_message_container_delete,db_message_container_put
 from cloudweb.globalx.variable import GLOBAL_USER_DB 
 from cloudweb.drive.consistency import db_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent
 def cloudfsContainerDelete(req):
@@ -15,9 +16,9 @@ def cloudfsContainerDelete(req):
     
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_message_container_delete(conn, objPath)
-    db_cloudfs_container_delete(newPath, conn)    
+    with getlock(conn) as mylock:
+        db_message_container_delete(conn, objPath)
+        db_cloudfs_container_delete(newPath, conn)    
     return jresponse('0','',req,200)
 
 @db_consistent
@@ -28,9 +29,9 @@ def cloudfsContainerPut(req):
     newPath = param.get('newPath')
     atName = newPath.split('/')[0]
     conn = GLOBAL_USER_DB.get(atName)
-    
-    db_cloudfs_container_put(newPath, conn)
-    db_message_container_put(conn, objPath)
+    with getlock(conn) as mylock:
+        db_cloudfs_container_put(newPath, conn)
+        db_message_container_put(conn, objPath)
     return jresponse('0','',req,200)
 
 ################################################

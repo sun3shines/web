@@ -7,8 +7,9 @@ from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudweb.dblib.db_flask_object import db_flask_object_disable,db_flask_object_enable
 from cloudlib.common.common.swob import Response as HResponse
 from cloudweb.drive.consistency import flask_consistent
+from cloudweb.db.table.lock.mysql import getlock
 
-@flask_consistent
+
 def flaskUploadObject(req,sdata):
     
     param = req.headers
@@ -50,9 +51,9 @@ def flaskEnableObject(req,sdata):
     objPath = param.get('objPath')
     
     conn = GLOBAL_USER_DB.get(atName)
-    
-    newPath = '/'.join([atName,objPath])
-    db_flask_object_enable(conn,newPath)
+    with getlock(conn) as mylock:
+        newPath = '/'.join([atName,objPath])
+        db_flask_object_enable(conn,newPath)
     return jresponse('0',json.dumps({}),req,200)
 
 @flask_consistent
@@ -65,6 +66,7 @@ def flaskDisableObject(req,sdata):
     conn = GLOBAL_USER_DB.get(atName)
     
     newPath = '/'.join([atName,objPath])
-    db_flask_object_disable(conn,newPath)
+    with getlock(conn) as mylock:
+        db_flask_object_disable(conn,newPath)
     return jresponse('0',json.dumps({}),req,200)
 

@@ -2,7 +2,7 @@
 
 from cloudweb.db.db_account import account2id
 from cloudweb.db.table.stobj import update_stobj,id2childAttrs
-from cloudweb.db.table.mysql import getDb
+# from cloudweb.db.table.mysql import getDb
 
 # atEnable -> db_flask_account_enable
 # atDisable -> db_flask_account_disable
@@ -23,7 +23,7 @@ def db_flask_account_list(db,path):
     return id2childAttrs( db,aid)
 
 if __name__ == '__main__':
-
-    db = getDb()
+    pass
+#    db = getDb()
 #    atDisable(db,'AUTH_zhu__feng00000com')
 #    atEnable(db,'AUTH_zhu__feng00000com')

@@ -109,6 +109,7 @@ if __name__ == '__main__':
     conn = dbConn(MYSQL_HOST,MYSQL_USER,MYSQL_PASSWD,MYSQL_PORT,'cloudweb') 
     
     email = 'testadministrator@163com'
+    # email = 'zhu__feng001@163com'
     passwd = '123456'
     
     usertoken = libGetToken(email, passwd)

@@ -55,12 +55,17 @@ if __name__ == '__main__':
     email = 'zhu__feng001@163com'
     passwd = '123456'
     atName = 'AUTH_zhu__feng001163com'
+#    email = 'testadministrator@163com'
+#    passwd = '123456'
+#    atName = 'AUTH_' + email.replace('@','').replace('.','')
+
+    import pdb;pdb.set_trace()
     user_login(email,passwd)
     
-#    fs_test(atName)
+    fs_test(atName)
 #    object_test(atName)    
 #    quota_test(atName)
 #    record_test(atName)
 #    search_test(atName)
-    user_test(atName)
+#    user_test(atName)
 
