@@ -14,6 +14,8 @@ strGetServiceStatus = '/flask/host/getServiceStatus'
 
 strGetWorkloadStatus = '/flask/host/getWorkloadStatus'
 
+strGetHostStatic = '/flask/host/getHostStatic'
+
 strGetAbnormalEvents = '/flask/host/getAbnormalEvents'
 
 strDataGlobalSearch = '/flask/data/dataGlobalSearch'

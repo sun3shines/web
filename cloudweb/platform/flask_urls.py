@@ -9,7 +9,7 @@ from cloudweb.platform.http_flask_search import flaskDataGlobalSearch,flaskDataO
 from cloudweb.platform.http_flask_object import flaskDeleteObject,flaskDisableObject,flaskDownloadObject,flaskEnableObject,flaskUploadObject
 from cloudweb.platform.http_flask_quota import flaskQuotaGet,flaskQuotaSet
 from cloudweb.platform.http_flask_record import flaskGetAccountRecords,flaskGetObjectRecords
-
+from cloudweb.platform.http_flask_host import flaskQueryAllStatic,flaskQueryService,flaskQueryStatClass
 def flaskUrl2View():
     url2view = {}
     url2view.update({strUserLogin:flaskUserLogin}) # restful
@@ -17,12 +17,16 @@ def flaskUrl2View():
     url2view.update({strUserEnable:flaskUserEnable})
     url2view.update({strUserDisable:flaskUserDisable})
     url2view.update({strUserDelete:flaskUserDelete})
-    url2view.update({strGetServiceStatus:None})
-    url2view.update({strGetWorkloadStatus:None})
+    
+    url2view.update({strGetServiceStatus:flaskQueryService})
+    url2view.update({strGetWorkloadStatus:flaskQueryStatClass})
+    url2view.update({strGetHostStatic:flaskQueryAllStatic})
     url2view.update({strGetAbnormalEvents:None})
+    
     url2view.update({strDataGlobalSearch:flaskDataGlobalSearch})
     url2view.update({strDataUserSearch:flaskDataUserSearch})
     url2view.update({strDataMd5Search:None})
+    
     url2view.update({strObjectDetails:flaskDataObjectDetail})
     url2view.update({strDisableObject:flaskDisableObject}) # db
     url2view.update({strEnableObject:flaskEnableObject}) # db
@@ -36,5 +40,6 @@ def flaskUrl2View():
     url2view.update({strDirList:flasklistDir})   #db
     url2view.update({strGetAtRecords:flaskGetAccountRecords})   #db
     url2view.update({strGetOtRecords:flaskGetObjectRecords})    #db
+    
     return url2view
 

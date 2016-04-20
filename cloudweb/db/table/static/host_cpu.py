@@ -66,9 +66,6 @@ def hid2attrs(db,hid):
         
     return attrs
 
-def queryattrs(db):
-    pass
-
 def putc(db,hid,attrs):
     c = Cpu()
     dbattrs = hid2attrs(db, hid)
