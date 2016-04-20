@@ -48,7 +48,6 @@ def query_all_static(db):
     return staticAttrs
 
 if __name__ == '__main__':
-    import pdb;pdb.set_trace()
     conn = getdb()
     print query_all_static(conn)
     

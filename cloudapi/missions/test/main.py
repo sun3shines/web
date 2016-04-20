@@ -70,7 +70,6 @@ if __name__ == '__main__':
 #    passwd = '123456'
 #    atName = 'AUTH_' + email.replace('@','').replace('.','')
 
-    import pdb;pdb.set_trace()
     user_login(email,passwd)
     
 #    fs_test(atName)
