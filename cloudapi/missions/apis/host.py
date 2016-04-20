@@ -28,3 +28,9 @@ def get_abnormal_events(atName):
     mission.execute(t)
     print t.response
     return t.response
+
+if __name__ == '__main__':
+#    get_service_status()
+    pass
+
+

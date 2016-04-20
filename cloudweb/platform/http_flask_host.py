@@ -8,6 +8,7 @@ from cloudweb.db.table.lock.mysql import getlock
 from cloudweb.dblib.db_flask_static import db_flask_query_all_static
 from cloudweb.dblib.db_flask_dynamic import db_flask_query_dynamic_class
 from cloudweb.dblib.db_flask_service import db_flask_query_service
+from cloudweb.globalx.variable import strTimeStamp
 
 def flaskQueryAllStatic(request,sdata):
     
@@ -20,6 +21,7 @@ def flaskQueryAllStatic(request,sdata):
     return jresponse('0',json.dumps(metadata),request,200) 
 
 def flaskQueryService(request,sdata):
+    
     param = json.loads(request.body)
     atName = param.get('atName')
     hostUuid = param.get('hostUuid')
@@ -27,6 +29,10 @@ def flaskQueryService(request,sdata):
     metadata = []
     with getlock(conn) as mylock:
         metadata = db_flask_query_service(conn, hostUuid)
+        
+    for attr in metadata:
+        attr[strTimeStamp] = str(attr.pop(strTimeStamp))
+        
     return jresponse('0',json.dumps(metadata),request,200) 
 
 
@@ -41,6 +47,9 @@ def flaskQueryStatClass(request,sdata):
     metadata = []
     with getlock(conn) as mylock:
         metadata = db_flask_query_dynamic_class(conn, hostUuid, className)
+        
+    for attr in metadata:
+        attr[strTimeStamp] = str(attr.pop(strTimeStamp))
         
     return jresponse('0',json.dumps(metadata),request,200)
 

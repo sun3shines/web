@@ -10,6 +10,8 @@ from cloudapi.missions.apis.search import data_global_find,data_user_find,data_m
 from cloudapi.missions.apis.user import user_login,get_accounts,disable_account,\
     enable_account,delete_account
     
+from cloudapi.missions.apis.host import get_host_static,get_service_status,get_workload_status
+
 def fs_test(atName):
     list_account(atName)
     list_container(atName,'/normal')
@@ -50,6 +52,15 @@ def user_test(atName):
     get_accounts(atName)
     delete_account(atName,atName)
 
+def host_test(atName,hostUuid):
+    get_host_static(atName)
+    get_service_status(atName, hostUuid)
+    get_workload_status(atName, hostUuid, 'cpu')
+    get_workload_status(atName, hostUuid, 'mem')
+    get_workload_status(atName, hostUuid, 'disk')
+    get_workload_status(atName, hostUuid, 'net')
+    get_workload_status(atName, hostUuid, 'storage')
+    
 if __name__ == '__main__': 
 
     email = 'zhu__feng001@163com'
@@ -62,10 +73,14 @@ if __name__ == '__main__':
     import pdb;pdb.set_trace()
     user_login(email,passwd)
     
-    fs_test(atName)
+#    fs_test(atName)
 #    object_test(atName)    
 #    quota_test(atName)
 #    record_test(atName)
 #    search_test(atName)
 #    user_test(atName)
 
+    hostUuid = 'mIYuQsiH-1NmLgn-ny3t'
+    host_test(atName, hostUuid)
+    
+    

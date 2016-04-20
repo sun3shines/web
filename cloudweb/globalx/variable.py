@@ -13,3 +13,5 @@ GLOBAL_USER_TOKEN = CacheUser()
 GLOBAL_USER_CONSISTENCY = CacheConsistency()
 
 USER_CONSISTENCY_DIR = CacheQueue()
+
+strTimeStamp = 'timestamp'
