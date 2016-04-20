@@ -1323,3 +1323,8 @@ Exception _mysql_exceptions.ProgrammingError: (2014, "Commands out of sync; you 
 
 要求增加交互式的设计。希望可以避免上述的错误了。是的。
 
+    select id,kind,click_num from code as a where  click_num=(select max(b.click_num) from code as b where a.kind = b.kind);  
+
+select * from stat_mem as a where seq=(select max(b.seq) from stat_mem as b where a.host_id = b.host_id) and host_id=6;
+
+select * from stat_mem as a where seq=(select max(b.seq) from stat_mem as b where a.host_id = b.host_id) and host_id=6;

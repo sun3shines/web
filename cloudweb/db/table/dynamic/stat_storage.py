@@ -56,3 +56,6 @@ def hid2attrs(db,hid):
         attrs.append(attr)
     return attrs
 
+def query_lates_storage(db,hid):
+    attrs = hid2attrs(db, hid)
+    

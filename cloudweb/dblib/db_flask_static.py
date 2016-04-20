@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from cloudweb.db.static.db_static import query_all_static
 

@@ -30,11 +30,13 @@ def flaskUrl2View():
     url2view.update({strObjectDetails:flaskDataObjectDetail})
     url2view.update({strDisableObject:flaskDisableObject}) # db
     url2view.update({strEnableObject:flaskEnableObject}) # db
+    
     url2view.update({strDeleteObject:flaskDeleteObject}) # restful
     url2view.update({strDownloadObject:flaskDownloadObject}) #restful
     url2view.update({strUploadObject:flaskUploadObject}) #restful
     url2view.update({strQuotaGet:flaskQuotaGet}) # restful
     url2view.update({strQuotaSet:flaskQuotaSet}) # restful
+    
     url2view.update({strAccountList:flasklistAccount})   # db
     url2view.update({strContainerList:flasklistContainer})   #db
     url2view.update({strDirList:flasklistDir})   #db

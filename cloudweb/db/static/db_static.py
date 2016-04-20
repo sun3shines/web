@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from cloudweb.db.table.static.host import queryattrs as host_queryattrs
 from cloudweb.db.table.static.host import Host
 from cloudweb.db.table.static.host_cpu import hid2attrs as cpu_hid2attrs

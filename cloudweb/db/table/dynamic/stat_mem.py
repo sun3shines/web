@@ -46,3 +46,9 @@ def hid2attrs(db,hid):
         attrs.append(attr)
     return attrs
 
+def getLatesMem(db,hid):
+    
+    cStr = 'select max(b.seq) from stat_mem as b where a.host_id = b.host_id'
+    sqlStr = 'select * from stat_mem as a where seq=(%s) and host_id=%s;' % (cStr,str(hid))
+    return db.getDataList(sqlStr)
+
