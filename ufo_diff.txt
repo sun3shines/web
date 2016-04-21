@@ -1328,3 +1328,14 @@ Exception _mysql_exceptions.ProgrammingError: (2014, "Commands out of sync; you 
 select * from stat_mem as a where seq=(select max(b.seq) from stat_mem as b where a.host_id = b.host_id) and host_id=6;
 
 select * from stat_mem as a where seq=(select max(b.seq) from stat_mem as b where a.host_id = b.host_id) and host_id=6;
+
+PyroScope
+
+http://pyrocore.readthedocs.org/en/latest/installation.html
+
+bug 处理。关于user 表中的id，改为stobj的id,去掉userid。
+
+以及urlpath，改为auth_zhu__feng001改为 Auth_zhu__feng001 获取到atName.
+
+bug 处理，数据库重连。
+

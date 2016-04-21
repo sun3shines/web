@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-HOST_PATH = 'hostUuid'
+HOST_PATH = '/etc/cloud/hostUuid'
 
 MONITOR_SERVER_HOST = '192.168.36.3'
 MONITOR_SERVER_PORT = 7013

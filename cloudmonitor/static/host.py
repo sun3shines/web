@@ -5,7 +5,7 @@ import socket
 import os.path
 import time
 from cloudmonitor.globalx import HOST_PATH,MONITOR_CONNECT_INTERVAL
-from cloudmonitor.uuid import get_vs_uuid
+from cloudlib.utils.uuid import get_vs_uuid
 
 from cloudmonitor.static.lshw import get_hw
 from cloudmonitor.static.host_cpu import get_hw_cpu

@@ -4,7 +4,7 @@ import time
 import datetime
 
 from cloudmonitor.globalx import PSUTIL_STORAGE_INTERVAL,MONITOR_ALLOWD_FSTYPE
-from cloudmonitor.md5 import str2uuid
+from cloudlib.utils.md5 import str2uuid
 
 def storage_iter():
     
