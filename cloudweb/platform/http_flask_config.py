@@ -3,18 +3,18 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 
-def flaskAddExecutor():
-    pass
+def flaskAddExecutor(request,sdata):
+    return jresponse('0','',request,200) 
 
-def flaskDelExecutor():
-    pass
+def flaskDelExecutor(request,sdata):
+    return jresponse('0','',request,200) 
 
-def flaskListExecutor():
-    pass
+def flaskListExecutor(request,sdata):
+    return jresponse('0','',request,200) 
 
-def flaskSetConfig():
-    pass
+def flaskSetConfig(request,sdata):
+    return jresponse('0','',request,200) 
 
-def flaskGetConfig():
-    pass
+def flaskGetConfig(request,sdata):
+    return jresponse('0','',request,200) 
 
