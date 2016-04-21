@@ -1339,3 +1339,5 @@ bug 处理。关于user 表中的id，改为stobj的id,去掉userid。
 
 bug 处理，数据库重连。
 
+create table config_executor(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,name varchar(255),uuid varchar(255),inet varchar(64),available varchar(16));
+

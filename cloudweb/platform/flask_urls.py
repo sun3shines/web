@@ -10,6 +10,9 @@ from cloudweb.platform.http_flask_object import flaskDeleteObject,flaskDisableOb
 from cloudweb.platform.http_flask_quota import flaskQuotaGet,flaskQuotaSet
 from cloudweb.platform.http_flask_record import flaskGetAccountRecords,flaskGetObjectRecords
 from cloudweb.platform.http_flask_host import flaskQueryAllStatic,flaskQueryService,flaskQueryStatClass
+from cloudweb.platform.http_flask_config import flaskAddExecutor,flaskDelExecutor,flaskListExecutor,\
+    flaskGetConfig,flaskSetConfig
+    
 def flaskUrl2View():
     url2view = {}
     url2view.update({strUserLogin:flaskUserLogin}) # restful
@@ -42,6 +45,12 @@ def flaskUrl2View():
     url2view.update({strDirList:flasklistDir})   #db
     url2view.update({strGetAtRecords:flaskGetAccountRecords})   #db
     url2view.update({strGetOtRecords:flaskGetObjectRecords})    #db
+    
+    url2view.update({strExecutorAdd:flaskAddExecutor})
+    url2view.update({strExecutorDel:flaskDelExecutor})
+    url2view.update({strExecutorList:flaskListExecutor})
+    url2view.update({strConfigSet:flaskSetConfig})
+    url2view.update({strConfigGet:flaskGetConfig})
     
     return url2view
 

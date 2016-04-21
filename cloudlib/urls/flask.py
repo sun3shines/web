@@ -50,3 +50,13 @@ strGetAtRecords = '/flask/record/account'
 
 strGetOtRecords = '/flask/record/object'
 
+strExecutorAdd = '/flask/executor/add'
+
+strExecutorDel = '/flask/executor/del'
+
+strExecutorList = '/flask/executor/list'
+
+strConfigSet = '/flask/config/set'
+
+strConfigGet = '/flask/config/get'
+
