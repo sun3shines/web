@@ -15,7 +15,7 @@
 # limitations under the License.
 
 from cloudlib.common.utils import parse_options
-from cloudserver.wsgi import run_wsgi
+from cloudlib.common.wsgi import run_wsgi
 
 if __name__ == '__main__':
     conf_file, options = parse_options()
