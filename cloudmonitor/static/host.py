@@ -2,10 +2,10 @@
 
 import subprocess
 import socket
-import os.path
 import time
-from cloudmonitor.globalx import HOST_PATH,MONITOR_CONNECT_INTERVAL
-from cloudlib.utils.uuid import get_vs_uuid
+from cloudmonitor.globalx import MONITOR_CONNECT_INTERVAL
+
+from cloudlib.utils.uuid import loadUuid
 
 from cloudmonitor.static.lshw import get_hw
 from cloudmonitor.static.host_cpu import get_hw_cpu
@@ -14,17 +14,6 @@ from cloudmonitor.static.host_mem import get_hw_mem
 from cloudmonitor.static.host_net import get_hw_net
 
 from cloudmonitor.http.api import monitor_start
-
-def loadUuid():
-    
-    if not os.path.exists(HOST_PATH):
-        uuid = get_vs_uuid()
-        with open(HOST_PATH,'w') as f:
-            f.write(uuid)
-            
-    with open(HOST_PATH,'r') as f:
-        return f.read()
-
 
 def get_hw_host():
     hw = subprocess.Popen(['dmidecode'], 

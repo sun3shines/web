@@ -7,3 +7,5 @@ CLOUDFS_CA_KEY = '/etc/cloud/ca.key.unsecure'
 CLOUDFS_CA_CRT = '/etc/cloud/ca.crt'
 
 HTTP_TIMEOUT = 100
+
+HOST_PATH = '/etc/cloud/hostUuid'

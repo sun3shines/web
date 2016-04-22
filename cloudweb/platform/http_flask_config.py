@@ -29,7 +29,7 @@ def flaskAddExecutor(request):
         if attr:
             info = '%s %s %s' % (attr.get('name'),attr.get('uuid'),attr.get('ip'))
             return jresponse('-1','executor uuid already exists: '+info,request,200) 
-        db_flask_put_executor(conn, ei.get('name'), ei.get('inet'), ei.get('uuid'))
+        db_flask_put_executor(conn, ei.get('name'), hostip, ei.get('uuid'))
     return jresponse('0','',request,200) 
 
 def flaskDelExecutor(request):

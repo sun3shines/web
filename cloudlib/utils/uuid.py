@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import os.path
 import random
-
+from cloudlib.globalx.static import HOST_PATH
 
 def get_num_random(num=1):
     
@@ -55,4 +56,13 @@ def get_vs_uuid():
     vs_uuid = get_uuid()
     return vs_uuid
     
+def loadUuid():
+    
+    if not os.path.exists(HOST_PATH):
+        uuid = get_vs_uuid()
+        with open(HOST_PATH,'w') as f:
+            f.write(uuid)
+            
+    with open(HOST_PATH,'r') as f:
+        return f.read()
 
