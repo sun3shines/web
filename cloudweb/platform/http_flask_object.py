@@ -3,10 +3,10 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudlib.restful.cloudfs.lib_file import libUploadFile,libDownloadFile,libDeleteFile
-from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudweb.dblib.db_flask_object import db_flask_object_disable,db_flask_object_enable
 from cloudlib.common.common.swob import Response as HResponse
-from cloudweb.drive.consistency import flask_consistent
+from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 

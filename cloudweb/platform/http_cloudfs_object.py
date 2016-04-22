@@ -6,8 +6,8 @@ from cloudweb.dblib.db_cloudfs_object import db_cloudfs_object_put,db_cloudfs_ob
     db_cloudfs_object_copy,db_cloudfs_object_move,db_cloudfs_object_moverecycle
 from cloudweb.db.message.message_object import db_message_object_put,db_message_object_delete,db_message_object_deleterecycle,\
     db_message_object_copy,db_message_object_move,db_message_object_moverecycle
-from cloudweb.globalx.variable import GLOBAL_USER_DB 
-from cloudweb.drive.consistency import db_consistent
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.platform.drive.consistency import db_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent

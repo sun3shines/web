@@ -2,8 +2,8 @@
 
 import json
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.globalx.variable import GLOBAL_USER_TOKEN
-from cloudweb.drive.utils import getAtNameByEmail
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN
+from cloudweb.platform.drive.utils import getAtNameByEmail
 
 def cloudfsOauthRegister(req):
     

@@ -1341,3 +1341,14 @@ bug 处理，数据库重连。
 
 create table config_executor(id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,name varchar(255),uuid varchar(255),inet varchar(64),available varchar(16));
 
+find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.drive/cloudweb.platform.drive/g' {}
+
+find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.globalx/cloudweb.platform.globalx/g' {}
+
+find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.thread/cloudweb.platform.thread/g' {}
+
+find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.tools/cloudweb.platform.tools/g' {}
+
+
+
+

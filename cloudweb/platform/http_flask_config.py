@@ -2,8 +2,8 @@
 
 import json
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.globalx.variable import GLOBAL_USER_DB
-from cloudweb.globalx.static import CONFIG_EXECUTOR_PORT
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB
+from cloudweb.platform.globalx.static import CONFIG_EXECUTOR_PORT
 from cloudweb.db.table.lock.mysql import getlock
 from cloudweb.dblib.db_flask_config import db_flask_ip2attr,db_flask_list_executor,\
     db_flask_uuid2attr,db_flask_put_executor,db_flask_del_executor

@@ -4,8 +4,8 @@ import json
 import time
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_flask_record import db_flask_record_object,db_flask_record_user
-from cloudweb.globalx.variable import GLOBAL_USER_DB
-from cloudweb.drive.consistency import flask_consistent
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB
+from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent

@@ -5,8 +5,8 @@ from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.dblib.db_cloudfs_account import db_cloudfs_account_delete,db_cloudfs_account_put
 from cloudweb.db.message.message_account import db_message_account_put,db_message_account_delete
 from cloudweb.dblib.db_cloudfs_user import db_cloudfs_user_put
-from cloudweb.globalx.variable import GLOBAL_USER_DB 
-from cloudweb.drive.consistency import db_consistent
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.platform.drive.consistency import db_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent

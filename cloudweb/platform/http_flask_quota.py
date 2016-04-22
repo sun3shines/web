@@ -3,8 +3,8 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudlib.restful.cloudfs.lib_quota import libGetQuota,libSetQuota
-from cloudweb.globalx.variable import GLOBAL_USER_TOKEN
-from cloudweb.drive.consistency import flask_consistent
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN
+from cloudweb.platform.drive.consistency import flask_consistent
 
 @flask_consistent
 def flaskQuotaGet(req,sdata):

@@ -2,14 +2,14 @@
 
 import json
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB,GLOBAL_USER_CONSISTENCY
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB,GLOBAL_USER_CONSISTENCY
 from cloudlib.restful.cloudfs.lib_token import libGetTokenAttr
 
 from cloudweb.db.db_user import user2attr
 from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,db_flask_user_enable,db_flask_user_list
 from cloudweb.dblib.db_flask_account import db_flask_account_disable,db_flask_account_enable
-from cloudweb.drive.consistency import flask_consistent
-from cloudweb.tools.init_consistency_db import getDirList
+from cloudweb.platform.drive.consistency import flask_consistent
+from cloudweb.platform.tools.init_consistency_db import getDirList
 from cloudweb.db.table.lock.mysql import getlock
 
 def flaskUserLogin(req,sdata):

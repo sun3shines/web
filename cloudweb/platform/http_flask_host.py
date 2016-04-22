@@ -3,12 +3,12 @@
 import json
 from cloudlib.common.bufferedhttp import jresponse
 
-from cloudweb.globalx.variable import GLOBAL_USER_DB
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB
 from cloudweb.db.table.lock.mysql import getlock
 from cloudweb.dblib.db_flask_static import db_flask_query_all_static
 from cloudweb.dblib.db_flask_dynamic import db_flask_query_dynamic_class
 from cloudweb.dblib.db_flask_service import db_flask_query_service
-from cloudweb.globalx.variable import strTimeStamp
+from cloudweb.platform.globalx.variable import strTimeStamp
 
 def flaskQueryAllStatic(request,sdata):
     

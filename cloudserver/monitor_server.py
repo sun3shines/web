@@ -29,7 +29,7 @@ from cloudlib.common.constraints import check_utf8
 from cloudlib.common.bufferedhttp import jresponse
 
 from cloudweb.monitor.urls import handlerequest
-from cloudweb.drive.data import Server
+from cloudweb.platform.drive.data import Server
 
 class ServerController(object):
     """WSGI controller for the account server."""

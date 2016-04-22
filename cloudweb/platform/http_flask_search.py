@@ -4,11 +4,11 @@ import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.db.table.stobj import id2urlAttrs
 from cloudweb.dblib.db_flask_search import db_flask_search_account_objects,db_flask_search_global_objects
-from cloudweb.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB
 from cloudlib.restful.cloudfs.lib_object import libGetObjectMeta
 from cloudlib.restful.cloudfs.lib_container import libGetContainerMeta
 from cloudlib.restful.cloudfs.lib_account import libGetAccountMeta
-from cloudweb.drive.consistency import flask_consistent
+from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent

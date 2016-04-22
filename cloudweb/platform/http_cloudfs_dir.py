@@ -6,8 +6,8 @@ from cloudweb.dblib.db_cloudfs_dir import db_cloudfs_dir_delete,db_cloudfs_dir_r
     db_cloudfs_dir_moverecycle,db_cloudfs_dir_put,db_cloudfs_dir_move,db_cloudfs_dir_copy
 from cloudweb.db.message.message_dir import db_message_dir_delete,db_message_dir_reset,db_message_dir_deleterecycle,\
     db_message_dir_moverecycle,db_message_dir_put,db_message_dir_move,db_message_dir_copy
-from cloudweb.globalx.variable import GLOBAL_USER_DB 
-from cloudweb.drive.consistency import db_consistent
+from cloudweb.platform.globalx.variable import GLOBAL_USER_DB 
+from cloudweb.platform.drive.consistency import db_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @db_consistent
