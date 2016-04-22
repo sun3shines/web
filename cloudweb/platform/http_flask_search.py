@@ -47,8 +47,12 @@ def flaskDataObjectDetail(req,sdata):
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     conn = GLOBAL_USER_DB.get(atName)
     
+    
     with getlock(conn) as mylock:
-        attr = id2urlAttrs(oid,conn)
+        flag,attr = id2urlAttrs(oid,conn)
+    
+    if not flag:
+        return jresponse('-1','id2urlAttrs Error: '+str(oid),req,200)
     
     if 'account' == attr.get('type'):
         resp = libGetAccountMeta(atName, usertoken)

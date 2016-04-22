@@ -17,6 +17,10 @@ def insert_executor(db,name,uuid,inet,avai):
     vals = [name,uuid,inet,avai]
     return db.insert(keys,vals,e.table)
 
+def del_executor(db,eid):
+    e = Executor()
+    return db.delete(e.table,{e.id:str(eid)})
+
 def fetch_executor(db,uuid=None,inet=None):
     
     e = Executor()
@@ -30,45 +34,11 @@ def fetch_executor(db,uuid=None,inet=None):
         
     return db.select(attrs,e.table,c)
 
-def ip2attrs(db,inet):
+def query_all_executor(db,inet=None,uuid=None):
     
     attrs = []
     e = Executor()
-    datas = fetch_executor(db, None,inet =inet)
-
-    truncated =  datas
-    for data in truncated:
-        attr = {}
-        attr[e.id] = data[0]
-        attr[e.name] = data[1]
-        attr[e.uuid] = data[2]
-        attr[e.inet] = data[3]
-        attr[e.avai] = data[4]
-        attrs.append(attr)
-    return attrs
-
-def uuid2attrs(db,uuid):
-    
-    attrs = []
-    e = Executor()
-    datas = fetch_executor(db, uuid=uuid)
-
-    truncated =  datas
-    for data in truncated:
-        attr = {}
-        attr[e.id] = data[0]
-        attr[e.name] = data[1]
-        attr[e.uuid] = data[2]
-        attr[e.inet] = data[3]
-        attr[e.avai] = data[4]
-        attrs.append(attr)
-    return attrs
-
-def query_all_executor(db):
-    
-    attrs = []
-    e = Executor()
-    datas = fetch_executor(db)
+    datas = fetch_executor(db,inet,uuid)
 
     truncated =  datas
     for data in truncated:
@@ -80,3 +50,10 @@ def query_all_executor(db):
         attrs.append(attr)
     return attrs    
 
+def ip2attrs(db,inet):
+    
+    return query_all_executor(db, inet=inet)
+
+def uuid2attrs(db,uuid):
+    
+    return query_all_executor(db, inet=None,uuid=uuid)

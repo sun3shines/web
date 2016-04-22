@@ -214,7 +214,7 @@ def id2urlAttrs(id,db):
         parent_id = tmpattr.get(s.parent_id)
         
     attr[s.path] = path
-    return attr
+    return True,attr
 
 def copy_stobj(conn,srcNewPath,dstNewPath):
 

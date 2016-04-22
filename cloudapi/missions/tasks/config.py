@@ -32,7 +32,7 @@ class ExecutorDel(Task):
                            'hostUuid':self.hostUuid})
         
 class ExecutorList(Task):
-    def __init__(self,atName,hostUuid):
+    def __init__(self,atName):
         self.atName = atName
         
     def getUrl(self):
