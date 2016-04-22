@@ -16,8 +16,8 @@ class CacheDb:
                 self.lock.release()
         conn = self.d.get(atName)
         if self.lockfunc:
-            with self.lockfunc() as mylock:
-                if conn.timeout:
+            if conn.timeout:
+                with self.lockfunc() as mylock:
                     conn.close()
                     conn.connect()
         return conn
