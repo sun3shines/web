@@ -12,7 +12,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.platform.tools.init_consistency_db import getDirList
 from cloudweb.db.table.lock.mysql import getlock
 
-def flaskUserLogin(req,sdata):
+def flaskUserLogin(req):
     param = json.loads(req.body)
     email = param.get('email')
     passwd = param.get('passwd')
@@ -40,7 +40,7 @@ def flaskUserLogin(req,sdata):
     return jresponse(resp['status'],resp['msg'],req,200)
 
 @flask_consistent
-def flaskUserList(req,sdata):
+def flaskUserList(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -52,7 +52,7 @@ def flaskUserList(req,sdata):
     return jresponse('0',json.dumps(metadata),req,200)
 
 @flask_consistent
-def flaskUserEnable(req,sdata):
+def flaskUserEnable(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -67,7 +67,7 @@ def flaskUserEnable(req,sdata):
     return jresponse('0',json.dumps({}),req,200)
 
 @flask_consistent
-def flaskUserDisable(req,sdata):
+def flaskUserDisable(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -81,7 +81,7 @@ def flaskUserDisable(req,sdata):
     return jresponse('0',json.dumps({}),req,200)
 
 @flask_consistent
-def flaskUserDelete(req,sdata):
+def flaskUserDelete(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')

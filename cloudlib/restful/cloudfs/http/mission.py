@@ -118,7 +118,7 @@ class Mission:
 
 class TestMission(Mission):
 
-    def __init__(self,email='',passwd='',sdata=None):
+    def __init__(self,email='',passwd=''):
         
         self.connection_flag = False
         self.conn = None

@@ -9,7 +9,7 @@ from cloudweb.dblib.db_flask_config import db_flask_ip2attr,db_flask_list_execut
     db_flask_uuid2attr,db_flask_put_executor,db_flask_del_executor
 from cloudlib.restful.config.lib_config import libPullExecutor
 
-def flaskAddExecutor(request,sdata):
+def flaskAddExecutor(request):
     
     param = json.loads(request.body)
     hostip = param.get('hostip')
@@ -32,7 +32,7 @@ def flaskAddExecutor(request,sdata):
         db_flask_put_executor(conn, ei.get('name'), ei.get('inet'), ei.get('uuid'))
     return jresponse('0','',request,200) 
 
-def flaskDelExecutor(request,sdata):
+def flaskDelExecutor(request):
     param = json.loads(request.body)
     hostUuid = param.get('hostUuid')
     atName = param.get('atName')
@@ -42,7 +42,7 @@ def flaskDelExecutor(request,sdata):
         
     return jresponse('0','',request,200) 
 
-def flaskListExecutor(request,sdata):
+def flaskListExecutor(request):
     param = json.loads(request.body)
     atName = param.get('atName')
     conn = GLOBAL_USER_DB.get(atName)
@@ -53,9 +53,9 @@ def flaskListExecutor(request,sdata):
             
     return jresponse('0',json.dumps(attrs),request,200) 
 
-def flaskSetConfig(request,sdata):
+def flaskSetConfig(request):
     return jresponse('0','',request,200) 
 
-def flaskGetConfig(request,sdata):
+def flaskGetConfig(request):
     return jresponse('0','',request,200) 
 

@@ -9,7 +9,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent
-def flaskGetObjectRecords(req,sdata):
+def flaskGetObjectRecords(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -26,7 +26,7 @@ def flaskGetObjectRecords(req,sdata):
     return jresponse('0',json.dumps(attrs),req,200)
 
 @flask_consistent
-def flaskGetAccountRecords(req,sdata):
+def flaskGetAccountRecords(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')

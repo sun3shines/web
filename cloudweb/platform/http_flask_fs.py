@@ -11,7 +11,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent
-def flasklistAccount(req,sdata):
+def flasklistAccount(req):
     param = json.loads(req.body)
     atName = param.get('atName')
     conn = GLOBAL_USER_DB.get(atName)
@@ -21,7 +21,7 @@ def flasklistAccount(req,sdata):
     return jresponse('0',json.dumps(metadata),req,200)
 
 @flask_consistent
-def flasklistContainer(req,sdata):
+def flasklistContainer(req):
     param = json.loads(req.body)
     atName = param.get('atName')
     cntPath = param.get('cntPath')
@@ -33,7 +33,7 @@ def flasklistContainer(req,sdata):
     return jresponse('0',json.dumps(metadata),req,200)
 
 @flask_consistent
-def flasklistDir(req,sdata):
+def flasklistDir(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')

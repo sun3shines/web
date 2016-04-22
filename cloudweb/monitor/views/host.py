@@ -19,7 +19,7 @@ from cloudweb.monitor.threads.disk import StatDisk
 from cloudweb.monitor.threads.storage import StatStorage
 from cloudweb.monitor.threads.service import StatService
 
-def processStartUp(request,sdata):
+def processStartUp(request):
 
     param = json.loads(request.body)
     

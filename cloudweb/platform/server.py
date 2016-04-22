@@ -29,14 +29,12 @@ from cloudlib.common.constraints import check_utf8
 from cloudlib.common.bufferedhttp import jresponse
 
 from cloudweb.platform.urls import handlerequest
-from cloudweb.platform.drive.data import Server
 
 class ServerController(object):
     """WSGI controller for the account server."""
 
     def __init__(self, conf):
         self.logger = get_logger(conf, log_route='cloud-server')
-        self.sdata = Server()
         
     def __call__(self, env, start_response):
         req = Request(env)
@@ -46,7 +44,7 @@ class ServerController(object):
             res = jresponse('-1', 'invalid utf8', req,412)
         else:
             try:
-                res = handlerequest(req,self.sdata) 
+                res = handlerequest(req) 
             except (Exception, Timeout):
                 self.logger.exception(('ERROR __call__ error with %(method)s'
                     ' %(path)s '), {'method': req.method, 'path': req.path})

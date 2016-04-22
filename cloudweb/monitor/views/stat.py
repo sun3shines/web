@@ -4,7 +4,7 @@ import json
 from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.monitor.globalx import GlobalQueue
 
-def processStatData(request,sdata):
+def processStatData(request):
 
     param = json.loads(request.body)
     hostUuid = param.get('hostUuid')

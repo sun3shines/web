@@ -7,7 +7,7 @@ from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN
 from cloudweb.platform.drive.consistency import flask_consistent
 
 @flask_consistent
-def flaskQuotaGet(req,sdata):
+def flaskQuotaGet(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -18,7 +18,7 @@ def flaskQuotaGet(req,sdata):
     return jresponse(resp['status'],resp['msg'],req,200)
 
 @flask_consistent
-def flaskQuotaSet(req,sdata):
+def flaskQuotaSet(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')

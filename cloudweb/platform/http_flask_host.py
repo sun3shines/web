@@ -10,7 +10,7 @@ from cloudweb.dblib.db_flask_dynamic import db_flask_query_dynamic_class
 from cloudweb.dblib.db_flask_service import db_flask_query_service
 from cloudweb.platform.globalx.variable import strTimeStamp
 
-def flaskQueryAllStatic(request,sdata):
+def flaskQueryAllStatic(request):
     
     param = json.loads(request.body)
     atName = param.get('atName')
@@ -20,7 +20,7 @@ def flaskQueryAllStatic(request,sdata):
         metadata = db_flask_query_all_static(conn)
     return jresponse('0',json.dumps(metadata),request,200) 
 
-def flaskQueryService(request,sdata):
+def flaskQueryService(request):
     
     param = json.loads(request.body)
     atName = param.get('atName')
@@ -36,7 +36,7 @@ def flaskQueryService(request,sdata):
     return jresponse('0',json.dumps(metadata),request,200) 
 
 
-def flaskQueryStatClass(request,sdata):
+def flaskQueryStatClass(request):
     param = json.loads(request.body)
     atName = param.get('atName')
     hostUuid = param.get('hostUuid')

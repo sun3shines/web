@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# daemon data;server data ; sdata
+# daemon data;server data
 
 from cloudweb.platform.drive.cache import UserCache,TokenCache
 class Server:

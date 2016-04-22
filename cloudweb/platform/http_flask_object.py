@@ -10,7 +10,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 
-def flaskUploadObject(req,sdata):
+def flaskUploadObject(req):
     
     param = req.headers
     atName = param.pop('Atname')
@@ -20,7 +20,7 @@ def flaskUploadObject(req,sdata):
     return jresponse(resp['status'],resp['msg'],req,200)
 
 @flask_consistent
-def flaskDownloadObject(req,sdata):
+def flaskDownloadObject(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -32,7 +32,7 @@ def flaskDownloadObject(req,sdata):
     return HResponse(app_iter=app_iter,request=req,conditional_response=True)
 
 @flask_consistent
-def flaskDeleteObject(req,sdata):
+def flaskDeleteObject(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -44,7 +44,7 @@ def flaskDeleteObject(req,sdata):
     return jresponse(resp['status'],resp['msg'],req,200)
 
 @flask_consistent
-def flaskEnableObject(req,sdata):
+def flaskEnableObject(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -57,7 +57,7 @@ def flaskEnableObject(req,sdata):
     return jresponse('0',json.dumps({}),req,200)
 
 @flask_consistent
-def flaskDisableObject(req,sdata):
+def flaskDisableObject(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')

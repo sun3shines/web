@@ -8,7 +8,7 @@ url2view = {}
 url2view.update(flaskUrl2View())
 url2view.update(cloudfsUrl2View())
 
-def handlerequest(req,sdata):
+def handlerequest(req):
 
     url = req.path
 #    print url
@@ -17,6 +17,6 @@ def handlerequest(req,sdata):
     if url.startswith('/cloudfs'):
         return url2view[url](req)
     else: 
-        return url2view[url](req,sdata)
+        return url2view[url](req)
 
 

@@ -12,7 +12,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 @flask_consistent
-def flaskDataGlobalSearch(req,sdata):
+def flaskDataGlobalSearch(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -25,7 +25,7 @@ def flaskDataGlobalSearch(req,sdata):
     return jresponse('0',objects,req,200)
 
 @flask_consistent
-def flaskDataUserSearch(req,sdata):
+def flaskDataUserSearch(req):
     
     param = json.loads(req.body)
     atName = param.get('atName')
@@ -38,7 +38,7 @@ def flaskDataUserSearch(req,sdata):
     return jresponse('0', objects, req,200) 
 
 @flask_consistent
-def flaskDataObjectDetail(req,sdata):
+def flaskDataObjectDetail(req):
 
     param = json.loads(req.body)
     atName = param.get('atName')
