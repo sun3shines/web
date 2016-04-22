@@ -10,3 +10,6 @@ def libPullExecutor(http_host,http_port):
     t = mission.execute(http_host, http_port, t)
     return t.response
 
+if __name__ == '__main__':
+    libPullExecutor('192.168.36.3', 7015)
+    

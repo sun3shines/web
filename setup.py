@@ -40,11 +40,13 @@ setup(
     scripts=[
         'bin/cloud-web-server',
         'bin/cloud-monitor-server',
+        'bin/cloud-config-executor',
     ],
     entry_points={
         'paste.app_factory': [
             'webserver = cloudweb.platform.server:app_factory',
             'monitorserver = cloudweb.monitor.server:app_factory',
+            'configexecutor = cloudexecutor.server:app_factory',
 #            'object=cloud.swift.obj.server:app_factory',
 #            'container=cloud.swift.container.server:app_factory',
 #            'account=cloud.swift.account.server:app_factory',
