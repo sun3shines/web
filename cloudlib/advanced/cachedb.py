@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import threading
+
 class CacheDb:
-    def __init__(self,func):
+    def __init__(self,func,lockfunc=None):
         self.d = {}
         self.func = func
+        self.lockfunc = lockfunc
         self.lock = threading.Lock()
         
     def get(self,atName):
@@ -12,7 +14,13 @@ class CacheDb:
             if self.lock.acquire():
                 self.d.update({atName:self.func()})
                 self.lock.release()
-        return self.d.get(atName)
+        conn = self.d.get(atName)
+        if self.lockfunc:
+            with self.lockfunc() as mylock:
+                if conn.timeout:
+                    conn.close()
+                    conn.connect()
+        return conn
     
     def pop(self,atName):
         if atName in self.d:

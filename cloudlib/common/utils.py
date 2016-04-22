@@ -730,7 +730,7 @@ def parse_options(parser=None, once=False, test_args=None):
     config = os.path.abspath(args.pop(0))
     if not os.path.exists(config):
         parser.print_usage()
-        print _("Error: unable to locate %s") % config
+        print ("Error: unable to locate %s") % config
         sys.exit(1)
 
     extra_args = []

@@ -1349,6 +1349,8 @@ find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.thr
 
 find . -name '*.py'  | awk -F ':' '{print $1}' | xargs -i sed -i 's/cloudweb.tools/cloudweb.platform.tools/g' {}
 
+crudini
+
 
 
 
