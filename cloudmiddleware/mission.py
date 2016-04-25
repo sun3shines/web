@@ -2,7 +2,7 @@
 
 import json
 from httplib import HTTPConnection
-from cloudmiddleware.globalx.static import CLOUD_WEB_HOST,CLOUD_WEB_PORT,HTTP_TIMEOUT
+from cloudmiddleware.globalx.static import CLOUD_PLATFORM_HOST,CLOUD_PLATFORM_PORT,HTTP_TIMEOUT
 
 class Mission:
     
@@ -18,7 +18,7 @@ class Mission:
   
     def getHttpsConn(self):
         
-        return HTTPConnection(CLOUD_WEB_HOST,CLOUD_WEB_PORT,True,HTTP_TIMEOUT)  
+        return HTTPConnection(CLOUD_PLATFORM_HOST,CLOUD_PLATFORM_PORT,True,HTTP_TIMEOUT)  
 
     def connect(self):
         
