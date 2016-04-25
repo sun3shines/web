@@ -2,10 +2,10 @@
 
 from cloudexecutor.libconfig.libst import _stget,_stset
 from cloudlib.globalx.config import EX_ACCOUNT_CONF_PATH,EX_CONTAINER_CONF_PATH,\
-    EX_OBJECT_CONF_PATH,EX_PROXY_CONF_PATH
+    EX_OBJECT_CONF_PATH,EX_PROXY_CONF_PATH,EX_OPTION_OAUTH_HOST,EX_OPTION_OAUTH_PORT
     
-conf2st = {'auth_oauth_host':[(EX_PROXY_CONF_PATH,'filter:oauth','oauth_host')],
-           'auth_ouath_port':[(EX_PROXY_CONF_PATH,'filter:oauth','oauth_port')]}
+conf2st = {EX_OPTION_OAUTH_HOST:[(EX_PROXY_CONF_PATH,'filter:oauth','oauth_host')],
+           EX_OPTION_OAUTH_PORT:[(EX_PROXY_CONF_PATH,'filter:oauth','oauth_port')]}
 
 def libSetAuth(attr):
     for key,val in attr.items():
