@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from httplib import HTTPSConnection
-from cloudweb.globalx.static import CLOUDFS_HOST,CLOUDFS_PORT,CLOUDFS_CA_CRT,CLOUDFS_CA_KEY,HTTP_TIMEOUT
+from cloudweb.platform.globalx.static import CLOUDFS_HOST,CLOUDFS_PORT,CLOUDFS_CA_CRT,CLOUDFS_CA_KEY,HTTP_TIMEOUT
 class Operation:
     
     def __init__(self):

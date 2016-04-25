@@ -26,7 +26,7 @@ def libGetExecutorConf(http_host,http_port):
     return t.response
     
 if __name__ == '__main__':
-    import pdb;pdb.set_trace()
+    
     # libPullExecutor('192.168.36.3', 7015)
     attrs = {"cache": {"cache_memcache_host": "127.0.0.1", "cache_memcache_port": "11211"}, 
              "storage": {"storage_devices": "/mnt/cloudfs-object"}, 

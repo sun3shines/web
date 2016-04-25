@@ -29,8 +29,8 @@ def get_config(atName,hostUuid):
     print t.response
     return t.response
 
-def set_configs(atName,hostUuid,params):
-    t = ConfigSet(atName,hostUuid,params)
+def set_configs(atName,hostUuid,attrs):
+    t = ConfigSet(atName,hostUuid,attrs)
     mission.execute(t)
     print t.response
     return t.response

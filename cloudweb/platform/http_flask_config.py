@@ -17,13 +17,14 @@ def flaskAddExecutor(request):
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         attr = db_flask_ip2attr(conn, hostip)
-    if not attr:
-        info = '%s %s %s' % (attr.get('name'),attr.get('uuid'))
+    if attr:
+        info = '%s %s %s' % (attr.get('inet'),attr.get('name'),attr.get('uuid'))
         return jresponse('-1','executor ip already exists: '+info,request,200) 
     resp = libPullExecutor(hostip, CONFIG_EXECUTOR_PORT)
     if -1 == resp['status']:
         return jresponse('-1','pull executor host info failed,check network',request,200)
     ei = resp.get('msg')
+    ei = json.loads(ei)
     with getlock(conn) as mylock:
         attr = db_flask_uuid2attr(conn, ei.get('uuid'))
         if attr:
@@ -33,6 +34,7 @@ def flaskAddExecutor(request):
     return jresponse('0','',request,200) 
 
 def flaskDelExecutor(request):
+    
     param = json.loads(request.body)
     hostUuid = param.get('hostUuid')
     atName = param.get('atName')
@@ -43,6 +45,7 @@ def flaskDelExecutor(request):
     return jresponse('0','',request,200) 
 
 def flaskListExecutor(request):
+    
     param = json.loads(request.body)
     atName = param.get('atName')
     conn = GLOBAL_USER_DB.get(atName)
@@ -54,6 +57,7 @@ def flaskListExecutor(request):
     return jresponse('0',json.dumps(attrs),request,200) 
 
 def flaskSetConfig(request):
+    
     param = json.loads(request.body)
     attrs = param.get('confAttrs')
     hostUuid = param.get('hostUuid')
@@ -66,6 +70,7 @@ def flaskSetConfig(request):
     return jresponse('0','',request,200) 
 
 def flaskGetConfig(request):
+    
     param = json.loads(request.body)
     hostUuid = param.get('hostUuid')
     atName = param.get('atName')

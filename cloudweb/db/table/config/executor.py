@@ -21,7 +21,7 @@ def del_executor(db,eid):
     e = Executor()
     return db.delete(e.table,{e.id:str(eid)})
 
-def fetch_executor(db,uuid=None,inet=None):
+def fetch_executor(db,inet=None,uuid=None):
     
     e = Executor()
     
@@ -43,17 +43,28 @@ def query_all_executor(db,inet=None,uuid=None):
     truncated =  datas
     for data in truncated:
         attr = {}
+        attr[e.id] = data[0]
         attr[e.name] = data[1]
         attr[e.uuid] = data[2]
         attr[e.inet] = data[3]
         attr[e.avai] = data[4]
         attrs.append(attr)
-    return attrs    
+    
+    return attrs
 
 def ip2attrs(db,inet):
     
-    return query_all_executor(db, inet=inet)
+    datas =  query_all_executor(db, inet=inet)
+    if datas:
+        return datas[0]
+    else:
+        return {}
 
 def uuid2attrs(db,uuid):
     
-    return query_all_executor(db, inet=None,uuid=uuid)
+    datas = query_all_executor(db, inet=None,uuid=uuid)
+    if datas:
+        return datas[0]
+    else:
+        return {}
+    
