@@ -54,10 +54,10 @@ class ConfigGet(Task):
                            'hostUuid':self.hostUuid})
         
 class ConfigSet(Task):
-    def __init__(self,atName,hostUuid,param):
+    def __init__(self,atName,hostUuid,attrs):
         self.atName = atName
         self.hostUuid = hostUuid
-        self.param = param
+        self.attrs = attrs
         
     def getUrl(self):
         return strConfigSet
@@ -65,5 +65,5 @@ class ConfigSet(Task):
     def getBody(self):
         return json.dumps({'atName':self.atName,
                            'hostUuid':self.hostUuid,
-                           'param':self.param})
+                           'confAttrs':self.attrs})
      

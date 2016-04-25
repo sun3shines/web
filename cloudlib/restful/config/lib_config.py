@@ -10,6 +10,18 @@ def libPullExecutor(http_host,http_port):
     t = mission.execute(http_host, http_port, t)
     return t.response
 
+def libSetExecutorConf(http_host,http_port,attrs):
+    
+    t = ConfConfigSet(attrs)
+    t = mission.execute(http_host, http_port, t)
+    return t.response
+    
+def libGetExecutorConf(http_host,http_port):
+    
+    t = ConfConfigGet()
+    t = mission.execute(http_host, http_port, t)
+    return t.response
+    
 if __name__ == '__main__':
     libPullExecutor('192.168.36.3', 7015)
     

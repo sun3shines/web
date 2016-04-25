@@ -24,8 +24,11 @@ class ConfConfigGet(Task):
     
 class ConfConfigSet(Task):
     
+    def __init__(self,attrs):
+        self.attrs = attrs
+        
     def getBody(self):
-        return ''
+        return json.dumps({'confAttrs':self.attrs})
     
     def getUrl(self):
         return strConfigSet

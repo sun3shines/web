@@ -7,7 +7,7 @@ from cloudweb.platform.globalx.static import CONFIG_EXECUTOR_PORT
 from cloudweb.db.table.lock.mysql import getlock
 from cloudweb.dblib.db_flask_config import db_flask_ip2attr,db_flask_list_executor,\
     db_flask_uuid2attr,db_flask_put_executor,db_flask_del_executor
-from cloudlib.restful.config.lib_config import libPullExecutor
+from cloudlib.restful.config.lib_config import libPullExecutor,libGetExecutorConf,libSetExecutorConf
 
 def flaskAddExecutor(request):
     
@@ -54,8 +54,26 @@ def flaskListExecutor(request):
     return jresponse('0',json.dumps(attrs),request,200) 
 
 def flaskSetConfig(request):
+    param = json.loads(request.body)
+    attrs = param.get('confAttrs')
+    hostUuid = param.get('hostUuid')
+    atName = param.get('atName')
+    conn = GLOBAL_USER_DB.get(atName)
+    with getlock(conn) as mylock:
+        attr = db_flask_uuid2attr(conn, hostUuid)
+    http_host = attr.get('inet')
+    libSetExecutorConf(http_host, CONFIG_EXECUTOR_PORT, attrs)
     return jresponse('0','',request,200) 
 
 def flaskGetConfig(request):
-    return jresponse('0','',request,200) 
+    param = json.loads(request.body)
+    hostUuid = param.get('hostUuid')
+    atName = param.get('atName')
+    conn = GLOBAL_USER_DB.get(atName)
+    
+    with getlock(conn) as mylock:
+        attr = db_flask_uuid2attr(conn, hostUuid)
+    http_host = attr.get('inet')
+    resp = libGetExecutorConf(http_host,  CONFIG_EXECUTOR_PORT)
+    return jresponse(resp['status'],json.dumps(resp['msg']),request,200) 
 
