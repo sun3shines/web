@@ -11,7 +11,6 @@ url2view.update({strConfigGet:centerGetConfig})
 url2view.update({strConfigSet:centerSetConfig})
 
 def handlerequest(req):
-
     url = req.path
     if url not in url2view:
         return jresponse('-1','url error',req,404)

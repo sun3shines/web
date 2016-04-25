@@ -10,7 +10,7 @@ from cloudexecutor.libconfig.libconcurrency import libGetConCurrency,libSetConCu
 from cloudexecutor.libconfig.libproxy import libGetProxy,libSetProxy
 from cloudexecutor.libconfig.libstorage import libGetStorage,libSetStorage
 
-class2func = {'auth':libSetCache,
+class2func = {'auth':libSetAuth,
               'cache':libSetCache,
               'concurrency':libSetConCurrency,
               'proxy':libSetProxy,
@@ -36,7 +36,7 @@ def centerSetConfig(request):
     param = json.loads(request.body)
     attrs = param.get('confAttrs')
     
-    for classtype,confdict in attrs:
+    for classtype,confdict in attrs.items():
         if classtype not in class2func:
             continue
         class2func[classtype](confdict)

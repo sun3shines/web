@@ -2,7 +2,7 @@
 
 import json
 from httplib import HTTPConnection
-from cloudapi.globalx.static import HTTP_TIMEOUT
+from cloudlib.globalx.static import HTTP_TIMEOUT
 
 class Mission:
     

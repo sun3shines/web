@@ -63,4 +63,4 @@ EX_OBJECT_CONF_PATH = '/etc/swift/object-server/1.conf'
 
 EX_OPTION_STORAGE_DEVICES = ''
 EX_OPTION_OAUTH_HOST = 'auth_oauth_host'
-EX_OPTION_OAUTH_PORT = 'auth_ouath_port'
+EX_OPTION_OAUTH_PORT = 'auth_oauth_port'
