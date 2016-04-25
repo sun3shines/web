@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# from cloudweb.db.table.mysql import getDb
 from cloudweb.db.table.lock.mysql import getdb
 from cloudlib.advanced.cachedb import CacheDb
 from cloudlib.advanced.cacheuser import CacheUser

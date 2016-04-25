@@ -55,3 +55,8 @@ P_MYSQL_PASSWD = '111111'
 P_MYSQL_CONNECTION_TIMEOUT = 24*60*60
 
 P_CONFIG_EXECUTOR_PORT = 7015
+
+EX_PROXY_CONF_PATH = '/etc/swift/proxy-server.conf'
+EX_ACCOUNT_CONF_PATH = '/etc/swift/account-server/1.conf'
+EX_CONTAINER_CONF_PATH = '/etc/swift/container-server/1.conf'
+EX_OBJECT_CONF_PATH = '/etc/swift/object-server/1.conf'
