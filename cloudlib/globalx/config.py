@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-CONF_CONTROLLER_HOST = '192.168.36.3'
-CONF_CLOUDFS_PROXY_HOST = '192.168.36.201'
-CONF_CLOUDFS_PROXY_PORT = 443
+from cloudlib.globalx.parse import get_controller_host,get_proxy_host,get_proxy_port
+
+CONF_CONTROLLER_HOST = get_controller_host()
+CONF_CLOUDFS_PROXY_HOST = get_proxy_host()
+CONF_CLOUDFS_PROXY_PORT = get_proxy_port()
 
 
 MO_MONITOR_SERVER_HOST = CONF_CONTROLLER_HOST

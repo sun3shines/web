@@ -1353,4 +1353,5 @@ crudini
 
 
 
+create database cloudwebtest;
 

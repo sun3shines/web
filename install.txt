@@ -1,0 +1,104 @@
+
+
+一 架构基本说明
+
+1.1 存储一期说明（即cloudfs节点）
+
+存储一期，是作为底层的对象存储功能，提供类似百度云盘的后端功能
+
+安装包简介
+
+	cloudfs-swift-proxy 代理节点，http协议入口，对外提供API接口,安装在cloudfs节点
+	cloudfs-swift 共享库 安装在cloudfs节点
+	cloudfs-swift-account 账户服务 安装在cloudfs节点
+	cloudfs-swift-object 对象服务 安装在cloudfs节点
+	cloudfs-swift-container 容器服务 安装在cloudfs节点
+	cloudfs-swift-fs 负责实际和文件系统(nfs,cifs,ext4)级别写 安装在cloudfs节点
+
+cloudfs节点为存储节点，即存储一期任务，负责任务的实际存储业务
+
+访问cloudfs节点，主要是通过http协议，参见一期文档API手册
+
+关于详细安装说明，可查看一期部署文档，和API手册
+
+关于proxy/account/container/object 等相关概念的介绍，可查阅openstack swift/amazon s3 相关资料
+
+1.2 存储二期说明(前端节点/后端节点)
+
+本文仅介绍后端节点的安装和配置,前端节点的安装将会由刘文斌同学提供
+
+存储二期为存储一期对象存储对应的视图系统及其相关中间件
+
+用户包括普通用户和管理员，
+
+普通用户对个人云进行管理，管理私人的存储空间
+
+管理员用户，管理cloudfs节点（存储一期）集群，包括用户系统视图，主机管理视图，系统配置视图
+
+框架设计上，分为前端（此前端不同于网页前端）和后端，前端采用flask作为web server，并通过api与后端进行数据交换
+
+后端则负责维护整个视图系统的数据库数据，包括从cloudfs节点采集数据，并向前端提供数据
+
+因此，整体看来，类似于如下的设计
+
+  前端(浏览器+flask) <->  后端（api，platform，middleware） <-> cloudfs节点
+
+后端安装包简介
+
+	cloud-api  前端调用api库，web server（flask）通过此包获取后端数据，或者进行数据配置，安装在前端节点
+	cloud-web 数据处理平台，负责管理搜集到的底层数据 ，安装在后端节点
+	cloud-lib 共享库，提供所需的http接口，工具函数，安装在前端节点/后端节点/cloudfs节点
+	cloud-middleware 中间件，cloudfs通过此包将后端的相关数据传递给后端节点，安装在cloudfs节点
+	cloud-monitor 中间件，负责采集cloudfs节点的主机硬件配置和动态性能数据，安装在cloudfs节点
+	cloud-config-executor 插件包，负责获取/设置cloudfs节点的配置，安装在cloudfs节点
+
+二 系统安装
+
+2.1  安装存储一期（即cloudfs节点），请参照一期文档 ‘部署手册.pdf’
+
+2.2 安装存储二期
+
+2.2.1 安装依赖包和系统包
+
+2.2.2 安装数据库（mysql）
+2.2.2.1 my.cn 文件内容
+	[mysqld]
+	datadir=/var/lib/mysql
+	socket=/var/lib/mysql/mysql.sock
+	user=mysql
+	# Disabling symbolic-links is recommended to prevent assorted security risks
+	symbolic-links=0
+	default-storage-engine=INNODB
+	wait_timeout=172800
+	interactive_timeout=172800
+	
+	[mysqld_safe]
+	log-error=/var/log/mysqld.log
+	pid-file=/var/run/mysqld/mysqld.pid
+
+2.2.2.2 初始化数据库
+mysqldump -u root -p111111  cloudwebtest < dbcloudweb.20160421.bak 
+
+                         
+2.2.3 后端节点配置
+
+CONF_CONTROLLER_HOST = '192.168.36.3'
+CONF_CLOUDFS_PROXY_HOST = '192.168.36.201'
+CONF_CLOUDFS_PROXY_PORT = 443
+
+2.2.4 启动后端节点服务
+
+2.2.4.1 监控节点服务（cloudfs节点） 
+
+cd /usr/lib/python2.6/site-packages/cloudmonitor ; python client.py
+
+2.2.4.2 配置节点服务（cloudfs节点）
+
+/usr/bin/python /usr/bin/cloud-config-executor /etc/cloud/executor.conf
+
+2.2.4.3 数据处理平台服务（后端节点）
+
+/usr/bin/python /usr/bin/cloud-web-server /etc/cloud/web.conf
+/usr/bin/python /usr/bin/cloud-monitor-server /etc/cloud/monitor.conf
+
+
