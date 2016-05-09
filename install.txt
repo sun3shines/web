@@ -25,7 +25,7 @@ cloudfs节点为存储节点，即存储一期任务，负责任务的实际存�
 
 1.2 存储二期说明(前端节点/后端节点)
 
-本文仅介绍后端节点的安装和配置,前端节点的安装将会由刘文斌同学提供
+注：本文仅介绍后端节点的相关概念，安装/配置,前端节点的安装将会由刘文斌同学提供
 
 存储二期为存储一期对象存储对应的视图系统及其相关中间件
 
@@ -69,8 +69,8 @@ cloudfs节点为存储节点，即存储一期任务，负责任务的实际存�
 	# Disabling symbolic-links is recommended to prevent assorted security risks
 	symbolic-links=0
 	default-storage-engine=INNODB
-	wait_timeout=172800
-	interactive_timeout=172800
+	wait_timeout=172800 # 不可更改
+	interactive_timeout=172800 # 不可更改
 	
 	[mysqld_safe]
 	log-error=/var/log/mysqld.log
@@ -82,9 +82,12 @@ mysqldump -u root -p111111  cloudwebtest < dbcloudweb.20160421.bak
                          
 2.2.3 后端节点配置
 
-CONF_CONTROLLER_HOST = '192.168.36.3'
-CONF_CLOUDFS_PROXY_HOST = '192.168.36.201'
-CONF_CLOUDFS_PROXY_PORT = 443
+设置/etc/cloud/globalx.conf ，示例如下
+
+	[DEFAULT]
+	controller_host = 192.168.36.3
+	proxy_host = 192.168.36.201
+	proxy_port = 443
 
 2.2.4 启动后端节点服务
 

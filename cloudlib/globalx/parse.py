@@ -35,5 +35,10 @@ def get_proxy_port():
     if not option:
         print 'global config error,service exit'
         sys.exit(0)
-    return option
+    return int(option)
 
+if __name__ == '__main__':
+
+    print get_controller_host()
+    print get_proxy_host()
+    print get_proxy_port()
