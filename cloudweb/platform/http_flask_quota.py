@@ -10,7 +10,7 @@ from cloudweb.platform.drive.consistency import flask_consistent
 def flaskQuotaGet(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
 
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     resp = libGetQuota(atName, usertoken)
@@ -21,7 +21,7 @@ def flaskQuotaGet(req):
 def flaskQuotaSet(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
     val = param.get('val')
     
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)

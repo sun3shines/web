@@ -12,8 +12,8 @@ from cloudweb.db.table.lock.mysql import getlock
 def flaskGetObjectRecords(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    objPath = param.get('objPath')
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
     
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -29,7 +29,7 @@ def flaskGetObjectRecords(req):
 def flaskGetAccountRecords(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
 
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:

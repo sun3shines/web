@@ -12,8 +12,8 @@ from cloudlib.restful.config.lib_config import libPullExecutor,libGetExecutorCon
 def flaskAddExecutor(request):
     
     param = json.loads(request.body)
-    hostip = param.get('hostip')
-    atName = param.get('atName')
+    hostip = param.get('hostip').encode('utf-8')
+    atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         attr = db_flask_ip2attr(conn, hostip)
@@ -36,8 +36,8 @@ def flaskAddExecutor(request):
 def flaskDelExecutor(request):
     
     param = json.loads(request.body)
-    hostUuid = param.get('hostUuid')
-    atName = param.get('atName')
+    hostUuid = param.get('hostUuid').encode('utf-8')
+    atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         db_flask_del_executor(conn, hostUuid)
@@ -47,7 +47,7 @@ def flaskDelExecutor(request):
 def flaskListExecutor(request):
     
     param = json.loads(request.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         attrs = db_flask_list_executor(conn)
@@ -59,9 +59,9 @@ def flaskListExecutor(request):
 def flaskSetConfig(request):
     
     param = json.loads(request.body)
-    attrs = param.get('confAttrs')
-    hostUuid = param.get('hostUuid')
-    atName = param.get('atName')
+    attrs = param.get('confAttrs').encode('utf-8')
+    hostUuid = param.get('hostUuid').encode('utf-8')
+    atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         attr = db_flask_uuid2attr(conn, hostUuid)

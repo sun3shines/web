@@ -43,7 +43,7 @@ def flaskUserLogin(req):
 def flaskUserList(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
     
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -55,8 +55,8 @@ def flaskUserList(req):
 def flaskUserEnable(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    urName = param.get('urName')
+    atName = param.get('atName').encode('utf-8')
+    urName = param.get('urName').encode('utf-8')
     # check atName type ; only admin do
     
     conn = GLOBAL_USER_DB.get(atName)
@@ -70,8 +70,8 @@ def flaskUserEnable(req):
 def flaskUserDisable(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
-    urName = param.get('urName')
+    atName = param.get('atName').encode('utf-8')
+    urName = param.get('urName').encode('utf-8')
     
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -84,8 +84,8 @@ def flaskUserDisable(req):
 def flaskUserDelete(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
-    urName = param.get('urName')
+    atName = param.get('atName').encode('utf-8')
+    urName = param.get('urName').encode('utf-8')
 
     # check atName type ; only admin do
     

@@ -13,7 +13,7 @@ from cloudweb.db.table.lock.mysql import getlock
 @flask_consistent
 def flasklistAccount(req):
     param = json.loads(req.body)
-    atName = param.get('atName')
+    atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
         metadata = db_flask_account_list(conn,atName)
@@ -23,8 +23,8 @@ def flasklistAccount(req):
 @flask_consistent
 def flasklistContainer(req):
     param = json.loads(req.body)
-    atName = param.get('atName')
-    cntPath = param.get('cntPath')
+    atName = param.get('atName').encode('utf-8')
+    cntPath = param.get('cntPath').encode('utf-8')
     tree = param.get('tree')
     
     conn = GLOBAL_USER_DB.get(atName)
@@ -36,8 +36,8 @@ def flasklistContainer(req):
 def flasklistDir(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    drPath = param.get('drPath')
+    atName = param.get('atName').encode('utf-8')
+    drPath = param.get('drPath').encode('utf-8')
     tree = param.get('tree')
     
     conn = GLOBAL_USER_DB.get(atName)
