@@ -42,7 +42,7 @@ def flaskDataObjectDetail(req):
 
     param = json.loads(req.body)
     atName = param.get('atName').encode('utf-8')
-    oid = param.get('objectId').encode('utf-8')
+    oid = param.get('objectId')
     
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     conn = GLOBAL_USER_DB.get(atName)

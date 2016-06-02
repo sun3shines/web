@@ -59,7 +59,7 @@ def flaskListExecutor(request):
 def flaskSetConfig(request):
     
     param = json.loads(request.body)
-    attrs = param.get('confAttrs').encode('utf-8')
+    attrs = param.get('confAttrs')
     hostUuid = param.get('hostUuid').encode('utf-8')
     atName = param.get('atName').encode('utf-8')
     conn = GLOBAL_USER_DB.get(atName)
