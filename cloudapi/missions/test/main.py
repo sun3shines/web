@@ -20,8 +20,8 @@ def fs_test(atName):
     list_dir(atName,'/normal/dir')
     
 def object_test(atName):
-    
-    upload_object(atName,'/normal/中国.txt','/root/install.log')
+    import pdb;pdb.set_trace() 
+    upload_object(atName,'/normal/中国.txt',file('/root/install.log'))
 #    app_iter = download_object(atName,'/normal/test.txt')
 #    for data in app_iter:
 #        print data
