@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import urllib
 import json
 from httplib import HTTPConnection
 import cloudapi.globalx.static as api_globals
@@ -37,7 +38,12 @@ class Mission:
         
     def http(self,t):
        
-        self.conn.request(t.getMethod(),t.getUrl(),t.getBody(),t.getHeaders())
+        url = t.getUrl()
+        ps = t.getParams() 
+        if ps:
+            url = url + '?' + urllib.urlencode(ps)
+            
+        self.conn.request(t.getMethod(),url,t.getBody(),t.getHeaders())
         resp = self.conn.getresponse()
         t.status = resp.status
         t.data = resp.read()

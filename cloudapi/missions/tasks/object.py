@@ -88,10 +88,10 @@ class ObjectUpload(Task):
     def getUrl(self):
         return strUploadObject
 
-    def getHeaders(self):
+    def getParams(self):
         return {'atName':self.atName,
                 'objPath':self.obj}
-
+ 
     def getBody(self):
         return file(self.localPath)
 

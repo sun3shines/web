@@ -15,8 +15,8 @@ from cloudweb.db.table.lock.mysql import getlock
 def flaskDataGlobalSearch(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    keyword = param.get('keyword')
+    atName = param.get('atName').encode('utf-8')
+    keyword = param.get('keyword').encode('utf-8')
     objects = []
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -28,8 +28,8 @@ def flaskDataGlobalSearch(req):
 def flaskDataUserSearch(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    keyword = param.get('keyword')
+    atName = param.get('atName').encode('utf-8')
+    keyword = param.get('keyword').encode('utf-8')
     objects = []
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -41,8 +41,8 @@ def flaskDataUserSearch(req):
 def flaskDataObjectDetail(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
-    oid = param.get('objectId')
+    atName = param.get('atName').encode('utf-8')
+    oid = param.get('objectId').encode('utf-8')
     
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     conn = GLOBAL_USER_DB.get(atName)

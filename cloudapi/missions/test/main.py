@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 from cloudapi.missions.apis.fs import list_account,list_container,list_dir
 from cloudapi.missions.apis.object import disable_object,enable_object,delete_object,\
@@ -21,13 +21,13 @@ def fs_test(atName):
     
 def object_test(atName):
     
-    upload_object(atName,'/normal/test3.txt','/root/install.log')
-    app_iter = download_object(atName,'/normal/test.txt')
-    for data in app_iter:
-        print data
-    disable_object(atName,'/normal/test.txt')
-    enable_object(atName,'/normal/test.txt')   
-    delete_object(atName,'/normal/test3.txt')
+    upload_object(atName,'/normal/中国.txt','/root/install.log')
+#    app_iter = download_object(atName,'/normal/test.txt')
+#    for data in app_iter:
+#        print data
+#    disable_object(atName,'/normal/test.txt')
+#    enable_object(atName,'/normal/test.txt')   
+#    delete_object(atName,'/normal/中国.txt')
 
 def quota_test(atName):
 
@@ -41,12 +41,12 @@ def record_test(atName):
     get_object_records(atName,'/normal/dir')
 
 def search_test(atName):
-    data_user_find(atName,'normal')    
-    get_object_details(atName,'1340')
-    data_user_find(atName,'zhu__feng')
-    get_object_details(atName,'1339')
-    data_user_find(atName,'test')
-    get_object_details(atName,'1350')
+#    data_user_find(atName,'normal')    
+#    get_object_details(atName,'1340')
+#    data_user_find(atName,'zhu__feng')
+#    get_object_details(atName,'1339')
+    data_user_find(atName,'中国')
+#    get_object_details(atName,'1350')
 def user_test(atName):
     
     disable_account(atName,atName) 
@@ -96,13 +96,13 @@ if __name__ == '__main__':
     user_login(email,passwd)
     
 #    fs_test(atName)
-#    object_test(atName)    
+    object_test(atName)    
 #    quota_test(atName)
 #    record_test(atName)
-#    search_test(atName)
+    search_test(atName)
     
 #    user_test(atName)
-    config_test(atName)
+#    config_test(atName)
 #    hostUuid = 'mIYuQsiH-1NmLgn-ny3t'
 #    host_test(atName, hostUuid)
     

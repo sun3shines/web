@@ -19,7 +19,7 @@ class Task:
 
     def getParams(self):
         
-        return ''
+        return {}
     
     def getHeaders(self):
         

@@ -11,20 +11,21 @@ from cloudweb.db.table.lock.mysql import getlock
 
 
 def flaskUploadObject(req):
+
+    param = req.GET
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
     
-    param = req.headers
-    atName = param.pop('Atname')
-    objPath = param.pop('Objpath')
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
-    resp = libUploadFile(atName, usertoken, objPath, '', handle=req.environ['wsgi.input'], headers=param)
+    resp = libUploadFile(atName, usertoken, objPath, '', handle=req.environ['wsgi.input'], headers=req.headers)
     return jresponse(resp['status'],resp['msg'],req,200)
 
 @flask_consistent
 def flaskDownloadObject(req):
 
     param = json.loads(req.body)
-    atName = param.get('atName')
-    objPath = param.get('objPath')
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
 
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     app_iter = libDownloadFile(atName, usertoken, objPath)
@@ -35,8 +36,8 @@ def flaskDownloadObject(req):
 def flaskDeleteObject(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    objPath = param.get('objPath')
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
     
     usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
     resp = libDeleteFile(atName, usertoken, objPath)
@@ -47,8 +48,8 @@ def flaskDeleteObject(req):
 def flaskEnableObject(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    objPath = param.get('objPath')
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
     
     conn = GLOBAL_USER_DB.get(atName)
     with getlock(conn) as mylock:
@@ -60,8 +61,8 @@ def flaskEnableObject(req):
 def flaskDisableObject(req):
     
     param = json.loads(req.body)
-    atName = param.get('atName')
-    objPath = param.get('objPath')
+    atName = param.get('atName').encode('utf-8')
+    objPath = param.get('objPath').encode('utf-8')
     
     conn = GLOBAL_USER_DB.get(atName)
     
