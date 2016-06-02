@@ -9,8 +9,8 @@ def get_network_info(interface):
     output = subprocess.Popen(['ip', 'addr', 'show', 'dev', interface], stdout=subprocess.PIPE).communicate()[0].rsplit('\n')
     mtu = re.findall('mtu ([0-9]+) ', output[0])[0]
     link_ha = re.findall('link/(\w+) ([0-9a-fA-F:]+) ', output[1])[0]
-    inet = None
-    inet6 = None
+    inet = {"addr": "NA", "mask": "NA"} 
+    inet6 = {"addr": "NA", "mask": "NA"} 
     for line in output[2:]:   
         if not inet:
             tinet = re.findall('inet ([0-9\.]+)/([0-9]+) ', line)

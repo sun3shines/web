@@ -71,6 +71,9 @@ def userDisable(db,userName):
 
 def userPut(db,userName):
     
+    if -1 != name2id(db, userName):
+        return True,''
+    
     u = User()
     return insert_user(db,userName,userType=u.typeUser,userState='enable',userEmail=userName)
 

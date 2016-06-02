@@ -2,7 +2,7 @@
 
 import json
 from httplib import HTTPConnection
-from cloudapi.globalx.static import CLOUD_PLATFORM_HOST,CLOUD_PLATFORM_PORT,HTTP_TIMEOUT
+import cloudapi.globalx.static as api_globals
 
 class Mission:
     
@@ -18,7 +18,7 @@ class Mission:
   
     def getHttpsConn(self):
         
-        return HTTPConnection(CLOUD_PLATFORM_HOST,CLOUD_PLATFORM_PORT,True,HTTP_TIMEOUT)  
+        return HTTPConnection(api_globals.CLOUD_PLATFORM_HOST,api_globals.CLOUD_PLATFORM_PORT,True,api_globals.HTTP_TIMEOUT)  
 
     def connect(self):
         

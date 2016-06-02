@@ -29,6 +29,7 @@ def get_accounts(atName,start=0,num=0):
     输出：state 账户状态
           type 账户类型
           name：账户名
+          id:
     ''' 
     t = UserList(atName)
     mission.execute(t)

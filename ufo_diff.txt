@@ -1355,3 +1355,7 @@ crudini
 
 create database cloudwebtest;
 
+source /root/server_node/dbcloudweb.20160421.bak
+
+user db 去重了。是的。
+
