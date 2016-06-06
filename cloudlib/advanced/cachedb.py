@@ -17,7 +17,8 @@ class CacheDb:
         conn = self.d.get(atName)
         if self.lockfunc:
             if conn.timeout:
-                with self.lockfunc() as mylock:
+                print 're connect mysql db'
+                with self.lockfunc(conn) as mylock:
                     conn.close()
                     conn.connect()
         return conn

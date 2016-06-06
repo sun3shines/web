@@ -32,7 +32,7 @@ class dbConn(object):
 
     @property
     def timeout(self):
-        return time.time() > self._connect_time + MYSQL_CONNECTION_TIMEOUT
+        return  self._connect_time and time.time() > self._connect_time + MYSQL_CONNECTION_TIMEOUT
     
     def getData(self,sqlStr):
         sqlStr = sqlStr.encode('utf-8')
