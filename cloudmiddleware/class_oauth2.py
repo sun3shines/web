@@ -2,7 +2,7 @@
 
 import json
 from cloudmiddleware.task import Task
-from cloudlib.urls.cloudfs import strCloudfsOauthRegister
+from cloudlib.urls.cloudfs import strCloudfsOauthRegister,strCloudfsTokenValid
 
 class OauthRegister(Task):
     
@@ -18,4 +18,15 @@ class OauthRegister(Task):
     
     def getUrl(self):
         return strCloudfsOauthRegister
+    
+class OauthTokenValid(Task):
+    
+    def __init__(self,usertoken):
+        self.usertoken = usertoken
+        
+    def getBody(self):
+        return json.dumps({'usertoken':self.usertoken})
+    
+    def getUrl(self):
+        return strCloudfsTokenValid
     

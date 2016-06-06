@@ -3,7 +3,7 @@
 from urllib import unquote
 from functools import wraps
 import cloudmiddleware.mission as mission 
-from cloudmiddleware.class_oauth2 import OauthRegister
+from cloudmiddleware.class_oauth2 import OauthRegister,OauthTokenValid
 
 def cloudfs_oauth_register(func):
     
@@ -29,3 +29,14 @@ def cloudfs_oauth_register(func):
     
     return wrapper
 
+def cloudfs_token_valid(usertoken):
+    
+    t = OauthRegister(usertoken)
+    t = mission.execute(t)
+    resp = t.response
+    if '0' == resp.get('status') and '0' == resp.get('msg'):
+        return True
+    else:
+        return False
+    
+    

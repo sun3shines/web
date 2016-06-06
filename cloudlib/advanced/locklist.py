@@ -22,5 +22,15 @@ class lockList:
             self.l.remove(pid)
             self.lock.release()       
 
-
-    
+    def put(self,item):
+        if self.lock.acquire():
+            if item not in self.l:
+                self.l.append(item)
+            self.lock.release()       
+            
+    def has_item(self,item):
+        if self.l.has(item):
+            return True
+        else:
+            return False
+        

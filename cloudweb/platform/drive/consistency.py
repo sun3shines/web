@@ -49,7 +49,10 @@ def flask_consistent(func):
         
         flag,resp = getUserToken(atName, request)
         if not flag:
-            return resp
+            if request.GET.get('x_admin_token'):
+                resp = request.GET.get('x_admin_token')
+            else:
+                return resp
             
         usertoken = resp
         

@@ -12,7 +12,7 @@ from cloudweb.platform.http_cloudfs_link import cloudfsLinkPut
 from cloudweb.platform.http_cloudfs_object import cloudfsObjectCopy,cloudfsObjectDelete,cloudfsObjectDeleteRecycle,\
     cloudfsObjectGet,cloudfsObjectHead,cloudfsObjectMeta,cloudfsObjectMove,cloudfsObjectMoveRecycle,\
     cloudfsObjectPost,cloudfsObjectPut
-from cloudweb.platform.http_cloudfs_oauth import cloudfsOauthRegister
+from cloudweb.platform.http_cloudfs_oauth import cloudfsOauthRegister,cloudfsOauthTokenValid
 
 def cloudfsUrl2View():
     
@@ -60,6 +60,6 @@ def cloudfsUrl2View():
     url2view.update({strCloudfsObjectPost:cloudfsObjectPost})
     
     url2view.update({strCloudfsOauthRegister:cloudfsOauthRegister})
-    
+    url2view.update({strCloudfsTokenValid:cloudfsOauthTokenValid})
     return url2view
     

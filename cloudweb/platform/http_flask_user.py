@@ -2,16 +2,19 @@
 
 import json
 from cloudlib.common.bufferedhttp import jresponse
-from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB,GLOBAL_USER_CONSISTENCY
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB,GLOBAL_USER_CONSISTENCY,\
+    GLOBAL_ADMIN_TOKENS
 from cloudlib.restful.cloudfs.lib_token import libGetTokenAttr
 
 from cloudweb.db.db_user import user2attr
-from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,db_flask_user_enable,db_flask_user_list
+from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,\
+    db_flask_user_enable,db_flask_user_list
 from cloudweb.dblib.db_flask_account import db_flask_account_disable,db_flask_account_enable
 from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.platform.tools.init_consistency_db import getDirList
 from cloudweb.db.table.lock.mysql import getlock
 from cloudweb.dblib.db_flask_user import db_flask_user_put
+from cloudweb.db.table.user import User
 
 def flaskUserLogin(req):
     param = json.loads(req.body)
@@ -37,6 +40,11 @@ def flaskUserLogin(req):
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_success)
     
     attr = user2attr(conn, userName)
+    
+    u = User()
+    if str(attr.get(u.type)) == u.typeAdmin:
+        GLOBAL_ADMIN_TOKENS.put(tokendict.get('access_token'))
+    
     tokendict.update(attr)
     resp['msg'] = json.dumps(tokendict)
     return jresponse(resp['status'],resp['msg'],req,200)
