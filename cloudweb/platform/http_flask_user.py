@@ -11,6 +11,7 @@ from cloudweb.dblib.db_flask_account import db_flask_account_disable,db_flask_ac
 from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.platform.tools.init_consistency_db import getDirList
 from cloudweb.db.table.lock.mysql import getlock
+from cloudweb.dblib.db_flask_user import db_flask_user_put
 
 def flaskUserLogin(req):
     param = json.loads(req.body)
@@ -29,6 +30,7 @@ def flaskUserLogin(req):
     
     if GLOBAL_USER_CONSISTENCY.failed(atName):
         with getlock(conn) as mylock:
+            db_flask_user_put(conn, atName)
             flag,msg = getDirList(conn, atName, tokendict.get('access_token'), 0)
             if not flag:
                 return jresponse('-1', msg, req, 400)

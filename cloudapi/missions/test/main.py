@@ -86,22 +86,22 @@ def config_test(atName):
 
 if __name__ == '__main__': 
 
-    email = 'zhu__feng001@163com'
-    passwd = '123456'
-    atName = 'AUTH_zhu__feng001163com'
-#    email = 'testadministrator@163com'
+#    email = 'zhu__feng001@163com'
 #    passwd = '123456'
-#    atName = 'AUTH_' + email.replace('@','').replace('.','')
+#    atName = 'AUTH_zhu__feng001163com'
+    email = 'testadministrator@163com'
+    passwd = '123456'
+    atName = 'AUTH_' + email.replace('@','').replace('.','')
 
     user_login(email,passwd)
     
 #    fs_test(atName)
-    object_test(atName)    
+#    object_test(atName)    
 #    quota_test(atName)
 #    record_test(atName)
-    search_test(atName)
+#    search_test(atName)
     
-#    user_test(atName)
+    user_test(atName)
 #    config_test(atName)
 #    hostUuid = 'mIYuQsiH-1NmLgn-ny3t'
 #    host_test(atName, hostUuid)
