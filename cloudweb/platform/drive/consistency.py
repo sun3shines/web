@@ -50,7 +50,7 @@ def flask_consistent(func):
         flag,resp = getUserToken(atName, request)
         if not flag:
             return resp
-        
+            
         usertoken = resp
         
         conn = GLOBAL_USER_DB.get(atName) 

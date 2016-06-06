@@ -9,7 +9,7 @@ from cloudlib.common.common.swob import Response as HResponse
 from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
-
+@flask_consistent
 def flaskUploadObject(req):
 
     param = req.GET

@@ -40,6 +40,8 @@ class Mission:
        
         url = t.getUrl()
         ps = t.getParams() 
+        if api_globals.X_ADMIN_TOKEN:
+            ps.update({'x_admin_token':api_globals.X_ADMIN_TOKEN})
         if ps:
             url = url + '?' + urllib.urlencode(ps)
             
