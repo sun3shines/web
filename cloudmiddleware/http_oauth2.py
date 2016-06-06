@@ -31,7 +31,7 @@ def cloudfs_oauth_register(func):
 
 def cloudfs_token_valid(usertoken):
     
-    t = OauthRegister(usertoken)
+    t = OauthTokenValid(usertoken)
     t = mission.execute(t)
     resp = t.response
     if '0' == resp.get('status') and '0' == resp.get('msg'):
@@ -39,4 +39,8 @@ def cloudfs_token_valid(usertoken):
     else:
         return False
     
-    
+   
+if __name__ == '__main__':
+    usertoken = 'gpdcsichk0n5f209fxl6glgzwa0cdiznmki88cumtestadministrator163com'
+    print cloudfs_token_valid(usertoken)  
+

@@ -40,10 +40,9 @@ def flaskUserLogin(req):
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_success)
     
     attr = user2attr(conn, userName)
-    
     u = User()
-    if str(attr.get(u.type)) == u.typeAdmin:
-        GLOBAL_ADMIN_TOKENS.put(tokendict.get('access_token'))
+    if str(attr.get(u.type)) == 'admin':
+        GLOBAL_ADMIN_TOKENS.put(tokendict.get('access_token').lower())
     
     tokendict.update(attr)
     resp['msg'] = json.dumps(tokendict)

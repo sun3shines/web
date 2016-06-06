@@ -29,7 +29,7 @@ class lockList:
             self.lock.release()       
             
     def has_item(self,item):
-        if self.l.has(item):
+        if item in self.l:
             return True
         else:
             return False

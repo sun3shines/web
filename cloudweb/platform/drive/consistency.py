@@ -50,6 +50,7 @@ def flask_consistent(func):
         flag,resp = getUserToken(atName, request)
         if not flag:
             if request.GET.get('x_admin_token'):
+                print 'user with admin token'
                 resp = request.GET.get('x_admin_token')
             else:
                 return resp
