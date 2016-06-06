@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import json
 from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN
@@ -18,9 +19,9 @@ def cloudfsGetAtName(request):
     return True,atName
 
 def flaskGetAtName(request):
-    
+        
     param = json.loads(request.body)     
-    return param.get('atName')
+    return param.get('atName').encode('utf-8')
 
 def getUserToken(atName,request):
     
