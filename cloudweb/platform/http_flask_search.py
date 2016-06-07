@@ -85,5 +85,5 @@ def flaskDataObjectDetail(req):
                 continue
             msg.pop(key)
         resp['msg'] = json.dumps(msg)
-        
+
     return jresponse(resp['status'],resp['msg'],req,200)

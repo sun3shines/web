@@ -193,7 +193,6 @@ def http_connect_raw(ipaddr, port, method, path, headers=None,
 
 def jresponse(status,msg,req,status_int,headers=None,statusstr='',param=None):
     
-#    msg = msg.lower()
     data = {'status':str(status),'msg':str(msg)}
     
     if param:
