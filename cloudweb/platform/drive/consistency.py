@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import time
+from eventlet import  sleep
 
 from cloudweb.platform.drive.utils import cloudfsGetAtName,flaskGetAtName,getUserToken
 from cloudweb.platform.globalx.variable import GLOBAL_USER_CONSISTENCY,USER_CONSISTENCY_DIR,GLOBAL_USER_DB
@@ -41,7 +41,8 @@ def flask_consistent(func):
         atName = flaskGetAtName(request)
         if GLOBAL_USER_CONSISTENCY.running(atName):    
             while GLOBAL_USER_CONSISTENCY.running(atName):
-                time.sleep(5)
+                print 'consistent loop'
+                sleep(5)
               
         if GLOBAL_USER_CONSISTENCY.success(atName):
             return func(*args,**kwargs)
@@ -51,15 +52,16 @@ def flask_consistent(func):
             if request.GET.get('x_admin_token'):
                 print 'user with admin token'
                 resp = request.GET.get('x_admin_token')
+                print '1',atName,resp
             else:
                 return resp
             
         usertoken = resp
         
         conn = GLOBAL_USER_DB.get(atName) 
-        
+        print '2',atName,resp 
+
         GLOBAL_USER_CONSISTENCY.put(atName, GLOBAL_USER_CONSISTENCY.state_running)
-        
         with getlock(conn) as mylock:
             flag,msg = getDirList(conn, atName, usertoken, 0)
             if not flag:
