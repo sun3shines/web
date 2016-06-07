@@ -45,4 +45,4 @@ if __name__ == '__main__':
     email = 'zhu__feng001@163com'
     passwd = '123456'
     print libGetToken(email,passwd)
-    
+    print libGetTokenAttr(email,passwd)    

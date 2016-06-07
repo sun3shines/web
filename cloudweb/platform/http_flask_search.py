@@ -44,7 +44,7 @@ def flaskDataObjectDetail(req):
     atName = param.get('atName').encode('utf-8')
     oid = param.get('objectId')
     
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     conn = GLOBAL_USER_DB.get(atName)
     
     

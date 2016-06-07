@@ -17,6 +17,7 @@ from cloudweb.dblib.db_flask_user import db_flask_user_put
 from cloudweb.db.table.user import User
 
 def flaskUserLogin(req):
+
     param = json.loads(req.body)
     email = param.get('email')
     passwd = param.get('passwd')
@@ -42,7 +43,7 @@ def flaskUserLogin(req):
     attr = user2attr(conn, userName)
     u = User()
     if str(attr.get(u.type)) == 'admin':
-        GLOBAL_ADMIN_TOKENS.put(tokendict.get('access_token').lower())
+        GLOBAL_ADMIN_TOKENS.put(tokendict.get('access_token'))
     
     tokendict.update(attr)
     resp['msg'] = json.dumps(tokendict)

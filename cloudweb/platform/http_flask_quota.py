@@ -12,7 +12,7 @@ def flaskQuotaGet(req):
     param = json.loads(req.body)
     atName = param.get('atName').encode('utf-8')
 
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     resp = libGetQuota(atName, usertoken)
     
     return jresponse(resp['status'],resp['msg'],req,200)
@@ -24,6 +24,6 @@ def flaskQuotaSet(req):
     atName = param.get('atName').encode('utf-8')
     val = param.get('val')
     
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     resp = libSetQuota(atName, usertoken, val)
     return jresponse(resp['status'],resp['msg'],req,200)

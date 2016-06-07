@@ -13,14 +13,15 @@ from cloudapi.missions.apis.user import user_login,get_accounts,disable_account,
 from cloudapi.missions.apis.host import get_host_static,get_service_status,get_workload_status
 from cloudapi.missions.apis.config import add_config_executor,del_config_executor,get_config_executor_list,\
     get_config,set_configs
-    
+   
+import cloudapi.globalx.static
+ 
 def fs_test(atName):
     list_account(atName)
     list_container(atName,'/normal')
     list_dir(atName,'/normal/dir')
     
 def object_test(atName):
-    import pdb;pdb.set_trace() 
     upload_object(atName,'/normal/中国.txt',file('/root/install.log'))
 #    app_iter = download_object(atName,'/normal/test.txt')
 #    for data in app_iter:
@@ -45,8 +46,11 @@ def search_test(atName):
 #    get_object_details(atName,'1340')
 #    data_user_find(atName,'zhu__feng')
 #    get_object_details(atName,'1339')
-    data_user_find(atName,'中国')
-#    get_object_details(atName,'1350')
+    attr = data_user_find(atName,'中国').get('msg')
+    import json
+    attr = json.loads(attr)[0]
+    get_object_details(atName,str(attr['id']))
+
 def user_test(atName):
     
     disable_account(atName,atName) 
@@ -92,16 +96,19 @@ if __name__ == '__main__':
     email = 'testadministrator@163com'
     passwd = '123456'
     atName = 'AUTH_' + email.replace('@','').replace('.','')
-
-    user_login(email,passwd)
-    
+    attr = user_login(email,passwd)
+    import json
+    token = json.loads(attr.get('msg'))['access_token']
+    cloudapi.globalx.static.X_ADMIN_TOKEN = token
+    print token
 #    fs_test(atName)
 #    object_test(atName)    
 #    quota_test(atName)
 #    record_test(atName)
-#    search_test(atName)
+    atName = 'AUTH_zhu__feng001163com'
+    search_test(atName)
     
-    user_test(atName)
+#    user_test(atName)
 #    config_test(atName)
 #    hostUuid = 'mIYuQsiH-1NmLgn-ny3t'
 #    host_test(atName, hostUuid)

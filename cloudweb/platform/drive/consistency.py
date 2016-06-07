@@ -39,11 +39,10 @@ def flask_consistent(func):
     def wrapper(*args,**kwargs):
         request = args[0]
         atName = flaskGetAtName(request)
-        
         if GLOBAL_USER_CONSISTENCY.running(atName):    
             while GLOBAL_USER_CONSISTENCY.running(atName):
                 time.sleep(5)
-               
+              
         if GLOBAL_USER_CONSISTENCY.success(atName):
             return func(*args,**kwargs)
         
