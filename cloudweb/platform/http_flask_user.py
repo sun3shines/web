@@ -5,7 +5,7 @@ from cloudlib.common.bufferedhttp import jresponse
 from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_USER_DB,GLOBAL_USER_CONSISTENCY,\
     GLOBAL_ADMIN_TOKENS
 from cloudlib.restful.cloudfs.lib_token import libGetTokenAttr
-
+from cloudlib.restful.cloudfs.lib_account import libAccountExists
 from cloudweb.db.db_user import user2attr
 from cloudweb.dblib.db_flask_user import db_flask_user_delete,db_flask_user_disable,\
     db_flask_user_enable,db_flask_user_list
@@ -26,9 +26,15 @@ def flaskUserLogin(req):
     resp = libGetTokenAttr(email, passwd)
     
     if '-1' == resp['status']:
-        return jresponse(resp['status'],resp['msg'],req,200)
+        return jresponse(resp['status'],resp['msg'],req,400)
     
+   
     tokendict = json.loads(resp['msg'])
+    
+    eresp = libAccountExists(atName, tokendict.get('access_token'))
+    if '-1' == eresp['status']:
+        return jresponse(eresp['status'],eresp['msg'],req,400)
+    
     conn = GLOBAL_USER_DB.get(atName)
     GLOBAL_USER_TOKEN.put(atName, email, passwd, tokendict.get('access_token'))
     

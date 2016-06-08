@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
-from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN
+from cloudweb.platform.globalx.variable import GLOBAL_USER_TOKEN,GLOBAL_ADMIN_TOKENS
 from cloudlib.common.bufferedhttp import jresponse
 from cloudlib.restful.cloudfs.lib_token import libGetToken
 
@@ -42,3 +42,8 @@ def getAtNameByEmail(email):
 
         return 'AUTH_' + email.replace('@','').replace('.','')
      
+def validUser(atName,admintoken):
+    
+    if not GLOBAL_USER_TOKEN.get_user_info(atName) and not GLOBAL_ADMIN_TOKENS.has_item(admintoken):
+        return False
+    return True

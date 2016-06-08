@@ -134,8 +134,8 @@ class TestMission(Mission):
     def getToken(self):
 
         resp = libGetToken(self.email,self.passwd)
-        if '-1' == resp['status']:
+        if not resp:
             return None
 
-        return json.loads(resp['msg']).get('access_token') 
+        return resp 
 

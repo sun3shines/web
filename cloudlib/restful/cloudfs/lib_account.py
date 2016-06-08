@@ -11,19 +11,25 @@ def libGetAccountMeta(atName,token):
     t = ev.http(t)
     return t.response
 
+def libAccountExists(atName,token):
+    ev = Mission(atName,token)
+    t = UfoAccountMeta()
+    t = ev.http(t)
+    return t.response
+
 if __name__ == "__main__":
 
     email = 'testadministrator@163com'
     passwd = '123456'
-    
-    ev = TestMission(email,passwd)
-    print ev.getAtName()
+    import pdb;pdb.set_trace()    
+#    ev = TestMission(email,passwd)
+#    print ev.getAtName()
 #    t = AccountMeta()
-    t = UserInit()
+#    t = UserInit()
 #    t = FileUpload('/normal/test.txt','/root/install.log')
 #    t = FileMeta('/normal/test.txt')
 #    t = DirCreate('/normal/dir')
 #    t = ObjectList('/normal',r=True) 
-    t = ev.http(t)
-    print t.response
+#    t = ev.http(t)
+#    print t.response
 
