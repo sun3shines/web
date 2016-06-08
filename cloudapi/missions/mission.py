@@ -70,7 +70,14 @@ class Mission:
     def download(self,t):
         try:    
             self.connect()
-            self.conn.request(t.getMethod(),t.getUrl(),t.getBody(),t.getHeaders())
+            url = t.getUrl()
+            ps = t.getParams()
+            if api_globals.X_ADMIN_TOKEN:
+                ps.update({'x_admin_token':api_globals.X_ADMIN_TOKEN})
+            if ps:
+                url = url + '?' + urllib.urlencode(ps)
+
+            self.conn.request(t.getMethod(),url,t.getBody(),t.getHeaders())
             resp = self.conn.getresponse()
             while True:
                 data = resp.read(self.readsize)

@@ -23,9 +23,10 @@ def fs_test(atName):
     
 def object_test(atName):
     upload_object(atName,'/normal/中国.txt',file('/root/install.log'))
-#    app_iter = download_object(atName,'/normal/test.txt')
-#    for data in app_iter:
-#        print data
+    app_iter = download_object(atName,'/normal/test.txt')
+    for data in app_iter:
+        print data
+
 #    disable_object(atName,'/normal/test.txt')
 #    enable_object(atName,'/normal/test.txt')   
 #    delete_object(atName,'/normal/中国.txt')
@@ -101,13 +102,18 @@ if __name__ == '__main__':
     token = json.loads(attr.get('msg'))['access_token']
     cloudapi.globalx.static.X_ADMIN_TOKEN = token
     print token
-#    fs_test(atName)
-#    object_test(atName)    
-#    quota_test(atName)
-#    record_test(atName)
-    atName = 'AUTH_zhu__feng001163com'
-    search_test(atName)
-    
+    # fs_test(atName)
+    # object_test(atName)    
+    # quota_test(atName)
+    # record_test(atName)
+    # atName = 'AUTH_zhu__feng001163com'
+    # atName = 'AUTH_administrator163com'
+#    search_test(atName)
+    # quota_test(atName)
+    atName = 'AUTH_zhu__feng001163com' 
+    # quota_test(atName)
+    object_test(atName)
+
 #    user_test(atName)
 #    config_test(atName)
 #    hostUuid = 'mIYuQsiH-1NmLgn-ny3t'

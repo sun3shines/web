@@ -10,9 +10,9 @@ from cloudweb.platform.drive.consistency import flask_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
 def flaskUploadObject(req):
+
     # 上传文件时，参数不使用request.body
     # 因此一致性无法保证了。所以不执行一致性同步，由登录保证
-
     param = req.GET
     atName = param.get('atName').encode('utf-8')
     objPath = param.get('objPath').encode('utf-8')
