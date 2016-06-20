@@ -13,8 +13,8 @@ from cloudapi.missions.apis.user import user_login,get_accounts,disable_account,
 from cloudapi.missions.apis.host import get_host_static,get_service_status,get_workload_status
 from cloudapi.missions.apis.config import add_config_executor,del_config_executor,get_config_executor_list,\
     get_config,set_configs
-   
-import cloudapi.globalx.static
+  
+from cloudapi.globalx.static import config as api_globals
  
 def fs_test(atName):
     list_account(atName)
@@ -100,8 +100,8 @@ if __name__ == '__main__':
     attr = user_login(email,passwd)
     import json
     token = json.loads(attr.get('msg'))['access_token']
-    cloudapi.globalx.static.X_ADMIN_TOKEN = token
-    print token
+    print token 
+    api_globals.X_ADMIN_TOKEN = token
     # fs_test(atName)
     # object_test(atName)    
     # quota_test(atName)
@@ -111,8 +111,8 @@ if __name__ == '__main__':
 #    search_test(atName)
     # quota_test(atName)
     atName = 'AUTH_zhu__feng001163com' 
-    # quota_test(atName)
-    object_test(atName)
+    quota_test(atName)
+#    object_test(atName)
 
 #    user_test(atName)
 #    config_test(atName)

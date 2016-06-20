@@ -3,7 +3,8 @@
 import urllib
 import json
 from httplib import HTTPConnection
-import cloudapi.globalx.static as api_globals
+#import cloudapi.globalx.static as api_globals
+from cloudapi.globalx.static import config as api_globals
 
 class Mission:
     
