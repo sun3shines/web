@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8" )
+
 import os.path
 import os
 
@@ -11,7 +15,8 @@ from cloudweb.db.db_link import insert_link
 from cloudweb.db.db_object import insert_file
 
 from cloudweb.platform.globalx.static import MYSQL_HOST,MYSQL_PORT,MYSQL_USER,MYSQL_PASSWD
-
+from cloudweb.dblib.db_cloudfs_account import db_cloudfs_account_put
+from cloudweb.dblib.db_cloudfs_user import db_cloudfs_user_put
 class fsDataDb:
 
     def __init__(self,conn):
@@ -22,8 +27,9 @@ class fsDataDb:
         newPath = '/'.join(path.split('/')[3:])
         if 'account' == type:
             accountPath = newPath 
-            return insert_account(self.conn,accountPath)
-
+            insert_account(self.conn,accountPath)
+            db_cloudfs_user_put(self.conn, accountPath)
+            return True,''
         elif 'container' == type:
             aPath = newPath.split('/')[0]
             cPath = newPath.split('/')[-1]

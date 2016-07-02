@@ -9,9 +9,7 @@ from cloudweb.platform.globalx.variable import GLOBAL_USER_DB
 from cloudweb.platform.drive.consistency import db_consistent
 from cloudweb.db.table.lock.mysql import getlock
 
-@db_consistent
 def cloudfsAccountPut(req):
-    
     param = json.loads(req.body)
     newPath = param.get('newPath')
     objPath = param.get('objPath')
