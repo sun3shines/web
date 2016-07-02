@@ -25,6 +25,8 @@ class fsDataDb:
     def insert_db_data(self,type,path):
     
         newPath = '/'.join(path.split('/')[3:])
+        newPath = ''.join(['AUTH_',newPath])
+
         if 'account' == type:
             accountPath = newPath 
             insert_account(self.conn,accountPath)
